@@ -60,7 +60,7 @@ public class Game {
         return this.player.authenticate(userId, password);
     }
 
-    public void displayStages() {
+    public void displayStages() { //display stage name, pokemon name, type, star
         if (stages.isEmpty()) {
             System.out.println("No stages available.");
         } else {
@@ -88,8 +88,8 @@ public class Game {
         Game game = new Game();
         boolean loggedIn = game.login("testUser", "password123"); //for testing only
 
-        //login page and sign up page
-        //save user id and password to a text file
+        //login page //sign up page if we got time
+        //save user id to a text file //password if we got time
 
         if (loggedIn) {
             System.out.println("Login successful!");
