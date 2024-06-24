@@ -79,13 +79,13 @@ public class PokemonService {
      */
     private int calculateStars(int attack, int defense, int health) {
         int sumStats = attack + defense + health;
-        if (sumStats > 350) {
+        if (sumStats > 220) {
             return 5;
-        } else if (sumStats > 280) {
-            return 4;
         } else if (sumStats > 190) {
+            return 4;
+        } else if (sumStats > 170) {
             return 3;
-        } else if (sumStats > 100) {
+        } else if (sumStats > 150) {
             return 2;
         } else {
             return 1;
