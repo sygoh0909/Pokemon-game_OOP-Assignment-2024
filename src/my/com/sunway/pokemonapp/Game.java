@@ -1,9 +1,12 @@
 package my.com.sunway.pokemonapp;
 
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Collections;
+import java.util.List;
+import java.util.Scanner;
 
 public class Game {
     private Player player;
@@ -84,7 +87,49 @@ public class Game {
         }
     }
 
-    public static void main(String[] args) {
+    public void chooseStageAndPokemon() throws IOException {
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.println("Choose a stage number: ");
+        for (int i = 0; i < stageNames.size(); i++) {
+            System.out.println((i + 1) + ": " + stageNames.get(i));
+        }
+
+        int stageChoice = scanner.nextInt() - 1;
+        if (stageChoice < 0 || stageChoice >= stages.size()) {
+            System.out.println("Invalid stage choice.");
+            return;
+        }
+
+        List<Pokemon> chosenStagePokemons = stages.get(stageChoice);
+        Collections.shuffle(chosenStagePokemons);
+        int printCount = Math.min(3, chosenStagePokemons.size());
+
+        System.out.println("Choose a Pokémon from the following list:");
+        for (int i = 0; i < printCount; i++) {
+            System.out.println((i + 1) + ": " + chosenStagePokemons.get(i));
+        }
+
+        int pokemonChoice = scanner.nextInt() - 1;
+        if (pokemonChoice < 0 || pokemonChoice >= printCount) {
+            System.out.println("Invalid Pokémon choice.");
+            return;
+        }
+
+        Pokemon chosenPokemon = chosenStagePokemons.get(pokemonChoice);
+        System.out.println("You chose: " + chosenPokemon);
+
+        saveChosenPokemon(chosenPokemon);
+    }
+
+    private void saveChosenPokemon(Pokemon pokemon) throws IOException {
+        String fileName = "user_pokemon_list.txt";
+        String pokemonDetails = pokemon.toString();
+        Files.write(Paths.get(fileName), (pokemonDetails + System.lineSeparator()).getBytes(), java.nio.file.StandardOpenOption.CREATE, java.nio.file.StandardOpenOption.APPEND);
+        System.out.println("Saved " + pokemon.getName() + " to " + fileName);
+    }
+
+    public static void main(String[] args) throws IOException {
         Game game = new Game();
         boolean loggedIn = game.login("testUser", "password123"); //for testing only
 
@@ -94,6 +139,7 @@ public class Game {
         if (loggedIn) {
             System.out.println("Login successful!");
             game.displayStages();
+            game.chooseStageAndPokemon();
         } else {
             System.out.println("Login failed!");
         }
