@@ -79,7 +79,8 @@ public class Game {
                     // Print up to 3 randomly selected Pokémon
                     int printCount = Math.min(3, stagePokemons.size());
                     for (int j = 0; j < printCount; j++) {
-                        System.out.println(stagePokemons.get(j));
+                        Pokemon pokemon = stagePokemons.get(j);
+                        System.out.println(pokemon.getName() + " | Type: " + pokemon.getType() + " | Stars: " + pokemon.getStars());
                     }
                 }
                 System.out.println();
@@ -107,7 +108,8 @@ public class Game {
 
         System.out.println("Choose a Pokémon from the following list:");
         for (int i = 0; i < printCount; i++) {
-            System.out.println((i + 1) + ": " + chosenStagePokemons.get(i));
+            Pokemon pokemon = chosenStagePokemons.get(i);
+            System.out.println((i + 1) + ": " + pokemon.getName() + " | Type: " + pokemon.getType() + " | Stars: " + pokemon.getStars());
         }
 
         int pokemonChoice = scanner.nextInt() - 1;
