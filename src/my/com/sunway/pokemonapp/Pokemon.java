@@ -11,6 +11,7 @@ public class Pokemon {
     private String type;
     private List<String> powers;
     private int stars;
+    private int speed;
 
     //constructors
     public Pokemon(String name, int health, int attack, int defense, String type, List<String> powers, int stars) {
@@ -21,6 +22,7 @@ public class Pokemon {
         this.type = type;
         this.powers = powers;
         this.stars = stars;
+        this.speed = speed;
     }
 
     //setters and getters
@@ -28,28 +30,28 @@ public class Pokemon {
         this.name = name;
     }
 
-    public int getHealth() {
-        return health;
-    }
-
     public void setHealth(int health) {
         this.health = health;
     }
 
-    public int getAttack() {
-        return attack;
+    public int getHealth() {
+        return health;
     }
 
     public void setAttack(int attack) {
         this.attack = attack;
     }
 
-    public int getDefense() {
-        return defense;
+    public int getAttack() {
+        return attack;
     }
 
     public void setDefense(int defense) {
         this.defense = defense;
+    }
+
+    public int getDefense() {
+        return defense;
     }
 
     public void setType(String type) {
@@ -93,6 +95,14 @@ public class Pokemon {
         return stars;
     }
 
+    public void setSpeed(int speed){
+        this.speed = s;
+    }
+
+    public int getSpeed(){
+        return speed;
+    }
+    
     @Override
     public String toString() {
         return name + " (Type: " + type + ", HP: " + health + ", Stars: " + stars + ")";
