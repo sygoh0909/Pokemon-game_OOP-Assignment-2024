@@ -57,6 +57,7 @@ public class Game {
         } else {
             for (int i = 0; i < stages.size(); i++) {
                 System.out.println("Stage " + (i + 1) + ": " + stageNames.get(i));
+                System.out.println("Pokemons that might appear in this stage: ");
                 List<Pokemon> stagePokemons = stages.get(i);
                 if (stagePokemons.isEmpty()) {
                     System.out.println("No Pokémon in this stage.");
