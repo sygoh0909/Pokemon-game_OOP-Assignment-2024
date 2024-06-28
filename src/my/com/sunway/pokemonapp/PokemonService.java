@@ -13,18 +13,8 @@ import java.util.regex.Pattern;
 public class PokemonService {
     private static final String API_URL = "https://pokeapi.co/api/v2/";
 
-    /**
-     * Fetches Pokémon by habitat IDs from the PokeAPI.
-     *
-     * @param habitatIds  The IDs of the habitats.
-     * @param habitatType The type of the habitats (e.g., grassland, cave).
-     * @return A list of Pokémon found in the specified habitats.
-     * @throws IOException          If an error occurs during HTTP request/response.
-     * @throws InterruptedException If the HTTP request is interrupted.
-     */
-    public List<Pokemon> fetchPokemonsByMultipleHabitats(List<Integer> habitatIds, String habitatType) throws IOException, InterruptedException {
+    public List<Pokemon> fetchPokemonsByMultipleHabitats(List<Integer> habitatIds) throws IOException, InterruptedException {
         List<Pokemon> pokemonList = new ArrayList<>();
-
         HttpClient client = HttpClient.newHttpClient();
 
         for (int habitatId : habitatIds) {
@@ -35,7 +25,6 @@ public class PokemonService {
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
             String jsonResponse = response.body();
 
-            // Regular expression to find the key-value pair for "pokemon_species"
             String regex = "\"pokemon_species\"\\s*:\\s*\\[(.*?)\\]";
             Pattern pattern = Pattern.compile(regex, Pattern.DOTALL);
             Matcher matcher = pattern.matcher(jsonResponse);
@@ -46,37 +35,62 @@ public class PokemonService {
                 Matcher speciesItemMatcher = speciesItemPattern.matcher(speciesJson);
                 while (speciesItemMatcher.find()) {
                     String name = speciesItemMatcher.group(1);
-                    String url = speciesItemMatcher.group(2);
+                    String speciesUrl = speciesItemMatcher.group(2);
 
-                    // Fetch details of the Pokémon by URL
-                    HttpRequest pokemonRequest = HttpRequest.newBuilder()
-                            .uri(URI.create(url))
+                    HttpRequest speciesRequest = HttpRequest.newBuilder()
+                            .uri(URI.create(speciesUrl))
                             .build();
 
-                    HttpResponse<String> pokemonResponse = client.send(pokemonRequest, HttpResponse.BodyHandlers.ofString());
-                    String pokemonJson = pokemonResponse.body();
+                    HttpResponse<String> speciesResponse = client.send(speciesRequest, HttpResponse.BodyHandlers.ofString());
+                    String speciesJsonResponse = speciesResponse.body();
 
-                    int health = (int) (Math.random() * 50) + 50;
-                    int attack = (int) (Math.random() * 50) + 50;
-                    int defense = (int) (Math.random() * 50) + 50;
-                    List<String> powers = List.of("Power1", "Power2", "Power3");
-                    int stars = calculateStars(attack, defense, health);
-                    pokemonList.add(new Pokemon(name, health, attack, defense, habitatType, powers, stars));
+                    String pokemonUrlRegex = "\"url\":\\s*\"(https://pokeapi.co/api/v2/pokemon/\\d+/)\"";
+                    Pattern pokemonUrlPattern = Pattern.compile(pokemonUrlRegex);
+                    Matcher pokemonUrlMatcher = pokemonUrlPattern.matcher(speciesJsonResponse);
+
+                    if (pokemonUrlMatcher.find()) {
+                        String pokemonUrl = pokemonUrlMatcher.group(1);
+
+                        HttpRequest pokemonRequest = HttpRequest.newBuilder()
+                                .uri(URI.create(pokemonUrl))
+                                .build();
+
+                        HttpResponse<String> pokemonResponse = client.send(pokemonRequest, HttpResponse.BodyHandlers.ofString());
+                        String pokemonJson = pokemonResponse.body();
+
+                        List<String> types = extractPokemonTypes(pokemonJson); // Extract types
+
+                        int health = (int) (Math.random() * 50) + 50;
+                        int attack = (int) (Math.random() * 50) + 50;
+                        int defense = (int) (Math.random() * 50) + 50;
+                        List<String> powers = List.of("Power1", "Power2", "Power3");
+                        int stars = calculateStars(attack, defense, health);
+                        pokemonList.add(new Pokemon(name, health, attack, defense, powers, stars, types));
+                    }
                 }
             }
         }
-
         return pokemonList;
     }
 
-    /**
-     * Calculates stars based on Pokémon stats.
-     *
-     * @param attack  Pokémon's attack stat.
-     * @param defense Pokémon's defense stat.
-     * @param health  Pokémon's health stat.
-     * @return Number of stars based on total stats.
-     */
+    private List<String> extractPokemonTypes(String pokemonJson) {
+        List<String> types = new ArrayList<>();
+        try {
+            // Regex to find all occurrences of type names in the JSON response
+            String typeRegex = "\"type\":\\s*\\{\\s*\"name\":\\s*\"(\\w+)\"";
+            Pattern typePattern = Pattern.compile(typeRegex);
+            Matcher typeMatcher = typePattern.matcher(pokemonJson);
+
+            while (typeMatcher.find()) {
+                String typeName = typeMatcher.group(1);
+                types.add(typeName);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return types;
+    }
+
     private int calculateStars(int attack, int defense, int health) {
         int sumStats = attack + defense + health;
         if (sumStats > 220) {

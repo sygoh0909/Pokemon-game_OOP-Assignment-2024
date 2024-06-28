@@ -3,14 +3,11 @@ package my.com.sunway.pokemonapp;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 public class Game {
     private Player player;
-    private List<List<Pokemon>> stages; //pokemon in the stages comes from the list of pokemon
+    private List<List<Pokemon>> stages; // Pokémon in the stages
     private List<String> stageNames;
     private List<Integer> topScores;
     private PokemonService pokemonService;
@@ -25,34 +22,25 @@ public class Game {
 
     private void setupStages() {
         try {
-            // Grasslands (IDs 2 and 3)
-            List<Integer> grasslandIds = List.of(2, 3);
-            stages.add(pokemonService.fetchPokemonsByMultipleHabitats(grasslandIds, "Grasslands and Forest"));
+            // Grasslands and Forest (IDs 1, 2)
+            List<Integer> grasslandIds = List.of(1, 2);
+            stages.add(pokemonService.fetchPokemonsByMultipleHabitats(grasslandIds));
             stageNames.add("Grasslands and Forest");
 
-            // Mountains and Caves (ID 1 and 4)
-            List<Integer> mountainIds = List.of(1, 4);
-            stages.add(pokemonService.fetchPokemonsByMultipleHabitats(mountainIds, "Mountains and Caves"));
+            // Mountains and Caves (IDs 3, 4)
+            List<Integer> mountainIds = List.of(3, 4);
+            stages.add(pokemonService.fetchPokemonsByMultipleHabitats(mountainIds));
             stageNames.add("Mountains and Caves");
 
-            // Water Bodies (ID 7 and 9)
-            List<Integer> waterIds = List.of(7, 9);
-            stages.add(pokemonService.fetchPokemonsByMultipleHabitats(waterIds, "Water Bodies"));
+            // Water Bodies (IDs 5, 6)
+            List<Integer> waterIds = List.of(5, 6);
+            stages.add(pokemonService.fetchPokemonsByMultipleHabitats(waterIds));
             stageNames.add("Water Bodies");
 
-            // Urban Areas (ID 8)
-            List<Integer> urbanIds = List.of(8);
-            stages.add(pokemonService.fetchPokemonsByMultipleHabitats(urbanIds, "Urban Areas"));
+            // Urban Areas (IDs 7, 8)
+            List<Integer> urbanIds = List.of(7, 8);
+            stages.add(pokemonService.fetchPokemonsByMultipleHabitats(urbanIds));
             stageNames.add("Urban Areas");
-
-            // Icy Regions (ID 10)
-            //stages.add(pokemonService.fetchPokemonsByMultipleHabitats(10, "Icy Regions"));
-            //stageNames.add("Icy Regions");
-
-            // Desert Regions (ID 7)
-            //stages.add(pokemonService.fetchPokemonsByMultipleHabitats(7, "Desert Regions"));
-            //stageNames.add("Desert Regions");
-
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
         }
@@ -63,7 +51,7 @@ public class Game {
         return this.player.authenticate(userId, password);
     }
 
-    public void displayStages() { //display stage name, pokemon name, type, star
+    public void displayStages() { // Display stage name, Pokémon name, type, star
         if (stages.isEmpty()) {
             System.out.println("No stages available.");
         } else {
@@ -80,7 +68,8 @@ public class Game {
                     int printCount = Math.min(3, stagePokemons.size());
                     for (int j = 0; j < printCount; j++) {
                         Pokemon pokemon = stagePokemons.get(j);
-                        System.out.println(pokemon.getName() + " | Type: " + pokemon.getType() + " | Stars: " + pokemon.getStars());
+                        String typesString = String.join(", ", pokemon.getTypes()); // Join types with a comma
+                        System.out.println(pokemon.getName() + " | Type: " + typesString + " | Stars: " + pokemon.getStars());
                     }
                 }
                 System.out.println();
@@ -109,7 +98,8 @@ public class Game {
         System.out.println("Choose a Pokémon from the following list:");
         for (int i = 0; i < printCount; i++) {
             Pokemon pokemon = chosenStagePokemons.get(i);
-            System.out.println((i + 1) + ": " + pokemon.getName() + " | Type: " + pokemon.getType() + " | Stars: " + pokemon.getStars());
+            String typesString = String.join(", ", pokemon.getTypes()); // Join types with a comma
+            System.out.println((i + 1) + ": " + pokemon.getName() + " | Type: " + typesString + " | Stars: " + pokemon.getStars());
         }
 
         int pokemonChoice = scanner.nextInt() - 1;
@@ -119,7 +109,7 @@ public class Game {
         }
 
         Pokemon chosenPokemon = chosenStagePokemons.get(pokemonChoice);
-        System.out.println("You chose: " + chosenPokemon);
+        System.out.println("You chose: " + chosenPokemon.getName());
 
         saveChosenPokemon(chosenPokemon);
     }
@@ -131,12 +121,9 @@ public class Game {
         System.out.println("Saved " + pokemon.getName() + " to " + fileName);
     }
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws IOException, InterruptedException {
         Game game = new Game();
-        boolean loggedIn = game.login("testUser", "password123"); //for testing only
-
-        //login page //sign up page if we got time
-        //save user id to a text file //password if we got time
+        boolean loggedIn = game.login("testUser", "password123"); // For testing only
 
         if (loggedIn) {
             System.out.println("Login successful!");
