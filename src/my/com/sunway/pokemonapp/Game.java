@@ -111,7 +111,29 @@ public class Game {
         Pokemon chosenPokemon = chosenStagePokemons.get(pokemonChoice);
         System.out.println("You chose: " + chosenPokemon.getName());
 
-        saveChosenPokemon(chosenPokemon);
+        // Randomly choose a Poké Ball
+        Pokeball chosenPokeball = chooseRandomPokeball();
+        System.out.println("A " + chosenPokeball + " appeared!");
+
+        // Attempt to catch the Pokémon
+        boolean isCaught = attemptCatch(chosenPokeball);
+        if (isCaught) {
+            System.out.println("You caught the " + chosenPokemon.getName() + "!");
+            saveChosenPokemon(chosenPokemon);
+        } else {
+            System.out.println("The " + chosenPokemon.getName() + " escaped!");
+        }
+    }
+
+    private Pokeball chooseRandomPokeball() {
+        Pokeball[] pokeballs = Pokeball.values();
+        int randomIndex = new Random().nextInt(pokeballs.length);
+        return pokeballs[randomIndex];
+    }
+
+    private boolean attemptCatch(Pokeball pokeball) {
+        double catchChance = Math.random();
+        return catchChance <= pokeball.getCatchRate();
     }
 
     private void saveChosenPokemon(Pokemon pokemon) throws IOException {
