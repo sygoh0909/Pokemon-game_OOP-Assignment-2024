@@ -1,0 +1,3 @@
+roselia (Type: Grasslands and Forest, HP: 62, Stars: 5)
+my.com.sunway.pokemonapp.Pokemon@4d1b0d2a
+Pokemon{name='chansey', health=51, attack=71, defense=97, powers=[Power1, Power2, Power3], stars=4, types=[normal]}
