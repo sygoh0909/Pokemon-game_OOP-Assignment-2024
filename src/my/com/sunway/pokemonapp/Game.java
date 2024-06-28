@@ -22,23 +22,23 @@ public class Game {
 
     private void setupStages() {
         try {
-            // Grasslands and Forest (IDs 1, 2)
-            List<Integer> grasslandIds = List.of(1, 2);
+            // Grasslands and Forest (IDs 2, 3)
+            List<Integer> grasslandIds = List.of(2, 3);
             stages.add(pokemonService.fetchPokemonsByMultipleHabitats(grasslandIds));
             stageNames.add("Grasslands and Forest");
 
-            // Mountains and Caves (IDs 3, 4)
-            List<Integer> mountainIds = List.of(3, 4);
+            // Mountains and Caves (IDs 1, 4)
+            List<Integer> mountainIds = List.of(1, 4);
             stages.add(pokemonService.fetchPokemonsByMultipleHabitats(mountainIds));
             stageNames.add("Mountains and Caves");
 
-            // Water Bodies (IDs 5, 6)
-            List<Integer> waterIds = List.of(5, 6);
+            // Water Bodies (IDs 7, 9)
+            List<Integer> waterIds = List.of(7, 9);
             stages.add(pokemonService.fetchPokemonsByMultipleHabitats(waterIds));
             stageNames.add("Water Bodies");
 
-            // Urban Areas (IDs 7, 8)
-            List<Integer> urbanIds = List.of(7, 8);
+            // Urban Areas (IDs 8)
+            List<Integer> urbanIds = List.of(8);
             stages.add(pokemonService.fetchPokemonsByMultipleHabitats(urbanIds));
             stageNames.add("Urban Areas");
         } catch (IOException | InterruptedException e) {
