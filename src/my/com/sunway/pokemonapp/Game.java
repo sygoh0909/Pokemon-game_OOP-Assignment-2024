@@ -79,16 +79,23 @@ public class Game {
 
     public void chooseStageAndPokemon() throws IOException {
         Scanner scanner = new Scanner(System.in);
+        int stageChoice = -1;
 
-        System.out.println("Choose a stage number: ");
-        for (int i = 0; i < stageNames.size(); i++) {
-            System.out.println((i + 1) + ": " + stageNames.get(i));
-        }
+        while (stageChoice < 0 || stageChoice >= stages.size()) {
+            System.out.println("Choose a stage number: ");
+            for (int i = 0; i < stageNames.size(); i++) {
+                System.out.println((i + 1) + ": " + stageNames.get(i));
+            }
 
-        int stageChoice = scanner.nextInt() - 1;
-        if (stageChoice < 0 || stageChoice >= stages.size()) {
-            System.out.println("Invalid stage choice.");
-            return;
+            try {
+                stageChoice = scanner.nextInt() - 1;
+                if (stageChoice < 0 || stageChoice >= stages.size()) {
+                    System.out.println("Invalid stage choice. Please try again.");
+                }
+            } catch (InputMismatchException e) {
+                System.out.println("Invalid input. Please enter a number.");
+                scanner.next(); // Clear the invalid input
+            }
         }
 
         List<Pokemon> chosenStagePokemons = stages.get(stageChoice);
@@ -102,10 +109,17 @@ public class Game {
             System.out.println((i + 1) + ": " + pokemon.getName() + " | Type: " + typesString + " | Stars: " + pokemon.getStars());
         }
 
-        int pokemonChoice = scanner.nextInt() - 1;
-        if (pokemonChoice < 0 || pokemonChoice >= printCount) {
-            System.out.println("Invalid Pokémon choice.");
-            return;
+        int pokemonChoice = -1;
+        while (pokemonChoice < 0 || pokemonChoice >= printCount) {
+            try {
+                pokemonChoice = scanner.nextInt() - 1;
+                if (pokemonChoice < 0 || pokemonChoice >= printCount) {
+                    System.out.println("Invalid Pokémon choice. Please try again.");
+                }
+            } catch (InputMismatchException e) {
+                System.out.println("Invalid input. Please enter a number.");
+                scanner.next(); // Clear the invalid input
+            }
         }
 
         Pokemon chosenPokemon = chosenStagePokemons.get(pokemonChoice);
@@ -126,9 +140,15 @@ public class Game {
     }
 
     private Pokeball chooseRandomPokeball() {
-        Pokeball[] pokeballs = Pokeball.values();
-        int randomIndex = new Random().nextInt(pokeballs.length);
-        return pokeballs[randomIndex];
+        double randomValue = Math.random();
+        double cumulativeProbability = 0.0;
+        for (Pokeball pokeball : Pokeball.values()) {
+            cumulativeProbability += pokeball.getAppearanceRate();
+            if (randomValue <= cumulativeProbability) {
+                return pokeball;
+            }
+        }
+        return Pokeball.POKEBALL; // Default case, should never occur if appearance rates sum to 1
     }
 
     private boolean attemptCatch(Pokeball pokeball) {
