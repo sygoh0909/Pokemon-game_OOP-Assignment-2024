@@ -1,80 +1,106 @@
 package my.com.sunway.pokemonapp;
 
 import java.util.List;
+import java.util.Random;
 
 public class Pokemon {
     private String name;
     private int health;
     private int attack;
     private int defense;
+    private String type;
     private List<String> powers;
     private int stars;
-    private List<String> types;
 
-    public Pokemon(String name, int health, int attack, int defense, List<String> powers, int stars, List<String> types) {
+    //constructors
+    public Pokemon(String name, int health, int attack, int defense, String type, List<String> powers, int stars) {
         this.name = name;
         this.health = health;
         this.attack = attack;
         this.defense = defense;
+        this.type = type;
         this.powers = powers;
         this.stars = stars;
-        this.types = types;
     }
 
-    public String getName() {
-        return name;
+    //setters and getters
+    public void setName(String name) {
+        this.name = name;
     }
 
     public int getHealth() {
         return health;
     }
 
+    public void setHealth(int health) {
+        this.health = health;
+    }
+
     public int getAttack() {
         return attack;
+    }
+
+    public void setAttack(int attack) {
+        this.attack = attack;
     }
 
     public int getDefense() {
         return defense;
     }
 
+    public void setDefense(int defense) {
+        this.defense = defense;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
     public List<String> getPowers() {
         return powers;
     }
 
-    public int getStars() {
-        return stars;
+    public void setPowers(List<String> powers) {
+        this.powers = powers;
     }
 
-    public List<String> getTypes() {
-        return types;
+    public void setStars(int stars) {
+        this.stars = stars;
     }
 
+    //methods
     public void takeDamage(int damage) {
         this.health -= damage;
-        if (this.health < 0) {
-            this.health = 0;
-        }
-    }
-
-    public int attack() {
-        // Simple attack calculation, can be expanded
-        return (int) (Math.random() * attack) + 1;
     }
 
     public boolean isFainted() {
         return this.health <= 0;
     }
 
+    public int attack() {
+        return this.attack;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public int getStars() {
+        return stars;
+    }
+
     @Override
     public String toString() {
-        return "Pokemon{" +
-                "name='" + name + '\'' +
-                ", health=" + health +
-                ", attack=" + attack +
-                ", defense=" + defense +
-                ", powers=" + powers +
-                ", stars=" + stars +
-                ", types=" + types +
-                '}';
+        return name + " (Type: " + type + ", HP: " + health + ", Stars: " + stars + ")";
+    }
+
+    public static void main (String[] args){
+
     }
 }
+
+
