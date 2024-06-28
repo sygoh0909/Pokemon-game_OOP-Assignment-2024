@@ -21,6 +21,34 @@ public class Pokemon {
         this.types = types;
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setHealth(int health) {
+        this.health = health;
+    }
+
+    public void setAttack(int attack) {
+        this.attack = attack;
+    }
+
+    public void setDefense(int defense) {
+        this.defense = defense;
+    }
+
+    public void setPowers(List<String> powers) {
+        this.powers = powers;
+    }
+
+    public void setStars(int stars) {
+        this.stars = stars;
+    }
+
+    public void setTypes(List<String> types) {
+        this.types = types;
+    }
+
     public String getName() {
         return name;
     }
