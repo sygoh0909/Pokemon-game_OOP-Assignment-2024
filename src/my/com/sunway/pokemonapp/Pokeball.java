@@ -1,9 +1,9 @@
 package my.com.sunway.pokemonapp;
 
 public enum Pokeball {
-    POKEBALL(0.5, 0.4),
-    GREATBALL(0.7, 0.3),
-    ULTRABALL(0.9, 0.2),
+    POKEBALL(0.28, 0.6),
+    GREATBALL(0.41, 0.4),
+    ULTRABALL(0.624, 0.2),
     MASTERBALL(1.0, 0.1);
 
     private final double catchRate;
