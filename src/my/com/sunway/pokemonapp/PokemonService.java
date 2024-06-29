@@ -6,6 +6,7 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -59,13 +60,16 @@ public class PokemonService {
                         String pokemonJson = pokemonResponse.body();
 
                         List<String> types = extractPokemonTypes(pokemonJson); // Extract types
+                        int[] stats = extractPokemonStats(pokemonJson); // Extract stats
 
-                        int health = (int) (Math.random() * 50) + 50;
-                        int attack = (int) (Math.random() * 50) + 50;
-                        int defense = (int) (Math.random() * 50) + 50;
-                        List<String> powers = List.of("Power1", "Power2", "Power3");
+                        int health = stats[0];
+                        int attack = stats[1];
+                        int defense = stats[2];
+                        int speed = stats[3];
+                        int accuracy = stats[4];
+
                         int stars = calculateStars(attack, defense, health);
-                        pokemonList.add(new Pokemon(name, health, attack, defense, powers, stars, types));
+                        pokemonList.add(new Pokemon(name, health, attack, defense, stars, types, speed, accuracy));
                     }
                 }
             }
@@ -91,6 +95,40 @@ public class PokemonService {
         return types;
     }
 
+    private int[] extractPokemonStats(String pokemonJson) {
+        int[] stats = new int[5]; // Array to store hp, attack, defense, speed, accuracy
+        try {
+            String statsRegex = "\"stats\":\\[(.*?)\\]";
+            Pattern statsPattern = Pattern.compile(statsRegex, Pattern.DOTALL);
+            Matcher statsMatcher = statsPattern.matcher(pokemonJson);
+
+            if (statsMatcher.find()) {
+                String statsJson = statsMatcher.group(1);
+
+                stats[0] = extractStatValue(statsJson, "hp");
+                stats[1] = extractStatValue(statsJson, "attack");
+                stats[2] = extractStatValue(statsJson, "defense");
+                stats[3] = extractStatValue(statsJson, "speed");
+                stats[4] = extractStatValue(statsJson, "accuracy"); // Extract accuracy from stats
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return stats;
+    }
+
+    private int extractStatValue(String statsJson, String statName) {
+        String statRegex = "\"stat\":\\{.*?\"name\":\"" + statName + "\".*?\"base_stat\":(\\d+)";
+        Pattern statPattern = Pattern.compile(statRegex);
+        Matcher statMatcher = statPattern.matcher(statsJson);
+
+        if (statMatcher.find()) {
+            return Integer.parseInt(statMatcher.group(1));
+        } else {
+            return 0; // Default value if not found
+        }
+    }
+
     private int calculateStars(int attack, int defense, int health) {
         int sumStats = attack + defense + health;
         if (sumStats > 220) {
@@ -103,6 +141,20 @@ public class PokemonService {
             return 2;
         } else {
             return 1;
+        }
+    }
+
+    public static void main(String[] args) {
+        PokemonService pokemonService = new PokemonService();
+        List<Integer> habitatIds = Arrays.asList(1, 2); // Example habitat IDs
+
+        try {
+            List<Pokemon> pokemonList = pokemonService.fetchPokemonsByMultipleHabitats(habitatIds);
+            for (Pokemon pokemon : pokemonList) {
+                System.out.println(pokemon);
+            }
+        } catch (IOException | InterruptedException e) {
+            e.printStackTrace();
         }
     }
 }

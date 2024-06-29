@@ -41,6 +41,7 @@ public class Game {
             List<Integer> urbanIds = List.of(8);
             stages.add(pokemonService.fetchPokemonsByMultipleHabitats(urbanIds));
             stageNames.add("Urban Areas");
+
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
         }
