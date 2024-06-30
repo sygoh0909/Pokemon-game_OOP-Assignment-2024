@@ -1,6 +1,6 @@
 package my.com.sunway.pokemonapp;
 
-public enum Pokeball {
+public enum Pokeball { //using enum cause they are constants
     POKEBALL(0.28, 0.6),
     GREATBALL(0.41, 0.4),
     ULTRABALL(0.624, 0.2),
