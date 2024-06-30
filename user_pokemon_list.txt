@@ -12,3 +12,6 @@ Pokemon{name='bayleef', health=62, attack=80, defense=63, stars=4, types=[grass]
 Pokemon{name='caterpie', health=30, attack=35, defense=20, stars=1, types=[bug], speed=0, accuracy=0}
 Pokemon{name='banette', health=115, attack=65, defense=83, stars=5, types=[ghost], speed=0, accuracy=0}
 Pokemon{name='squirtle', health=48, attack=65, defense=50, stars=2, types=[water], speed=0, accuracy=0}
+Pokemon{name='hitmonchan', health=105, attack=79, defense=35, stars=4, types=[fighting], speed=0, accuracy=0}
+Pokemon{name='exploud', health=91, attack=63, defense=91, stars=5, types=[normal], speed=0, accuracy=0}
+Pokemon{name='volbeat', health=73, attack=75, defense=47, stars=4, types=[bug], speed=0, accuracy=0}
