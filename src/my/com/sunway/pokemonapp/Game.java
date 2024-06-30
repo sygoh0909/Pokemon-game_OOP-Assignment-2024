@@ -181,7 +181,7 @@ public class Game {
         Pokemon userPokemon1 = userPokemons.get(userChoice1);
         Pokemon userPokemon2 = userPokemons.get(userChoice2);
 
-        // Simulate battle logic (example: higher attack wins)
+        // Simulate battle logic (example: higher attack wins) - get from battle class later
         Pokemon wildPokemon1 = wildPokemons.get(0);
         Pokemon wildPokemon2 = wildPokemons.get(1);
 
