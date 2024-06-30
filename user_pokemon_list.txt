@@ -1,3 +1,14 @@
-roselia (Type: Grasslands and Forest, HP: 62, Stars: 5)
-my.com.sunway.pokemonapp.Pokemon@4d1b0d2a
 Pokemon{name='chansey', health=51, attack=71, defense=97, powers=[Power1, Power2, Power3], stars=4, types=[normal]}
+Pokemon{name='pichu', health=71, attack=81, defense=73, powers=[Power1, Power2, Power3], stars=5, types=[electric]}
+Pokemon{name='walrein', health=80, attack=56, defense=66, powers=[Power1, Power2, Power3], stars=4, types=[ice, water]}
+Pokemon{name='xatu', health=67, attack=93, defense=92, powers=[Power1, Power2, Power3], stars=5, types=[psychic, flying]}
+Pokemon{name='aggron', health=63, attack=52, defense=96, powers=[Power1, Power2, Power3], stars=4, types=[steel, rock]}
+Pokemon{name='venusaur', health=77, attack=91, defense=80, powers=[Power1, Power2, Power3], stars=5, types=[grass, poison]}
+Pokemon{name='electabuzz', health=95, attack=76, defense=94, powers=[Power1, Power2, Power3], stars=5, types=[electric]}
+Pokemon{name='farfetchd', health=79, attack=87, defense=70, powers=[Power1, Power2, Power3], stars=5, types=[normal, flying]}
+Pokemon{name='jigglypuff', health=60, attack=55, defense=59, powers=[Power1, Power2, Power3], stars=3, types=[normal, normal, fairy]}
+Pokemon{name='gastly', health=74, attack=55, defense=73, powers=[Power1, Power2, Power3], stars=4, types=[ghost, poison]}
+Pokemon{name='bayleef', health=62, attack=80, defense=63, stars=4, types=[grass], speed=0, accuracy=0}
+Pokemon{name='caterpie', health=30, attack=35, defense=20, stars=1, types=[bug], speed=0, accuracy=0}
+Pokemon{name='banette', health=115, attack=65, defense=83, stars=5, types=[ghost], speed=0, accuracy=0}
+Pokemon{name='squirtle', health=48, attack=65, defense=50, stars=2, types=[water], speed=0, accuracy=0}
