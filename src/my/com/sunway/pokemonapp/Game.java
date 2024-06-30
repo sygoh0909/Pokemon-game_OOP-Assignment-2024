@@ -9,50 +9,24 @@ public class Game {
     private Player player;
     private List<List<Pokemon>> stages; // Pokémon in the stages
     private List<String> stageNames;
-    private List<Integer> topScores;
     private PokemonService pokemonService;
+    private List<Pokemon> userPokemons;
 
     public Game() {
         this.stages = new ArrayList<>();
         this.stageNames = new ArrayList<>();
-        this.topScores = new ArrayList<>();
         this.pokemonService = new PokemonService();
+        this.userPokemons = new ArrayList<>(); // Initialize the userPokemons list
+        loadUserPokemons(); // Load user's Pokémon from file upon Game initialization
         setupStages();
     }
 
-    private void setupStages() {
-        try {
-            // Grasslands and Forest (IDs 2, 3)
-            List<Integer> grasslandIds = List.of(2, 3);
-            stages.add(pokemonService.fetchPokemonsByMultipleHabitats(grasslandIds));
-            stageNames.add("Grasslands and Forest");
-
-            // Mountains and Caves (IDs 1, 4)
-            List<Integer> mountainIds = List.of(1, 4);
-            stages.add(pokemonService.fetchPokemonsByMultipleHabitats(mountainIds));
-            stageNames.add("Mountains and Caves");
-
-            // Water Bodies (IDs 7, 9)
-            List<Integer> waterIds = List.of(7, 9);
-            stages.add(pokemonService.fetchPokemonsByMultipleHabitats(waterIds));
-            stageNames.add("Water Bodies");
-
-            // Urban Areas (IDs 8)
-            List<Integer> urbanIds = List.of(8);
-            stages.add(pokemonService.fetchPokemonsByMultipleHabitats(urbanIds));
-            stageNames.add("Urban Areas");
-
-        } catch (IOException | InterruptedException e) {
-            e.printStackTrace();
-        }
-    }
-
     public boolean login(String userId, String password) {
-        this.player = new Player("testUser", "password123");
+        this.player = new Player(userId, password);
         return this.player.authenticate(userId, password);
     }
 
-    public void displayStages() { // Display stage name, Pokémon name, type, star
+    public void displayStages() {
         if (stages.isEmpty()) {
             System.out.println("No stages available.");
         } else {
@@ -79,7 +53,7 @@ public class Game {
         }
     }
 
-    public void chooseStageAndPokemon() throws IOException {
+    public List<Pokemon> chooseStageAndPokemon() throws IOException {
         Scanner scanner = new Scanner(System.in);
         int stageChoice = -1;
 
@@ -139,6 +113,197 @@ public class Game {
         } else {
             System.out.println("The " + chosenPokemon.getName() + " escaped!");
         }
+
+        // Randomly select two wild Pokémon from the chosen stage's list
+        List<Pokemon> wildPokemons = new ArrayList<>();
+        Random random = new Random();
+        int firstIndex = random.nextInt(chosenStagePokemons.size());
+        int secondIndex = random.nextInt(chosenStagePokemons.size());
+        while (secondIndex == firstIndex) {
+            secondIndex = random.nextInt(chosenStagePokemons.size());
+        }
+
+        wildPokemons.add(chosenStagePokemons.get(firstIndex));
+        wildPokemons.add(chosenStagePokemons.get(secondIndex));
+
+        // Display wild Pokémon for battle
+        System.out.println("\nTwo wild Pokémon appear for battle:");
+        for (int i = 0; i < wildPokemons.size(); i++) {
+            Pokemon pokemon = wildPokemons.get(i);
+            System.out.println((i + 1) + ": " + pokemon.getName() + " | Type: " + String.join(", ", pokemon.getTypes()) + " | Stars: " + pokemon.getStars());
+        }
+
+        return wildPokemons; // Return wildPokemons for battle
+    }
+
+    public void startBattle(List<Pokemon> wildPokemons) {
+        Scanner scanner = new Scanner(System.in);
+
+        // Display user's Pokémon for selection, including newly caught Pokémon
+        System.out.println("\nYour Pokémon:");
+        for (int i = 0; i < userPokemons.size(); i++) {
+            Pokemon pokemon = userPokemons.get(i);
+            System.out.println((i + 1) + ": " + pokemon.getName() + " | Type: " + String.join(", ", pokemon.getTypes()) + " | Stars: " + pokemon.getStars());
+        }
+
+        int userChoice1 = -1;
+        int userChoice2 = -1;
+
+        // Choose first Pokémon
+        while (userChoice1 < 0 || userChoice1 >= userPokemons.size()) {
+            System.out.println("Choose your first Pokémon (enter number): ");
+            try {
+                userChoice1 = scanner.nextInt() - 1;
+                if (userChoice1 < 0 || userChoice1 >= userPokemons.size()) {
+                    System.out.println("Invalid Pokémon choice. Please try again.");
+                }
+            } catch (InputMismatchException e) {
+                System.out.println("Invalid input. Please enter a number.");
+                scanner.next(); // Clear the invalid input
+            }
+        }
+
+        // Choose second Pokémon
+        while (userChoice2 < 0 || userChoice2 >= userPokemons.size() || userChoice2 == userChoice1) {
+            System.out.println("Choose your second Pokémon (enter number, different from the first): ");
+            try {
+                userChoice2 = scanner.nextInt() - 1;
+                if (userChoice2 < 0 || userChoice2 >= userPokemons.size() || userChoice2 == userChoice1) {
+                    System.out.println("Invalid Pokémon choice. Please try again.");
+                }
+            } catch (InputMismatchException e) {
+                System.out.println("Invalid input. Please enter a number.");
+                scanner.next(); // Clear the invalid input
+            }
+        }
+
+        // Get chosen Pokémon objects
+        Pokemon userPokemon1 = userPokemons.get(userChoice1);
+        Pokemon userPokemon2 = userPokemons.get(userChoice2);
+
+        // Simulate battle logic (example: higher attack wins)
+        Pokemon wildPokemon1 = wildPokemons.get(0);
+        Pokemon wildPokemon2 = wildPokemons.get(1);
+
+        // Example battle logic (simplified)
+        boolean userWins = userPokemon1.getAttack() > wildPokemon1.getAttack() && userPokemon2.getAttack() > wildPokemon2.getAttack();
+
+        // Display battle result
+        if (userWins) {
+            System.out.println("You won the battle!");
+            // Handle winning scenario
+        } else {
+            System.out.println("You lost the battle!");
+            // Handle losing scenario
+        }
+    }
+
+    private void setupStages() {
+        try {
+            // Grasslands and Forest (IDs 2, 3)
+            List<Integer> grasslandIds = List.of(2, 3);
+            stages.add(pokemonService.fetchPokemonsByMultipleHabitats(grasslandIds));
+            stageNames.add("Grasslands and Forest");
+
+            // Mountains and Caves (IDs 1, 4)
+            List<Integer> mountainIds = List.of(1, 4);
+            stages.add(pokemonService.fetchPokemonsByMultipleHabitats(mountainIds));
+            stageNames.add("Mountains and Caves");
+
+            // Water Bodies (IDs 7, 9)
+            List<Integer> waterIds = List.of(7, 9);
+            stages.add(pokemonService.fetchPokemonsByMultipleHabitats(waterIds));
+            stageNames.add("Water Bodies");
+
+            // Urban Areas (IDs 8)
+            List<Integer> urbanIds = List.of(8);
+            stages.add(pokemonService.fetchPokemonsByMultipleHabitats(urbanIds));
+            stageNames.add("Urban Areas");
+
+        } catch (IOException | InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void loadUserPokemons() {
+        String fileName = "user_pokemon_list.txt";
+        try {
+            List<String> lines = Files.readAllLines(Paths.get(fileName));
+            for (String line : lines) {
+                Pokemon pokemon = parsePokemonFromString(line);
+                if (pokemon != null) {
+                    userPokemons.add(pokemon);
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private Pokemon parsePokemonFromString(String pokemonDetails) {
+        // Example format: "Pokemon{name='Charizard', health=100, ...}"
+        // Implement parsing logic to create a Pokemon object from string representation
+        // Split by comma and then parse each attribute
+
+        // Remove unnecessary characters and split by commas
+        String[] parts = pokemonDetails.replace("Pokemon{", "").replace("}", "").split(", ");
+
+        // Initialize variables to store parsed values
+        String name = null;
+        int health = 0;
+        int attack = 0;
+        int defense = 0;
+        int stars = 0;
+        List<String> types = new ArrayList<>();
+        int speed = 0;
+        int accuracy = 0;
+
+        // Iterate through parts to parse each attribute
+        for (String part : parts) {
+            // Split each part into key and value
+            String[] keyValue = part.split("=");
+            if (keyValue.length != 2) {
+                // Handle unexpected format or skip if needed
+                continue;
+            }
+            String key = keyValue[0].trim();
+            String value = keyValue[1].trim();
+
+            // Switch case to assign values based on key
+            switch (key) {
+                case "name":
+                    name = value;
+                    break;
+                case "health":
+                    health = Integer.parseInt(value);
+                    break;
+                case "attack":
+                    attack = Integer.parseInt(value);
+                    break;
+                case "defense":
+                    defense = Integer.parseInt(value);
+                    break;
+                case "stars":
+                    stars = Integer.parseInt(value);
+                    break;
+                case "types":
+                    // Remove brackets and split by comma for types
+                    types = Arrays.asList(value.substring(1, value.length() - 1).split(", "));
+                    break;
+                case "speed":
+                    speed = Integer.parseInt(value);
+                    break;
+                case "accuracy":
+                    accuracy = Integer.parseInt(value);
+                    break;
+                default:
+                    // Handle unrecognized keys or ignore
+                    break;
+            }
+        }
+
+        // Create and return Pokemon object
+        return new Pokemon(name, health, attack, defense, stars, types, speed, accuracy);
     }
 
     private Pokeball chooseRandomPokeball() {
@@ -158,11 +323,18 @@ public class Game {
         return catchChance <= pokeball.getCatchRate();
     }
 
-    private void saveChosenPokemon(Pokemon pokemon) throws IOException {
+    private void saveChosenPokemon(Pokemon pokemon) {
         String fileName = "user_pokemon_list.txt";
-        String pokemonDetails = pokemon.toString();
-        Files.write(Paths.get(fileName), (pokemonDetails + System.lineSeparator()).getBytes(), java.nio.file.StandardOpenOption.CREATE, java.nio.file.StandardOpenOption.APPEND);
-        System.out.println("Saved " + pokemon.getName() + " to " + fileName);
+        try {
+            String pokemonDetails = pokemon.toString();
+            Files.write(Paths.get(fileName), (pokemonDetails + System.lineSeparator()).getBytes(), java.nio.file.StandardOpenOption.CREATE, java.nio.file.StandardOpenOption.APPEND);
+            System.out.println("Saved " + pokemon.getName() + " to " + fileName);
+
+            // Add the newly caught pokemon to the userPokemons list
+            userPokemons.add(pokemon);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public static void main(String[] args) throws IOException, InterruptedException {
@@ -172,7 +344,13 @@ public class Game {
         if (loggedIn) {
             System.out.println("Login successful!");
             game.displayStages();
-            game.chooseStageAndPokemon();
+
+            // Choose stage and get wild Pokémon for battle
+            List<Pokemon> wildPokemons = game.chooseStageAndPokemon();
+
+            // Start battle with wildPokemons
+            game.startBattle(wildPokemons);
+
         } else {
             System.out.println("Login failed!");
         }
