@@ -127,7 +127,7 @@ public class Battle {
             }
 
             // Check if any Pokémon has fainted
-            if (userPokemon1.getHealth() <= 0 || userPokemon2.getHealth() <= 0) {
+            if (userPokemon1.getHealth() <= 0 && userPokemon2.getHealth() <= 0) {
                 System.out.println("You lost the battle!");
                 return;
             }
