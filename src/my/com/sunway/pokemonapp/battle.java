@@ -5,6 +5,12 @@ import java.util.List;
 import java.util.Scanner;
 
 public class Battle {
+    private QuickTimeEvent qte;
+
+    public Battle() {
+        this.qte = new QuickTimeEvent();
+    }
+
     public void startBattle(List<Pokemon> userPokemons, List<Pokemon> wildPokemons) {
         Scanner scanner = new Scanner(System.in);
 
@@ -46,24 +52,89 @@ public class Battle {
             }
         }
 
+        System.out.println("Battle start!");
+
         // Get chosen Pokémon objects
         Pokemon userPokemon1 = userPokemons.get(userChoice1);
         Pokemon userPokemon2 = userPokemons.get(userChoice2);
 
-        // Simulate battle logic (example: higher attack wins) - get from battle class later
+        // Simulate battle logic
         Pokemon wildPokemon1 = wildPokemons.get(0);
         Pokemon wildPokemon2 = wildPokemons.get(1);
 
-        // Example battle logic (simplified)
-        boolean userWins = userPokemon1.getAttack() > wildPokemon1.getAttack() && userPokemon2.getAttack() > wildPokemon2.getAttack();
+        // Turn-based battle logic
+        while (userPokemon1.getHealth() > 0 && userPokemon2.getHealth() > 0 && (wildPokemon1.getHealth() > 0 || wildPokemon2.getHealth() > 0)) {
+            // Player's Pokémon 1 turn
+            System.out.println("Player's Pokémon 1 turn!");
+            long reactionTime1 = qte.performQTE();
 
-        // Display battle result
-        if (userWins) {
-            System.out.println("You won the battle!");
-            // Handle winning scenario
-        } else {
-            System.out.println("You lost the battle!");
-            // Handle losing scenario
+            int attackStrength1;
+            if (reactionTime1 < 1000) {
+                attackStrength1 = userPokemon1.getAttack() ; // Fast reaction
+            } else if (reactionTime1 < 2000) {
+                attackStrength1 = userPokemon1.getAttack(); // Moderate reaction
+            } else {
+                attackStrength1 = userPokemon1.getAttack() / 2; // Slow reaction
+            }
+
+            wildPokemon1.takeDamage(attackStrength1);
+            wildPokemon2.takeDamage(attackStrength1);
+
+            // Display remaining HP after user's Pokémon 1 turn
+            System.out.println("Remaining HP after Pokémon 1's attack:");
+            System.out.println(wildPokemon1.getName() + ": " + wildPokemon1.getHealth());
+            System.out.println(wildPokemon2.getName() + ": " + wildPokemon2.getHealth());
+
+            // Wild Pokémon 1 turn
+            if (wildPokemon1.getHealth() > 0) {
+                System.out.println("Wild Pokémon 1's turn!");
+                userPokemon1.takeDamage(wildPokemon1.getAttack());
+                // Display remaining HP after Wild Pokémon 1's turn
+                System.out.println("Remaining HP after Wild Pokémon 1's attack:");
+                System.out.println(userPokemon1.getName() + ": " + userPokemon1.getHealth());
+                System.out.println(userPokemon2.getName() + ": " + userPokemon2.getHealth());
+            }
+
+            // Player's Pokémon 2 turn
+            System.out.println("Player's Pokémon 2 turn!");
+            long reactionTime2 = qte.performQTE();
+
+            int attackStrength2;
+            if (reactionTime2 < 1000) {
+                attackStrength2 = userPokemon2.getAttack() ; // Fast reaction
+            } else if (reactionTime2 < 2000) {
+                attackStrength2 = userPokemon2.getAttack(); // Moderate reaction
+            } else {
+                attackStrength2 = userPokemon2.getAttack() / 2; // Slow reaction
+            }
+
+            wildPokemon1.takeDamage(attackStrength2);
+            wildPokemon2.takeDamage(attackStrength2);
+
+            // Display remaining HP after user's Pokémon 2 turn
+            System.out.println("Remaining HP after Pokémon 2's attack:");
+            System.out.println(wildPokemon1.getName() + ": " + wildPokemon1.getHealth());
+            System.out.println(wildPokemon2.getName() + ": " + wildPokemon2.getHealth());
+
+            // Wild Pokémon 2 turn
+            if (wildPokemon2.getHealth() > 0) {
+                System.out.println("Wild Pokémon 2's turn!");
+                userPokemon2.takeDamage(wildPokemon2.getAttack());
+                // Display remaining HP after Wild Pokémon 2's turn
+                System.out.println("Remaining HP after Wild Pokémon 2's attack:");
+                System.out.println(userPokemon1.getName() + ": " + userPokemon1.getHealth());
+                System.out.println(userPokemon2.getName() + ": " + userPokemon2.getHealth());
+            }
+
+            // Check if any Pokémon has fainted
+            if (userPokemon1.getHealth() <= 0 || userPokemon2.getHealth() <= 0) {
+                System.out.println("You lost the battle!");
+                return;
+            }
+            if (wildPokemon1.getHealth() <= 0 && wildPokemon2.getHealth() <= 0) {
+                System.out.println("You won the battle!");
+                return;
+            }
         }
     }
 }
