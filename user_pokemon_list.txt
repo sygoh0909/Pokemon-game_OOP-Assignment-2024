@@ -15,3 +15,7 @@ Pokemon{name='squirtle', health=48, attack=65, defense=50, stars=2, types=[water
 Pokemon{name='hitmonchan', health=105, attack=79, defense=35, stars=4, types=[fighting], speed=0, accuracy=0}
 Pokemon{name='exploud', health=91, attack=63, defense=91, stars=5, types=[normal], speed=0, accuracy=0}
 Pokemon{name='volbeat', health=73, attack=75, defense=47, stars=4, types=[bug], speed=0, accuracy=0}
+Pokemon{name='dugtrio', health=100, attack=50, defense=50, stars=4, types=[ground], speed=0, accuracy=0}
+Pokemon{name='natu', health=50, attack=45, defense=70, stars=2, types=[psychic, flying], speed=0, accuracy=0}
+Pokemon{name='totodile', health=65, attack=64, defense=44, stars=3, types=[water], speed=0, accuracy=0}
+Pokemon{name='flareon', health=130, attack=60, defense=95, stars=5, types=[fire], speed=0, accuracy=0}
