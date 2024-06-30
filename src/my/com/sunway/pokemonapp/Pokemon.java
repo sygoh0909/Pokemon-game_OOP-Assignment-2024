@@ -7,18 +7,20 @@ public class Pokemon {
     private int health;
     private int attack;
     private int defense;
-    private List<String> powers;
     private int stars;
     private List<String> types;
+    private int speed;
+    private int accuracy;
 
-    public Pokemon(String name, int health, int attack, int defense, List<String> powers, int stars, List<String> types) {
+    public Pokemon(String name, int health, int attack, int defense, int stars, List<String> types, int speed, int accuracy) {
         this.name = name;
         this.health = health;
         this.attack = attack;
         this.defense = defense;
-        this.powers = powers;
         this.stars = stars;
         this.types = types;
+        this.speed = speed;
+        this.accuracy = accuracy;
     }
 
     public void setName(String name) {
@@ -37,16 +39,20 @@ public class Pokemon {
         this.defense = defense;
     }
 
-    public void setPowers(List<String> powers) {
-        this.powers = powers;
-    }
-
     public void setStars(int stars) {
         this.stars = stars;
     }
 
     public void setTypes(List<String> types) {
         this.types = types;
+    }
+
+    public void setSpeed(int speed) {
+        this.speed = speed;
+    }
+
+    public void setAccuracy(int accuracy) {
+        this.accuracy = accuracy;
     }
 
     public String getName() {
@@ -65,16 +71,20 @@ public class Pokemon {
         return defense;
     }
 
-    public List<String> getPowers() {
-        return powers;
-    }
-
     public int getStars() {
         return stars;
     }
 
     public List<String> getTypes() {
         return types;
+    }
+
+    public int getSpeed() {
+        return speed;
+    }
+
+    public int getAccuracy() {
+        return accuracy;
     }
 
     public void takeDamage(int damage) {
@@ -100,9 +110,10 @@ public class Pokemon {
                 ", health=" + health +
                 ", attack=" + attack +
                 ", defense=" + defense +
-                ", powers=" + powers +
                 ", stars=" + stars +
                 ", types=" + types +
+                ", speed=" + speed +
+                ", accuracy=" + accuracy +
                 '}';
     }
 }
