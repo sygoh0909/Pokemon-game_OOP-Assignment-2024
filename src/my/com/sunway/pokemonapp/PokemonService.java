@@ -35,7 +35,7 @@ public class PokemonService {
             Matcher matcher = pattern.matcher(jsonResponse);
 
             if (matcher.find()) {
-                String speciesJson = matcher.group(1); //retrieves the substring captured by the first capturing group in the regex pattern
+                String speciesJson = matcher.group(1); // Retrieves the substring captured by the first capturing group in the regex pattern
                 Pattern speciesItemPattern = Pattern.compile("\"name\":\\s*\"(\\w+)\",\\s*\"url\":\\s*\"(.*?)\"");
                 Matcher speciesItemMatcher = speciesItemPattern.matcher(speciesJson);
 
@@ -77,14 +77,16 @@ public class PokemonService {
                         int health = stats[0];
                         int attack = stats[1];
                         int defense = stats[2];
-                        int speed = stats[3];
-                        int accuracy = stats[4];
+                        int specialAttack = stats[3];
+                        int specialDefense = stats[4];
+                        int speed = stats[5];
+                        int accuracy = stats[6];
 
                         // Calculate stars based on stats
-                        int stars = calculateStars(attack, defense, health);
+                        int stars = calculateStars(attack, defense, health, specialAttack, specialDefense);
 
                         // Create Pokémon object and add to list
-                        pokemonList.add(new Pokemon(name, health, attack, defense, stars, types, speed, accuracy));
+                        pokemonList.add(new Pokemon(name, health, attack, defense, stars, types, speed, accuracy, specialAttack, specialDefense));
                     }
                 }
             }
@@ -114,7 +116,7 @@ public class PokemonService {
 
     // Method to extract Pokémon stats from JSON response
     private int[] extractPokemonStats(String pokemonJson) {
-        int[] stats = new int[5]; // Array to store hp, attack, defense, speed, accuracy
+        int[] stats = new int[7]; // Array to store hp, attack, defense, special attack, special defense, speed, accuracy
         try {
             // Regex pattern to find stats array in JSON response
             String statsRegex = "\"stats\":\\s*\\[(.*?)\\]";
@@ -128,8 +130,10 @@ public class PokemonService {
                 stats[0] = extractStatValue(statsJson, "hp");
                 stats[1] = extractStatValue(statsJson, "attack");
                 stats[2] = extractStatValue(statsJson, "defense");
-                stats[3] = extractStatValue(statsJson, "speed");
-                stats[4] = extractStatValue(statsJson, "accuracy"); // Extract accuracy from stats
+                stats[3] = extractStatValue(statsJson, "special-attack");
+                stats[4] = extractStatValue(statsJson, "special-defense");
+                stats[5] = extractStatValue(statsJson, "speed");
+                stats[6] = extractStatValue(statsJson, "accuracy"); // Extract accuracy from stats
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -151,13 +155,13 @@ public class PokemonService {
     }
 
     // Method to calculate stars based on Pokémon stats
-    private int calculateStars(int attack, int defense, int health) {
-        int sumStats = attack + defense + health;
-        if (sumStats > 220) {
+    private int calculateStars(int attack, int defense, int health, int specialAttack, int specialDefense) {
+        int sumStats = attack + defense + health + specialAttack + specialDefense;
+        if (sumStats > 300) {
             return 5;
-        } else if (sumStats > 190) {
+        } else if (sumStats > 250) {
             return 4;
-        } else if (sumStats > 170) {
+        } else if (sumStats > 200) {
             return 3;
         } else if (sumStats > 150) {
             return 2;

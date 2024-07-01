@@ -11,8 +11,10 @@ public class Pokemon {
     private List<String> types;
     private int speed;
     private int accuracy;
+    private int specialAttack;
+    private int specialDefense;
 
-    public Pokemon(String name, int health, int attack, int defense, int stars, List<String> types, int speed, int accuracy) {
+    public Pokemon(String name, int health, int attack, int defense, int stars, List<String> types, int speed, int accuracy, int specialAttack, int specialDefense) {
         this.name = name;
         this.health = health;
         this.attack = attack;
@@ -21,6 +23,8 @@ public class Pokemon {
         this.types = types;
         this.speed = speed;
         this.accuracy = accuracy;
+        this.specialAttack = specialAttack;
+        this.specialDefense = specialDefense;
     }
 
     public void setName(String name) {
@@ -55,6 +59,14 @@ public class Pokemon {
         this.accuracy = accuracy;
     }
 
+    public void setSpecialAttack(int specialAttack) {
+        this.specialAttack = specialAttack;
+    }
+
+    public void setSpecialDefense(int specialDefense) {
+        this.specialDefense = specialDefense;
+    }
+
     public String getName() {
         return name;
     }
@@ -87,6 +99,14 @@ public class Pokemon {
         return accuracy;
     }
 
+    public int getSpecialAttack() {
+        return specialAttack;
+    }
+
+    public int getSpecialDefense() {
+        return specialDefense;
+    }
+
     public void takeDamage(int damage) {
         this.health -= damage;
         if (this.health < 0) {
@@ -114,6 +134,8 @@ public class Pokemon {
                 ", types=" + types +
                 ", speed=" + speed +
                 ", accuracy=" + accuracy +
+                ", special attack=" + specialAttack +
+                ", specialDefense=" + specialDefense +
                 '}';
     }
 }

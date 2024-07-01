@@ -107,6 +107,11 @@ public class Game {
         Pokeball chosenPokeball = chooseRandomPokeball();
         System.out.println("A " + chosenPokeball + " appeared!");
 
+        // Ask user to press Enter to attempt to catch the Pokémon
+        System.out.println("Press Enter to attempt to catch the " + chosenPokemon.getName() + "!");
+        Scanner keyboard = new Scanner(System.in);
+        scanner.nextLine(); // Wait for the user to press Enter
+
         // Attempt to catch the Pokémon
         boolean isCaught = attemptCatch(chosenPokeball);
         if (isCaught) {
@@ -197,6 +202,8 @@ public class Game {
         List<String> types = new ArrayList<>();
         int speed = 0;
         int accuracy = 0;
+        int specialAttack = 0;
+        int specialDefense = 0;
 
         // Iterate through parts to parse each attribute
         for (String part : parts) {
@@ -236,6 +243,12 @@ public class Game {
                 case "accuracy":
                     accuracy = Integer.parseInt(value);
                     break;
+                case "special attack":
+                    specialAttack = Integer.parseInt(value);
+                    break;
+                case "special defense":
+                    specialDefense = Integer.parseInt(value);
+                    break;
                 default:
                     // Handle unrecognized keys or ignore
                     break;
@@ -243,7 +256,7 @@ public class Game {
         }
 
         // Create and return Pokemon object
-        return new Pokemon(name, health, attack, defense, stars, types, speed, accuracy);
+        return new Pokemon(name, health, attack, defense, stars, types, speed, accuracy, specialAttack, specialDefense);
     }
 
     private Pokeball chooseRandomPokeball() {
