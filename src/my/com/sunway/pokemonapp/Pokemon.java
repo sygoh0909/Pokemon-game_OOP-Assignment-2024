@@ -21,7 +21,6 @@ public class Pokemon {
         this.stars = stars;
         this.types = types;
         this.speed = speed;
-        this.accuracy = accuracy;
         this.specialAttack = specialAttack;
         this.specialDefense = specialDefense;
     }
