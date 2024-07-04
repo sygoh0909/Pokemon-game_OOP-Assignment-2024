@@ -10,7 +10,6 @@ public class Pokemon {
     private int stars;
     private List<String> types;
     private int speed;
-    private int accuracy;
     private int specialAttack;
     private int specialDefense;
 
@@ -55,10 +54,6 @@ public class Pokemon {
         this.speed = speed;
     }
 
-    public void setAccuracy(int accuracy) {
-        this.accuracy = accuracy;
-    }
-
     public void setSpecialAttack(int specialAttack) {
         this.specialAttack = specialAttack;
     }
@@ -95,10 +90,6 @@ public class Pokemon {
         return speed;
     }
 
-    public int getAccuracy() {
-        return accuracy;
-    }
-
     public int getSpecialAttack() {
         return specialAttack;
     }
@@ -133,7 +124,6 @@ public class Pokemon {
                 ", stars=" + stars +
                 ", types=" + types +
                 ", speed=" + speed +
-                ", accuracy=" + accuracy +
                 ", special attack=" + specialAttack +
                 ", specialDefense=" + specialDefense +
                 '}';
