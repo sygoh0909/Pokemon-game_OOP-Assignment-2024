@@ -380,7 +380,7 @@ public class Game {
             game.battle.startBattle(game.userPokemons, wildPokemons);
 
         } else {
-            System.out.println("Login failed!");
+            System.out.println("Login failed!"); //login fail
         }
     }
 
