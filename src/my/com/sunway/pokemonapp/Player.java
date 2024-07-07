@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Player {
-    private final String userId; //using final means cannot be reassigned after being initialized in the constructor.
+    private final String userId;
     private final String password;
     private final List<Pokemon> pokemons;
     private int points;
@@ -14,6 +14,10 @@ public class Player {
         this.password = password;
         this.pokemons = new ArrayList<Pokemon>();
         this.points = 100; // Initial points
+    }
+
+    public String getUserId() {
+        return userId;
     }
 
     public void catchPokemon(Pokemon pokemon) {

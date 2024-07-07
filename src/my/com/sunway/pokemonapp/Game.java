@@ -2,7 +2,9 @@ package my.com.sunway.pokemonapp;
 
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.util.*;
 
 public class Game {
@@ -19,13 +21,77 @@ public class Game {
         this.pokemonService = new PokemonService();
         this.userPokemons = new ArrayList<>(); // Initialize the userPokemons list
         this.battle = new Battle(); // Initialize the Battle instance
-        loadUserPokemons(); // Load user's Pokémon from file upon Game initialization
         setupStages();
     }
 
-    public boolean login(String userId, String password) {
-        this.player = new Player(userId, password);
-        return this.player.authenticate(userId, password);
+    public boolean login() {
+        Scanner scanner = new Scanner(System.in);
+        boolean isAuthenticated = false;
+
+        while (!isAuthenticated) {
+            System.out.println("Enter your user ID:");
+            String userId = scanner.nextLine().trim();
+
+            // Check if user ID exists in stored credentials
+            String[] storedCredentials = findStoredCredentials(userId);
+
+            if (storedCredentials == null) {
+                System.out.println("User ID not found. Would you like to create a new account? (yes/no)");
+                String createAccountChoice = scanner.nextLine().trim().toLowerCase();
+
+                if (createAccountChoice.equals("yes")) {
+                    // Prompt for password creation
+                    System.out.println("Enter your new password:");
+                    String newPassword = scanner.nextLine().trim();
+
+                    // Save new user credentials
+                    saveUserCredentials(userId, newPassword);
+
+                    // Authenticate with newly created credentials
+                    this.player = new Player(userId, newPassword);
+                    isAuthenticated = true;
+                } else {
+                    System.out.println("Returning to login...");
+                }
+            } else {
+                String storedUserId = storedCredentials[0];
+                String storedPassword = storedCredentials[1];
+
+                System.out.println("Enter your password:");
+                String password = scanner.nextLine().trim();
+
+                if (storedPassword.equals(password)) {
+                    this.player = new Player(storedUserId, storedPassword);
+                    System.out.println("Login successful!");
+                    isAuthenticated = true;
+                } else {
+                    System.out.println("Incorrect password. Login failed. Retry? (yes/no)");
+                    String retryChoice = scanner.nextLine().trim().toLowerCase();
+                    if (!retryChoice.equals("yes")) {
+                        break; // Exit the loop if user chooses not to retry
+                    }
+                }
+            }
+        }
+
+        return isAuthenticated;
+    }
+
+
+    private String[] findStoredCredentials(String userId) {
+        String fileName = "user_credentials.txt";
+        try {
+            List<String> lines = Files.readAllLines(Paths.get(fileName));
+            for (String line : lines) {
+                String[] parts = line.split(",");
+                if (parts.length == 2 && parts[0].trim().equals(userId)) {
+                    return parts;
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     public void displayStages() {
@@ -74,6 +140,7 @@ public class Game {
                 System.out.println("Invalid input. Please enter a number.");
                 scanner.next(); // Clear the invalid input
             }
+
         }
 
         List<Pokemon> chosenStagePokemons = stages.get(stageChoice);
@@ -110,7 +177,7 @@ public class Game {
         // Ask user to press Enter to attempt to catch the Pokémon
         System.out.println("Press Enter to attempt to catch the " + chosenPokemon.getName() + "!");
         Scanner keyboard = new Scanner(System.in);
-        scanner.nextLine(); // Wait for the user to press Enter
+        keyboard.nextLine(); //wait for user to press enter
 
         // Attempt to catch the Pokémon
         boolean isCaught = attemptCatch(chosenPokeball);
@@ -121,26 +188,22 @@ public class Game {
             System.out.println("The " + chosenPokemon.getName() + " escaped!");
         }
 
-        // Randomly select two wild Pokémon from the chosen stage's list
-        List<Pokemon> wildPokemons = new ArrayList<>();
-        Random random = new Random();
-        int firstIndex = random.nextInt(chosenStagePokemons.size());
-        int secondIndex = random.nextInt(chosenStagePokemons.size());
-        while (secondIndex == firstIndex) {
-            secondIndex = random.nextInt(chosenStagePokemons.size());
+        // Randomly generate wild Pokémon for battle
+        List<Pokemon> wildPokemons = battle.chooseWildPokemons(chosenStagePokemons);
+
+        return wildPokemons;
+    }
+
+    private void saveUserCredentials(String userId, String password) {
+        String fileName = "user_credentials.txt";
+        try {
+            String credentials = userId + "," + password;
+            Files.write(Paths.get(fileName), (credentials + System.lineSeparator()).getBytes(),
+                    StandardOpenOption.CREATE, StandardOpenOption.APPEND);
+            System.out.println("User credentials saved to " + fileName);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-
-        wildPokemons.add(chosenStagePokemons.get(firstIndex));
-        wildPokemons.add(chosenStagePokemons.get(secondIndex));
-
-        // Display wild Pokémon for battle
-        System.out.println("\nTwo wild Pokémon appear for battle:");
-        for (int i = 0; i < wildPokemons.size(); i++) {
-            Pokemon pokemon = wildPokemons.get(i);
-            System.out.println((i + 1) + ": " + pokemon.getName() + " | Type: " + String.join(", ", pokemon.getTypes()) + " | Stars: " + pokemon.getStars());
-        }
-
-        return wildPokemons; // Return wildPokemons for battle
     }
 
     private void setupStages() {
@@ -171,19 +234,27 @@ public class Game {
     }
 
     private void loadUserPokemons() {
-        String fileName = "user_pokemon_list.txt";
+        String fileName = "user_pokemon_list_" + player.getUserId() + ".txt";
+        Path filePath = Paths.get(fileName);
+
         try {
-            List<String> lines = Files.readAllLines(Paths.get(fileName));
-            for (String line : lines) {
-                Pokemon pokemon = parsePokemonFromString(line);
-                if (pokemon != null) {
-                    userPokemons.add(pokemon);
+            if (Files.exists(filePath)) {
+                List<String> lines = Files.readAllLines(filePath);
+                for (String line : lines) {
+                    Pokemon pokemon = parsePokemonFromString(line);
+                    if (pokemon != null) {
+                        userPokemons.add(pokemon);
+                    }
                 }
+            } else {
+                System.out.println("No Pokémon list found for user. Creating new list...");
+                Files.createFile(filePath); // Create a new file if it doesn't exist
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
+
 
     private Pokemon parsePokemonFromString(String pokemonDetails) {
         // Example format: "Pokemon{name='Charizard', health=100, ...}"
@@ -256,7 +327,7 @@ public class Game {
         }
 
         // Create and return Pokemon object
-        return new Pokemon(name, health, attack, defense, stars, types, speed, accuracy, specialAttack, specialDefense);
+        return new Pokemon(name, health, attack, defense, stars, types, speed, specialAttack, specialDefense);
     }
 
     private Pokeball chooseRandomPokeball() {
@@ -277,10 +348,10 @@ public class Game {
     }
 
     private void saveChosenPokemon(Pokemon pokemon) {
-        String fileName = "user_pokemon_list.txt";
+        String fileName = "user_pokemon_list_" + player.getUserId() + ".txt"; // Use player.getUserId() to get the user ID
         try {
             String pokemonDetails = pokemon.toString();
-            Files.write(Paths.get(fileName), (pokemonDetails + System.lineSeparator()).getBytes(), java.nio.file.StandardOpenOption.CREATE, java.nio.file.StandardOpenOption.APPEND);
+            Files.write(Paths.get(fileName), (pokemonDetails + System.lineSeparator()).getBytes(), StandardOpenOption.CREATE, StandardOpenOption.APPEND);
             System.out.println("Saved " + pokemon.getName() + " to " + fileName);
 
             // Add the newly caught pokemon to the userPokemons list
@@ -292,10 +363,14 @@ public class Game {
 
     public static void main(String[] args) throws IOException, InterruptedException {
         Game game = new Game();
-        boolean loggedIn = game.login("testUser", "password123"); // For testing only
+        boolean loggedIn = game.login();
 
         if (loggedIn) {
-            System.out.println("Login successful!");
+            System.out.println("Login successful for user ID: " + game.player.getUserId());
+
+            // Load user-specific Pokémon data after successful login
+            game.loadUserPokemons();
+
             game.displayStages();
 
             // Choose stage and get wild Pokémon for battle
@@ -308,4 +383,5 @@ public class Game {
             System.out.println("Login failed!");
         }
     }
+
 }

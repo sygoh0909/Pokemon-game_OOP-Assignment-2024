@@ -80,13 +80,12 @@ public class PokemonService {
                         int specialAttack = stats[3];
                         int specialDefense = stats[4];
                         int speed = stats[5];
-                        int accuracy = stats[6];
 
                         // Calculate stars based on stats
                         int stars = calculateStars(attack, defense, health, specialAttack, specialDefense);
 
                         // Create Pokémon object and add to list
-                        pokemonList.add(new Pokemon(name, health, attack, defense, stars, types, speed, accuracy, specialAttack, specialDefense));
+                        pokemonList.add(new Pokemon(name, health, attack, defense, stars, types, speed, specialAttack, specialDefense));
                     }
                 }
             }
@@ -116,7 +115,7 @@ public class PokemonService {
 
     // Method to extract Pokémon stats from JSON response
     private int[] extractPokemonStats(String pokemonJson) {
-        int[] stats = new int[7]; // Array to store hp, attack, defense, special attack, special defense, speed, accuracy
+        int[] stats = new int[6]; // Array to store hp, attack, defense, special attack, special defense, speed
         try {
             // Regex pattern to find stats array in JSON response
             String statsRegex = "\"stats\":\\s*\\[(.*?)\\]";
@@ -133,7 +132,6 @@ public class PokemonService {
                 stats[3] = extractStatValue(statsJson, "special-attack");
                 stats[4] = extractStatValue(statsJson, "special-defense");
                 stats[5] = extractStatValue(statsJson, "speed");
-                stats[6] = extractStatValue(statsJson, "accuracy"); // Extract accuracy from stats
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -157,13 +155,13 @@ public class PokemonService {
     // Method to calculate stars based on Pokémon stats
     private int calculateStars(int attack, int defense, int health, int specialAttack, int specialDefense) {
         int sumStats = attack + defense + health + specialAttack + specialDefense;
-        if (sumStats > 300) {
+        if (sumStats > 570) {
             return 5;
-        } else if (sumStats > 250) {
+        } else if (sumStats > 500) {
             return 4;
-        } else if (sumStats > 200) {
+        } else if (sumStats > 350) {
             return 3;
-        } else if (sumStats > 150) {
+        } else if (sumStats > 250) {
             return 2;
         } else {
             return 1;

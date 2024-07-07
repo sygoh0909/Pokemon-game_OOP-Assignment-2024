@@ -13,7 +13,7 @@ public class Pokemon {
     private int specialAttack;
     private int specialDefense;
 
-    public Pokemon(String name, int health, int attack, int defense, int stars, List<String> types, int speed, int accuracy, int specialAttack, int specialDefense) {
+    public Pokemon(String name, int health, int attack, int defense, int stars, List<String> types, int speed, int specialAttack, int specialDefense) {
         this.name = name;
         this.health = health;
         this.attack = attack;
