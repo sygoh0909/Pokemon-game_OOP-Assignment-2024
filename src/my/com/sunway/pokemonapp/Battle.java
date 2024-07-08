@@ -1,14 +1,13 @@
 package my.com.sunway.pokemonapp;
 
-import java.util.ArrayList;
-import java.util.InputMismatchException;
-import java.util.List;
-import java.util.Random;
-import java.util.Scanner;
+import java.io.*;
+import java.util.*;
 
 public class Battle {
     private QuickTimeEvent qte;
     private List<Pokemon> rentalPokemons;
+    private static final String SCORE_FILE = "top_scores.txt";
+    private static final int MAX_TOP_SCORES = 5;
 
     public Battle() {
         this.qte = new QuickTimeEvent();
@@ -19,7 +18,7 @@ public class Battle {
         rentalPokemons.add(new Pokemon("Tyrunt", 58, 89, 77, 3, List.of("rock", "dragon"), 48, 45, 45));
     }
 
-    public void startBattle(List<Pokemon> userPokemons, List<Pokemon> stageWildPokemons) {
+    public void startBattle(List<Pokemon> userPokemons, List<Pokemon> stageWildPokemons, String userId) {
         if (stageWildPokemons.isEmpty()) {
             System.out.println("No wild Pokémon available for battle. Exiting.");
             return;
@@ -35,6 +34,23 @@ public class Battle {
 
         Scanner scanner = new Scanner(System.in);
 
+        // Check if user has at least 2 Pokémon to choose
+        if (userPokemons.size() < 2) {
+            System.out.println("You don't have enough Pokémon. Choosing rental Pokémon.");
+            int rentalChoice1 = choosePokemon(rentalPokemons, scanner, -1);
+            int rentalChoice2 = choosePokemon(rentalPokemons, scanner, rentalChoice1);
+
+            Pokemon rentalPokemon1 = rentalPokemons.get(rentalChoice1);
+            Pokemon rentalPokemon2 = rentalPokemons.get(rentalChoice2);
+
+            System.out.println("You chose: ");
+            System.out.println("1: " + rentalPokemon1.getName() + " | Type: " + String.join(", ", rentalPokemon1.getTypes()) + " | Stars: " + rentalPokemon1.getStars());
+            System.out.println("2: " + rentalPokemon2.getName() + " | Type: " + String.join(", ", rentalPokemon2.getTypes()) + " | Stars: " + rentalPokemon2.getStars());
+
+            userPokemons.add(rentalPokemon1);
+            userPokemons.add(rentalPokemon2);
+        }
+
         System.out.println("\nYour Pokémon:");
         for (int i = 0; i < userPokemons.size(); i++) {
             Pokemon pokemon = userPokemons.get(i);
@@ -49,6 +65,8 @@ public class Battle {
         Pokemon userPokemon1 = userPokemons.get(userChoice1);
         Pokemon userPokemon2 = userPokemons.get(userChoice2);
 
+        int battleScore = 0;
+
         while (true) {
             if (userPokemon1.getHealth() > 0) {
                 System.out.println("\nPlayer's Pokémon 1 turn!");
@@ -56,6 +74,7 @@ public class Battle {
                 int attackStrength1 = calculateAttackStrength(userPokemon1, reactionTime1);
                 wildPokemon1.takeDamage(attackStrength1);
                 wildPokemon2.takeDamage(attackStrength1);
+                battleScore += attackStrength1;
                 displayRemainingHP(wildPokemon1, wildPokemon2);
             }
 
@@ -71,6 +90,7 @@ public class Battle {
                 int attackStrength2 = calculateAttackStrength(userPokemon2, reactionTime2);
                 wildPokemon1.takeDamage(attackStrength2);
                 wildPokemon2.takeDamage(attackStrength2);
+                battleScore += attackStrength2;
                 displayRemainingHP(wildPokemon1, wildPokemon2);
             }
 
@@ -89,7 +109,12 @@ public class Battle {
                 break;
             }
         }
+
+        System.out.println("\nBattle ended. Your score: " + battleScore);
+        updateTopScores(userId, battleScore);
+        displayTopScores();
     }
+
 
     List<Pokemon> chooseWildPokemons(List<Pokemon> chosenStagePokemons) {
         List<Pokemon> wildPokemons = new ArrayList<>();
@@ -151,5 +176,83 @@ public class Battle {
             System.out.println(pokemon.getName() + ": " + pokemon.getHealth());
         }
     }
-}
 
+    private void updateTopScores(String userId, int newScore) {
+        List<Score> topScores = readTopScores();
+        topScores.add(new Score(userId, newScore));
+        Collections.sort(topScores, Collections.reverseOrder());
+        if (topScores.size() > MAX_TOP_SCORES) {
+            topScores = topScores.subList(0, MAX_TOP_SCORES);
+        }
+        writeTopScores(topScores);
+    }
+
+    private List<Score> readTopScores() {
+        List<Score> topScores = new ArrayList<>();
+        File file = new File(SCORE_FILE);
+
+        try {
+            if (!file.exists()) {
+                file.createNewFile(); // Create a new file if it doesn't exist
+            }
+
+            Scanner scanner = new Scanner(file);
+            while (scanner.hasNextLine()) {
+                String line = scanner.nextLine();
+                String[] parts = line.split(",");
+                if (parts.length == 2) {
+                    String userId = parts[0].trim();
+                    int score = Integer.parseInt(parts[1].trim());
+                    topScores.add(new Score(userId, score));
+                }
+            }
+            scanner.close();
+        } catch (IOException e) {
+            System.out.println("Failed to read top scores: " + e.getMessage());
+        }
+
+        return topScores;
+    }
+
+
+    private void writeTopScores(List<Score> topScores) {
+        try (PrintWriter writer = new PrintWriter(new FileWriter(SCORE_FILE))) {
+            for (Score score : topScores) {
+                writer.println(score.getUserId() + "," + score.getScore());
+            }
+        } catch (IOException e) {
+            System.out.println("Failed to write top scores: " + e.getMessage());
+        }
+    }
+
+    private void displayTopScores() {
+        List<Score> topScores = readTopScores();
+        System.out.println("\nTop Scores:");
+        for (Score score : topScores) {
+            System.out.println(score.getUserId() + ": " + score.getScore());
+        }
+    }
+
+    static class Score implements Comparable<Score> {
+        private final String userId;
+        private final int score;
+
+        public Score(String userId, int score) {
+            this.userId = userId;
+            this.score = score;
+        }
+
+        public String getUserId() {
+            return userId;
+        }
+
+        public int getScore() {
+            return score;
+        }
+
+        @Override
+        public int compareTo(Score other) {
+            return Integer.compare(this.score, other.score);
+        }
+    }
+}

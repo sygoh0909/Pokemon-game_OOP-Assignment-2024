@@ -376,8 +376,8 @@ public class Game {
             // Choose stage and get wild Pokémon for battle
             List<Pokemon> wildPokemons = game.chooseStageAndPokemon();
 
-            // Start battle with wildPokemons
-            game.battle.startBattle(game.userPokemons, wildPokemons);
+            /// Pass user ID to Battle class when starting battle
+            game.battle.startBattle(game.userPokemons, wildPokemons, game.player.getUserId());
 
         } else {
             System.out.println("Login failed!"); //login fail
