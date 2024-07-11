@@ -19,33 +19,40 @@ public class QuickTimeEvent {
         return builder.toString();
     }
 
+    private long reactionTime; // Variable to store reaction time
+    private boolean tooSlow;   // Flag to track if user was too slow
+
     public long performQTE() {
         Scanner scanner = new Scanner(System.in);
         AtomicBoolean success = new AtomicBoolean(false);
         Timer timer = new Timer();
         long startTime = System.currentTimeMillis();
-        long[] endTime = new long[1];  // Array to store end time
 
         String randomSequence = generateRandomSequence(10);
-        System.out.println("Enter the following sequence within 7 seconds: " + randomSequence);
+        System.out.println("Enter the following sequence within 15 seconds: " + randomSequence);
 
         TimerTask task = new TimerTask() {
             @Override
             public void run() {
                 if (!success.get()) {
-                    System.out.println("Too slow!");
+                    System.out.println("Too slow! Attack failed.");
+                    tooSlow = true;  // Set flag for too slow
+                    timer.cancel();
                 }
             }
         };
 
-        timer.schedule(task, 7000);  // 7 seconds for QTE
+        timer.schedule(task, 15000);  // 15 seconds for QTE
 
         Thread inputThread = new Thread(() -> {
             String input = scanner.nextLine();
             if (input.equalsIgnoreCase(randomSequence)) {
                 success.set(true);
-                endTime[0] = System.currentTimeMillis();
-                System.out.println("Success!");
+                reactionTime = System.currentTimeMillis() - startTime; // Calculate reaction time
+                System.out.println("Success! Attack successful.");
+                timer.cancel();
+            } else {
+                System.out.println("Wrong sequence! Attack failed.");
                 timer.cancel();
             }
         });
@@ -58,14 +65,20 @@ public class QuickTimeEvent {
             e.printStackTrace();
         }
 
-        return success.get() ? (endTime[0] - startTime) : Long.MAX_VALUE;
+        if (success.get() && !tooSlow) {
+            return reactionTime;
+        } else {
+            return -1; // Return -1 to indicate failure or too slow
+        }
     }
 
     public static void main(String[] args) {
         QuickTimeEvent qte = new QuickTimeEvent();
-        long timeTaken = qte.performQTE();
-        if (timeTaken != Long.MAX_VALUE) {
-            System.out.println("Time taken: " + timeTaken + " ms");
+        long reactionTime = qte.performQTE();
+        if (reactionTime == -1) {
+            System.out.println("You were too slow or typed incorrectly. Attack failed.");
+        } else {
+            System.out.println("Reaction time: " + reactionTime + " ms");
         }
     }
 }

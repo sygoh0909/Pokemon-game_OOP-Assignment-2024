@@ -8,10 +8,14 @@ public class Battle {
     private List<Pokemon> rentalPokemons;
     private static final String SCORE_FILE = "top_scores.txt";
     private static final int MAX_TOP_SCORES = 5;
+    private TypeChart typeChart;
 
     public Battle() {
         this.qte = new QuickTimeEvent();
         this.rentalPokemons = new ArrayList<>();
+        this.typeChart = new TypeChart();
+
+        //rental pokemon
         rentalPokemons.add(new Pokemon("Pikachu", 35, 55, 40, 3, List.of("electric"), 90, 50, 50));
         rentalPokemons.add(new Pokemon("Typhlosion", 78, 84, 78, 3, List.of("fire"), 100, 109, 85));
         rentalPokemons.add(new Pokemon("Snorlax", 160, 110, 65, 3, List.of("normal"), 30, 65, 110));
@@ -71,11 +75,15 @@ public class Battle {
             if (userPokemon1.getHealth() > 0) {
                 System.out.println("\nPlayer's Pokémon 1 turn!");
                 long reactionTime1 = qte.performQTE();
-                int attackStrength1 = calculateAttackStrength(userPokemon1, reactionTime1);
-                wildPokemon1.takeDamage(attackStrength1);
-                wildPokemon2.takeDamage(attackStrength1);
-                battleScore += attackStrength1;
-                displayRemainingHP(wildPokemon1, wildPokemon2);
+                if (reactionTime1 == -1) {
+                    System.out.println("Failed to perform Quick Time Event. Attack failed.");
+                } else {
+                    int attackStrength1 = calculateAttackStrength(userPokemon1, reactionTime1,wildPokemon1);
+                    wildPokemon1.takeDamage(attackStrength1);
+                    wildPokemon2.takeDamage(attackStrength1);
+                    battleScore += attackStrength1;
+                    displayRemainingHP(wildPokemon1, wildPokemon2);
+                }
             }
 
             if (wildPokemon1.getHealth() > 0) {
@@ -87,11 +95,15 @@ public class Battle {
             if (userPokemon2.getHealth() > 0) {
                 System.out.println("\nPlayer's Pokémon 2 turn!");
                 long reactionTime2 = qte.performQTE();
-                int attackStrength2 = calculateAttackStrength(userPokemon2, reactionTime2);
-                wildPokemon1.takeDamage(attackStrength2);
-                wildPokemon2.takeDamage(attackStrength2);
-                battleScore += attackStrength2;
-                displayRemainingHP(wildPokemon1, wildPokemon2);
+                if (reactionTime2 == -1) {
+                    System.out.println("Failed to perform Quick Time Event. Attack failed.");
+                } else {
+                    int attackStrength2 = calculateAttackStrength(userPokemon2, reactionTime2, wildPokemon2);
+                    wildPokemon1.takeDamage(attackStrength2);
+                    wildPokemon2.takeDamage(attackStrength2);
+                    battleScore += attackStrength2;
+                    displayRemainingHP(wildPokemon1, wildPokemon2);
+                }
             }
 
             if (wildPokemon2.getHealth() > 0) {
@@ -160,7 +172,17 @@ public class Battle {
         return userChoice;
     }
 
-    private int calculateAttackStrength(Pokemon pokemon, long reactionTime) {
+    private int calculateAttackStrength(Pokemon attacker, long reactionTime, Pokemon defender) {
+        // Calculate base attack strength based on reaction time
+        int baseAttack = calculateBaseAttack(attacker, reactionTime);
+        // Get type effectiveness from TypeChart
+        double effectiveness = typeChart.getEffectiveness(attacker.getTypes().get(0), defender.getTypes().get(0));
+        // Apply type effectiveness to attack strength
+        return (int) (baseAttack * effectiveness);
+    }
+
+    private int calculateBaseAttack(Pokemon pokemon, long reactionTime) {
+        // Example implementation of calculating base attack
         if (reactionTime < 1000) {
             return pokemon.getAttack() * 2;
         } else if (reactionTime < 2000) {

@@ -272,7 +272,6 @@ public class Game {
         int stars = 0;
         List<String> types = new ArrayList<>();
         int speed = 0;
-        int accuracy = 0;
         int specialAttack = 0;
         int specialDefense = 0;
 
@@ -310,9 +309,6 @@ public class Game {
                     break;
                 case "speed":
                     speed = Integer.parseInt(value);
-                    break;
-                case "accuracy":
-                    accuracy = Integer.parseInt(value);
                     break;
                 case "special attack":
                     specialAttack = Integer.parseInt(value);
