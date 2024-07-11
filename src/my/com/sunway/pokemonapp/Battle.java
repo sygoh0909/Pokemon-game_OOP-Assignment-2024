@@ -92,6 +92,7 @@ public class Battle {
         while (true) {
             if (userPokemon1.getHealth() > 0) {
                 System.out.println("\nPlayer's Pokémon 1 turn!");
+                waitForEnter(scanner); // Pause and wait for Enter
                 long reactionTime1 = qte.performQTE();
                 if (reactionTime1 == -1) {
                     System.out.println("Failed to perform Quick Time Event. Attack failed.");
@@ -106,13 +107,14 @@ public class Battle {
 
             if (wildPokemon1.getHealth() > 0) {
                 System.out.println("\nWild Pokémon 1's turn!");
+                waitForEnter(scanner); // Pause and wait for Enter
                 userPokemon1.takeDamage(wildPokemon1.getAttack());
                 displayRemainingHP(userPokemon1, userPokemon2);
-                waitForEnter(scanner); // Pause and wait for Enter
             }
 
             if (userPokemon2.getHealth() > 0) {
                 System.out.println("\nPlayer's Pokémon 2 turn!");
+                waitForEnter(scanner); // Pause and wait for Enter
                 long reactionTime2 = qte.performQTE();
                 if (reactionTime2 == -1) {
                     System.out.println("Failed to perform Quick Time Event. Attack failed.");
@@ -127,9 +129,9 @@ public class Battle {
 
             if (wildPokemon2.getHealth() > 0) {
                 System.out.println("\nWild Pokémon 2's turn!");
+                waitForEnter(scanner); // Pause and wait for Enter
                 userPokemon2.takeDamage(wildPokemon2.getAttack());
                 displayRemainingHP(userPokemon1, userPokemon2);
-                waitForEnter(scanner); // Pause and wait for Enter
             }
 
             if (userPokemon1.getHealth() <= 0 && userPokemon2.getHealth() <= 0) {
