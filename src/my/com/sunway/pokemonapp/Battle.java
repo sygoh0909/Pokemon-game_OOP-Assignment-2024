@@ -95,7 +95,7 @@ public class Battle {
                 waitForEnter(scanner); // Pause and wait for Enter
                 long reactionTime1 = qte.performQTE();
                 if (reactionTime1 == -1) {
-                    System.out.println("Failed to perform Quick Time Event. Attack failed.");
+                    System.out.println("Failed to perform Quick Time Event. Attack failed. Press Enter to continue.");
                 } else {
                     int attackStrength1 = calculateAttackStrength(userPokemon1, reactionTime1, wildPokemon1);
                     wildPokemon1.takeDamage(attackStrength1);
@@ -104,6 +104,7 @@ public class Battle {
                     displayRemainingHP(wildPokemon1, wildPokemon2);
                 }
             }
+
 
             if (wildPokemon1.getHealth() > 0) {
                 System.out.println("\nWild Pokémon 1's turn!");
@@ -117,7 +118,7 @@ public class Battle {
                 waitForEnter(scanner); // Pause and wait for Enter
                 long reactionTime2 = qte.performQTE();
                 if (reactionTime2 == -1) {
-                    System.out.println("Failed to perform Quick Time Event. Attack failed.");
+                    System.out.println("Failed to perform Quick Time Event. Attack failed. Press Enter to continue.");
                 } else {
                     int attackStrength2 = calculateAttackStrength(userPokemon2, reactionTime2, wildPokemon2);
                     wildPokemon1.takeDamage(attackStrength2);
@@ -196,7 +197,11 @@ public class Battle {
 
     private void waitForEnter(Scanner scanner) {
         System.out.println("Press Enter to continue...");
-        scanner.nextLine(); // Wait for user to press Enter
+        try {
+            System.in.read();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private int calculateAttackStrength(Pokemon attacker, long reactionTime, Pokemon defender) {
