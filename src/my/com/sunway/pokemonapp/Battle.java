@@ -102,7 +102,6 @@ public class Battle {
                     battleScore += attackStrength1;
                     displayRemainingHP(wildPokemon1, wildPokemon2);
                 }
-                waitForEnter(scanner); // Pause after action is complete
             }
 
             if (wildPokemon1.getHealth() > 0) {
@@ -124,7 +123,6 @@ public class Battle {
                     battleScore += attackStrength2;
                     displayRemainingHP(wildPokemon1, wildPokemon2);
                 }
-                waitForEnter(scanner); // Pause and wait for Enter
             }
 
             if (wildPokemon2.getHealth() > 0) {
