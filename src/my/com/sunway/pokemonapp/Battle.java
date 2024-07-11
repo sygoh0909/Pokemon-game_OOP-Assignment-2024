@@ -37,37 +37,55 @@ public class Battle {
         System.out.println("2: " + wildPokemon2.getName() + " | Type: " + String.join(", ", wildPokemon2.getTypes()) + " | Stars: " + wildPokemon2.getStars());
 
         Scanner scanner = new Scanner(System.in);
+        Pokemon userPokemon1 = null;
+        Pokemon userPokemon2 = null;
 
         // Check if user has at least 2 Pokémon to choose
         if (userPokemons.size() < 2) {
-            System.out.println("You don't have enough Pokémon. Choosing rental Pokémon.");
-            int rentalChoice1 = choosePokemon(rentalPokemons, scanner, -1);
-            int rentalChoice2 = choosePokemon(rentalPokemons, scanner, rentalChoice1);
+            if (userPokemons.isEmpty()) {
+                System.out.println("You don't have any Pokémon. Choosing rental Pokémon.");
+            } else {
+                System.out.println("You only have one Pokémon. Choosing one rental Pokémon.");
+            }
 
+            int rentalChoice1 = choosePokemon(rentalPokemons, scanner, -1);
             Pokemon rentalPokemon1 = rentalPokemons.get(rentalChoice1);
+
+            System.out.println("Rental Pokémon chosen:");
+            System.out.println("1: " + rentalPokemon1.getName() + " | Type: " + String.join(", ", rentalPokemon1.getTypes()) + " | Stars: " + rentalPokemon1.getStars());
+
+            // If user has one Pokémon, use it for battle, otherwise, use rental Pokémon
+            if (userPokemons.isEmpty()) {
+                userPokemon1 = rentalPokemon1;
+            } else {
+                userPokemon1 = userPokemons.get(0); // Only one user Pokémon available
+            }
+        } else {
+            System.out.println("Choose your Pokémon for battle:");
+
+            // Choose user's Pokémon for battle
+            int userChoice1 = choosePokemon(userPokemons, scanner, -1);
+            int userChoice2 = choosePokemon(userPokemons, scanner, userChoice1);
+
+            System.out.println("You chose:");
+            userPokemon1 = userPokemons.get(userChoice1);
+            userPokemon2 = userPokemons.get(userChoice2);
+            System.out.println("1: " + userPokemon1.getName() + " | Type: " + String.join(", ", userPokemon1.getTypes()) + " | Stars: " + userPokemon1.getStars());
+            System.out.println("2: " + userPokemon2.getName() + " | Type: " + String.join(", ", userPokemon2.getTypes()) + " | Stars: " + userPokemon2.getStars());
+        }
+
+        // If user only chose one Pokémon, assign second Pokémon to another user Pokémon or another rental Pokémon
+        if (userPokemon2 == null) {
+            int rentalChoice2 = choosePokemon(rentalPokemons, scanner, -1);
             Pokemon rentalPokemon2 = rentalPokemons.get(rentalChoice2);
 
-            System.out.println("You chose: ");
-            System.out.println("1: " + rentalPokemon1.getName() + " | Type: " + String.join(", ", rentalPokemon1.getTypes()) + " | Stars: " + rentalPokemon1.getStars());
+            System.out.println("Second Rental Pokémon chosen:");
             System.out.println("2: " + rentalPokemon2.getName() + " | Type: " + String.join(", ", rentalPokemon2.getTypes()) + " | Stars: " + rentalPokemon2.getStars());
 
-            userPokemons.add(rentalPokemon1);
-            userPokemons.add(rentalPokemon2);
+            userPokemon2 = rentalPokemon2;
         }
 
-        System.out.println("\nYour Pokémon:");
-        for (int i = 0; i < userPokemons.size(); i++) {
-            Pokemon pokemon = userPokemons.get(i);
-            System.out.println((i + 1) + ": " + pokemon.getName() + " | Type: " + String.join(", ", pokemon.getTypes()) + " | Stars: " + pokemon.getStars());
-        }
-
-        int userChoice1 = choosePokemon(userPokemons, scanner, -1);
-        int userChoice2 = choosePokemon(userPokemons, scanner, userChoice1);
-
-        System.out.println("Battle start!");
-
-        Pokemon userPokemon1 = userPokemons.get(userChoice1);
-        Pokemon userPokemon2 = userPokemons.get(userChoice2);
+        System.out.println("\nBattle start!");
 
         int battleScore = 0;
 
@@ -78,18 +96,20 @@ public class Battle {
                 if (reactionTime1 == -1) {
                     System.out.println("Failed to perform Quick Time Event. Attack failed.");
                 } else {
-                    int attackStrength1 = calculateAttackStrength(userPokemon1, reactionTime1,wildPokemon1);
+                    int attackStrength1 = calculateAttackStrength(userPokemon1, reactionTime1, wildPokemon1);
                     wildPokemon1.takeDamage(attackStrength1);
                     wildPokemon2.takeDamage(attackStrength1);
                     battleScore += attackStrength1;
                     displayRemainingHP(wildPokemon1, wildPokemon2);
                 }
+                waitForEnter(scanner); // Pause after action is complete
             }
 
             if (wildPokemon1.getHealth() > 0) {
                 System.out.println("\nWild Pokémon 1's turn!");
                 userPokemon1.takeDamage(wildPokemon1.getAttack());
                 displayRemainingHP(userPokemon1, userPokemon2);
+                waitForEnter(scanner); // Pause and wait for Enter
             }
 
             if (userPokemon2.getHealth() > 0) {
@@ -104,12 +124,14 @@ public class Battle {
                     battleScore += attackStrength2;
                     displayRemainingHP(wildPokemon1, wildPokemon2);
                 }
+                waitForEnter(scanner); // Pause and wait for Enter
             }
 
             if (wildPokemon2.getHealth() > 0) {
                 System.out.println("\nWild Pokémon 2's turn!");
                 userPokemon2.takeDamage(wildPokemon2.getAttack());
                 displayRemainingHP(userPokemon1, userPokemon2);
+                waitForEnter(scanner); // Pause and wait for Enter
             }
 
             if (userPokemon1.getHealth() <= 0 && userPokemon2.getHealth() <= 0) {
@@ -170,6 +192,11 @@ public class Battle {
         }
 
         return userChoice;
+    }
+
+    private void waitForEnter(Scanner scanner) {
+        System.out.println("Press Enter to continue...");
+        scanner.nextLine(); // Wait for user to press Enter
     }
 
     private int calculateAttackStrength(Pokemon attacker, long reactionTime, Pokemon defender) {
