@@ -12,14 +12,15 @@ public class Game {
     private List<List<Pokemon>> stages; // Pokémon in the stages
     private List<String> stageNames;
     private PokemonService pokemonService;
-    private List<Pokemon> userPokemons;
+    //private List<Pokemon> userPokemons;
     private Battle battle; // Add Battle instance
 
     public Game() {
+        this.player = new Player("userID", "password");
         this.stages = new ArrayList<>();
         this.stageNames = new ArrayList<>();
         this.pokemonService = new PokemonService();
-        this.userPokemons = new ArrayList<>(); // Initialize the userPokemons list
+        //this.userPokemons = new ArrayList<>(); // Initialize the userPokemons list
         this.battle = new Battle(); // Initialize the Battle instance
         setupStages();
     }
@@ -76,7 +77,6 @@ public class Game {
 
         return isAuthenticated;
     }
-
 
     private String[] findStoredCredentials(String userId) {
         String fileName = "user_credentials.txt";
@@ -175,12 +175,13 @@ public class Game {
 
         System.out.println("Press Enter to continue...");
         Scanner keyboard = new Scanner(System.in);
-        keyboard.nextLine(); // Wait for user to press Enter2909
+        keyboard.nextLine(); // Wait for user to press Enter
 
         boolean isCaught = player.attemptCatch(chosenPokeball);
         if (isCaught) {
             System.out.println("You caught " + chosenPokemon.getName() + "!");
             player.saveChosenPokemon(chosenPokemon);
+            player.loadUserPokemons(); //reload to save the newest caught pokemon to list
         } else {
             System.out.println(chosenPokemon.getName() + " escaped!");
         }
@@ -226,28 +227,6 @@ public class Game {
             stageNames.add("Urban Areas");
 
         } catch (IOException | InterruptedException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void loadUserPokemons() {
-        String fileName = "user_pokemon_list_" + player.getUserId() + ".txt";
-        Path filePath = Paths.get(fileName);
-
-        try {
-            if (Files.exists(filePath)) {
-                List<String> lines = Files.readAllLines(filePath);
-                for (String line : lines) {
-                    Pokemon pokemon = parsePokemonFromString(line);
-                    if (pokemon != null) {
-                        userPokemons.add(pokemon);
-                    }
-                }
-            } else {
-                System.out.println("No Pokémon list found for user. Creating new list...");
-                Files.createFile(filePath); // Create a new file if it doesn't exist
-            }
-        } catch (IOException e) {
             e.printStackTrace();
         }
     }
@@ -323,46 +302,14 @@ public class Game {
         return new Pokemon(name, health, attack, defense, stars, types, speed, specialAttack, specialDefense);
     }
 
-    private Pokeball chooseRandomPokeball() {
-        double randomValue = Math.random();
-        double cumulativeProbability = 0.0;
-        for (Pokeball pokeball : Pokeball.values()) {
-            cumulativeProbability += pokeball.getAppearanceRate();
-            if (randomValue <= cumulativeProbability) {
-                return pokeball;
-            }
-        }
-        return Pokeball.POKEBALL; // Default case, should never occur if appearance rates sum to 1
-    }
-
-    private boolean attemptCatch(Pokeball pokeball) {
-        double catchChance = Math.random();
-        return catchChance <= pokeball.getCatchRate();
-    }
-
-    private void saveChosenPokemon(Pokemon pokemon) {
-        String fileName = "user_pokemon_list_" + player.getUserId() + ".txt"; // Use player.getUserId() to get the user ID
-        try {
-            String pokemonDetails = pokemon.toString();
-            Files.write(Paths.get(fileName), (pokemonDetails + System.lineSeparator()).getBytes(), StandardOpenOption.CREATE, StandardOpenOption.APPEND);
-            System.out.println("Saved " + pokemon.getName() + " to " + fileName);
-
-            // Add the newly caught pokemon to the userPokemons list
-            userPokemons.add(pokemon);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
     public static void main(String[] args) throws IOException, InterruptedException {
         Game game = new Game();
         boolean loggedIn = game.login();
 
         if (loggedIn) {
+            game.player.loadUserPokemons();
+            List<Pokemon> userPokemons = game.player.getUserPokemons();
             System.out.println("Login successful for user ID: " + game.player.getUserId());
-
-            // Load user-specific Pokémon data after successful login
-            game.loadUserPokemons();
 
             game.displayStages();
 
@@ -370,7 +317,7 @@ public class Game {
             List<Pokemon> wildPokemons = game.chooseStageAndPokemon();
 
             /// Pass user ID to Battle class when starting battle
-            game.battle.startBattle(game.userPokemons, wildPokemons, game.player.getUserId());
+            game.battle.startBattle(game.player.getUserPokemons(), wildPokemons, game.player.getUserId());
 
         } else {
             System.out.println("Login failed!"); //login fail

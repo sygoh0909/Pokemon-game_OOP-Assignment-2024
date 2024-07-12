@@ -115,7 +115,6 @@ public class Battle {
 
             if (wildPokemon1.getHealth() > 0) {
                 System.out.println("\nWild Pokémon 1's turn!");
-                waitForEnter(scanner); // Pause and wait for Enter
                 userPokemon1.takeDamage(wildPokemon1.getAttack());
                 displayRemainingHP(userPokemon1, userPokemon2);
             }
@@ -135,7 +134,6 @@ public class Battle {
 
             if (wildPokemon2.getHealth() > 0) {
                 System.out.println("\nWild Pokémon 2's turn!");
-                waitForEnter(scanner); // Pause and wait for Enter
                 userPokemon2.takeDamage(wildPokemon2.getAttack());
                 displayRemainingHP(userPokemon1, userPokemon2);
             }
@@ -241,22 +239,11 @@ public class Battle {
         }
 
         System.out.println("\nAvailable Pokémon:");
+
         for (int i = 0; i < availablePokemons.size(); i++) {
             Pokemon pokemon = availablePokemons.get(i);
-            System.out.print((i + 1) + ": '" + pokemon.getName() + "' | Type: ");
-            List<String> types = pokemon.getTypes();
-
-            // Print types
-            for (int j = 0; j < types.size(); j++) {
-                String type = types.get(j);
-                System.out.print(type);
-
-                // Print comma if not the last type
-                if (j < types.size() - 1) {
-                    System.out.print(", ");
-                }
-            }
-            System.out.println(" | Stars: " + pokemon.getStars());
+            String typesString = String.join(", ", pokemon.getTypes()); // Join types with a comma
+            System.out.println(pokemon.getName() + " | Type: " + typesString + " | Stars: " + pokemon.getStars());
         }
 
         while (userChoice < 0 || userChoice >= availablePokemons.size() || userChoice == previousChoice) {

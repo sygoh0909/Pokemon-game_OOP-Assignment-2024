@@ -2,9 +2,11 @@ package my.com.sunway.pokemonapp;
 
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class Player {
@@ -30,6 +32,10 @@ public class Player {
 
     public void setBattlePoints(int battlePoints) {
         this.battlePoints = battlePoints;
+    }
+
+    public List<Pokemon> getUserPokemons() {
+        return userPokemons;
     }
 
     public Pokeball chooseRandomPokeball() {
@@ -61,6 +67,100 @@ public class Player {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public void loadUserPokemons() {
+        String fileName = "user_pokemon_list_" + getUserId() + ".txt";
+        Path filePath = Paths.get(fileName);
+
+        try {
+            if (Files.exists(filePath)) {
+                List<String> lines = Files.readAllLines(filePath);
+                userPokemons.clear(); // Clear existing list before reloading
+                for (String line : lines) {
+                    Pokemon pokemon = parsePokemonFromString(line);
+                    if (pokemon != null) {
+                        userPokemons.add(pokemon);
+                    }
+                }
+            } else {
+                System.out.println("No Pokémon list found for user. Creating new list...");
+                Files.createFile(filePath); // Create a new file if it doesn't exist
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    public Pokemon parsePokemonFromString(String pokemonDetails) {
+        // Example format: "Pokemon{name='Charizard', health=100, ...}"
+        // Implement parsing logic to create a Pokemon object from string representation
+        // Split by comma and then parse each attribute
+
+        // Remove unnecessary characters and split by commas
+        String[] parts = pokemonDetails.replace("Pokemon{", "").replace("}", "").split(", ");
+
+        // Initialize variables to store parsed values
+        String name = null;
+        int health = 0;
+        int attack = 0;
+        int defense = 0;
+        int stars = 0;
+        List<String> types = new ArrayList<>();
+        int speed = 0;
+        int specialAttack = 0;
+        int specialDefense = 0;
+
+        // Iterate through parts to parse each attribute
+        for (String part : parts) {
+            // Split each part into key and value
+            String[] keyValue = part.split("=");
+            if (keyValue.length != 2) {
+                // Handle unexpected format or skip if needed
+                continue;
+            }
+            String key = keyValue[0].trim();
+            String value = keyValue[1].trim();
+
+            // Switch case to assign values based on key
+            switch (key) {
+                case "name":
+                    name = value;
+                    break;
+                case "health":
+                    health = Integer.parseInt(value);
+                    break;
+                case "attack":
+                    attack = Integer.parseInt(value);
+                    break;
+                case "defense":
+                    defense = Integer.parseInt(value);
+                    break;
+                case "stars":
+                    stars = Integer.parseInt(value);
+                    break;
+                case "types":
+                    // Remove brackets and split by comma for types
+                    types = Arrays.asList(value.substring(1, value.length() - 1).split(", "));
+                    break;
+                case "speed":
+                    speed = Integer.parseInt(value);
+                    break;
+                case "special attack":
+                    specialAttack = Integer.parseInt(value);
+                    break;
+                case "special defense":
+                    specialDefense = Integer.parseInt(value);
+                    break;
+                default:
+                    // Handle unrecognized keys or ignore
+                    break;
+            }
+        }
+
+        // Create and return Pokemon object
+        return new Pokemon(name, health, attack, defense, stars, types, speed, specialAttack, specialDefense);
     }
 
     @Override
