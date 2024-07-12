@@ -9,11 +9,13 @@ public class Battle {
     private static final String SCORE_FILE = "top_scores.txt";
     private static final int MAX_TOP_SCORES = 5;
     private TypeChart typeChart;
+    private Player player;
 
     public Battle() {
         this.qte = new QuickTimeEvent();
         this.rentalPokemons = new ArrayList<>();
         this.typeChart = new TypeChart();
+        this.player = new Player("userID", "password");
 
         //rental pokemon
         rentalPokemons.add(new Pokemon("Pikachu", 35, 55, 40, 3, List.of("electric"), 90, 50, 50));
@@ -88,15 +90,21 @@ public class Battle {
         System.out.println("\nBattle start!");
 
         int battleScore = 0;
+        long startTime = System.currentTimeMillis();
+        long battleTimeLimit = 3 * 60 * 1000; // 3 minutes in milliseconds
 
         while (true) {
+            long elapsedTime = System.currentTimeMillis() - startTime;
+            if (elapsedTime >= battleTimeLimit) {
+                System.out.println("Time's up!");
+                break;
+            }
+
             if (userPokemon1.getHealth() > 0) {
                 System.out.println("\nPlayer's Pokémon 1 turn!");
                 waitForEnter(scanner); // Pause and wait for Enter
                 long reactionTime1 = qte.performQTE();
-                if (reactionTime1 == -1) {
-                    // Already handled by performQTE
-                } else {
+                if (reactionTime1 != -1) {
                     int attackStrength1 = calculateAttackStrength(userPokemon1, reactionTime1, wildPokemon1);
                     wildPokemon1.takeDamage(attackStrength1);
                     wildPokemon2.takeDamage(attackStrength1);
@@ -104,7 +112,6 @@ public class Battle {
                     displayRemainingHP(wildPokemon1, wildPokemon2);
                 }
             }
-
 
             if (wildPokemon1.getHealth() > 0) {
                 System.out.println("\nWild Pokémon 1's turn!");
@@ -117,9 +124,7 @@ public class Battle {
                 System.out.println("\nPlayer's Pokémon 2 turn!");
                 waitForEnter(scanner); // Pause and wait for Enter
                 long reactionTime2 = qte.performQTE();
-                if (reactionTime2 == -1) { //handle user exceed time limit or incorrect input by returning -1
-                    // Already handled by performQTE
-                } else {
+                if (reactionTime2 != -1) {
                     int attackStrength2 = calculateAttackStrength(userPokemon2, reactionTime2, wildPokemon2);
                     wildPokemon1.takeDamage(attackStrength2);
                     wildPokemon2.takeDamage(attackStrength2);
@@ -145,11 +150,55 @@ public class Battle {
             }
         }
 
+        // Handle catching a Pokémon if applicable
+        if ((wildPokemon1.getHealth() <= 0 && wildPokemon2.getHealth() > 0 && (userPokemon1.getHealth() > 0 || userPokemon2.getHealth() > 0)) ||
+                (wildPokemon2.getHealth() <= 0 && wildPokemon1.getHealth() > 0 && (userPokemon1.getHealth() > 0 || userPokemon2.getHealth() > 0)) ||
+                (wildPokemon1.getHealth() <= 0 && wildPokemon2.getHealth() <= 0 && (System.currentTimeMillis() - startTime) < battleTimeLimit && (userPokemon1.getHealth() > 0 || userPokemon2.getHealth() > 0))) {
+
+            System.out.println("You have the chance to catch one of the defeated wild Pokémon!");
+
+            boolean caughtAnyPokemon = false; // Flag to track if any Pokémon was caught
+
+            if (wildPokemon1.getHealth() <= 0) {
+                System.out.println("Do you want to catch " + wildPokemon1.getName() + "? (yes/no)");
+                if (scanner.next().equalsIgnoreCase("yes")) {
+                    Pokeball chosenPokeball = player.chooseRandomPokeball();
+                    boolean isCaught = player.attemptCatch(chosenPokeball);
+                    if (isCaught) {
+                        System.out.println("You caught " + wildPokemon1.getName() + "!");
+                        player.saveChosenPokemon(wildPokemon1);
+                        caughtAnyPokemon = true;
+                    } else {
+                        System.out.println(wildPokemon1.getName() + " escaped!");
+                    }
+                }
+            }
+
+            if (!caughtAnyPokemon && wildPokemon2.getHealth() <= 0) {
+                System.out.println("Do you want to catch " + wildPokemon2.getName() + "? (yes/no)");
+                if (scanner.next().equalsIgnoreCase("yes")) {
+                    Pokeball chosenPokeball = player.chooseRandomPokeball();
+                    boolean isCaught = player.attemptCatch(chosenPokeball);
+                    if (isCaught) {
+                        System.out.println("You caught " + wildPokemon2.getName() + "!");
+                        player.saveChosenPokemon(wildPokemon2);
+                        caughtAnyPokemon = true;
+                    } else {
+                        System.out.println(wildPokemon2.getName() + " escaped!");
+                    }
+                }
+            }
+
+            if (!caughtAnyPokemon) {
+                System.out.println("No Pokémon were caught during this opportunity.");
+            }
+        }
+
         System.out.println("\nBattle ended. Your score: " + battleScore);
         updateTopScores(userId, battleScore);
         displayTopScores();
-    }
 
+    }
 
     List<Pokemon> chooseWildPokemons(List<Pokemon> chosenStagePokemons) {
         List<Pokemon> wildPokemons = new ArrayList<>();
@@ -176,7 +225,20 @@ public class Battle {
         System.out.println("\nAvailable Pokémon:");
         for (int i = 0; i < availablePokemons.size(); i++) {
             Pokemon pokemon = availablePokemons.get(i);
-            System.out.println((i + 1) + ": " + pokemon.getName() + " | Type: " + String.join(", ", pokemon.getTypes()) + " | Stars: " + pokemon.getStars());
+            System.out.print((i + 1) + ": '" + pokemon.getName() + "' | Type: ");
+            List<String> types = pokemon.getTypes();
+
+            // Print types
+            for (int j = 0; j < types.size(); j++) {
+                String type = types.get(j);
+                System.out.print(type);
+
+                // Print comma if not the last type
+                if (j < types.size() - 1) {
+                    System.out.print(", ");
+                }
+            }
+            System.out.println(" | Stars: " + pokemon.getStars());
         }
 
         while (userChoice < 0 || userChoice >= availablePokemons.size() || userChoice == previousChoice) {

@@ -29,7 +29,7 @@ public class QuickTimeEvent {
         long startTime = System.currentTimeMillis();
 
         String randomSequence = generateRandomSequence(10);
-        System.out.println("Enter the following sequence within 15 seconds: " + randomSequence);
+        System.out.println("Enter the following sequence within 12 seconds: " + randomSequence);
 
         TimerTask task = new TimerTask() {
             @Override
@@ -42,7 +42,7 @@ public class QuickTimeEvent {
             }
         };
 
-        timer.schedule(task, 15000);  // 15 seconds for QTE
+        timer.schedule(task, 12000);  // 15 seconds for QTE
 
         Thread inputThread = new Thread(() -> {
             String input = scanner.nextLine();
@@ -69,16 +69,6 @@ public class QuickTimeEvent {
             return reactionTime;
         } else {
             return -1; // Return -1 to indicate failure or too slow
-        }
-    }
-
-    public static void main(String[] args) {
-        QuickTimeEvent qte = new QuickTimeEvent();
-        long reactionTime = qte.performQTE();
-        if (reactionTime == -1) {
-            System.out.println("You were too slow or typed incorrectly. Attack failed.");
-        } else {
-            System.out.println("Reaction time: " + reactionTime + " ms");
         }
     }
 }

@@ -170,24 +170,21 @@ public class Game {
         Pokemon chosenPokemon = chosenStagePokemons.get(pokemonChoice);
         System.out.println("You chose: " + chosenPokemon.getName());
 
-        // Randomly choose a Poké Ball
-        Pokeball chosenPokeball = chooseRandomPokeball();
+        Pokeball chosenPokeball = player.chooseRandomPokeball();
         System.out.println("A " + chosenPokeball + " appeared!");
 
-        // Ask user to press Enter to attempt to catch the Pokémon
-        System.out.println("Press Enter to attempt to catch the " + chosenPokemon.getName() + "!");
+        System.out.println("Press Enter to continue...");
         Scanner keyboard = new Scanner(System.in);
-        keyboard.nextLine(); //wait for user to press enter
+        keyboard.nextLine(); // Wait for user to press Enter2909
 
-        // Attempt to catch the Pokémon
-        boolean isCaught = attemptCatch(chosenPokeball);
+        boolean isCaught = player.attemptCatch(chosenPokeball);
         if (isCaught) {
-            System.out.println("You caught the " + chosenPokemon.getName() + "!");
-            saveChosenPokemon(chosenPokemon);
+            System.out.println("You caught " + chosenPokemon.getName() + "!");
+            player.saveChosenPokemon(chosenPokemon);
         } else {
-            System.out.println("The " + chosenPokemon.getName() + " escaped!");
+            System.out.println(chosenPokemon.getName() + " escaped!");
         }
-
+        
         // Randomly generate wild Pokémon for battle
         List<Pokemon> wildPokemons = battle.chooseWildPokemons(chosenStagePokemons);
 
