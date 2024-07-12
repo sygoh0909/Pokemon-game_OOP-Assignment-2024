@@ -95,7 +95,7 @@ public class Battle {
                 waitForEnter(scanner); // Pause and wait for Enter
                 long reactionTime1 = qte.performQTE();
                 if (reactionTime1 == -1) {
-                    System.out.println("You were too slow or typed incorrectly. Attack failed.");
+                    // Already handled by performQTE
                 } else {
                     int attackStrength1 = calculateAttackStrength(userPokemon1, reactionTime1, wildPokemon1);
                     wildPokemon1.takeDamage(attackStrength1);
@@ -117,8 +117,8 @@ public class Battle {
                 System.out.println("\nPlayer's Pokémon 2 turn!");
                 waitForEnter(scanner); // Pause and wait for Enter
                 long reactionTime2 = qte.performQTE();
-                if (reactionTime2 == -1) {
-                    System.out.println("You were too slow or typed incorrectly. Attack failed.");
+                if (reactionTime2 == -1) { //handle user exceed time limit or incorrect input by returning -1
+                    // Already handled by performQTE
                 } else {
                     int attackStrength2 = calculateAttackStrength(userPokemon2, reactionTime2, wildPokemon2);
                     wildPokemon1.takeDamage(attackStrength2);
