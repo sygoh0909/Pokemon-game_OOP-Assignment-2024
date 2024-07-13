@@ -8,6 +8,8 @@ import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Player {
     private final String userId;
@@ -19,19 +21,10 @@ public class Player {
         this.userId = userId;
         this.password = password;
         this.userPokemons = new ArrayList<>();
-        this.battlePoints = 0; // Initialize battle points to 0
     }
 
     public String getUserId() {
         return userId;
-    }
-
-    public int getBattlePoints() {
-        return battlePoints;
-    }
-
-    public void setBattlePoints(int battlePoints) {
-        this.battlePoints = battlePoints;
     }
 
     public List<Pokemon> getUserPokemons() {
@@ -92,14 +85,38 @@ public class Player {
         }
     }
 
+    public static String[] parsePokemon(String input) {
+        ArrayList<String> attributesList = new ArrayList<>();
+
+        // Define regex pattern to match key-value pairs
+        Pattern pattern = Pattern.compile("(\\w+)='([^']+)'|\\w+=\\d+|\\w+=\\[([^\\]]+)\\]|\\w+=\\d+");
+        Matcher matcher = pattern.matcher(input);
+
+        while (matcher.find()) {
+            if (matcher.group(1) != null && matcher.group(2) != null) {
+                // For string values
+                attributesList.add(matcher.group(1) + "=" + matcher.group(2));
+            } else if (matcher.group(3) != null) {
+                // For list values
+                attributesList.add("types=" + matcher.group(3));
+            } else {
+                // For numeric values
+                String[] parts = matcher.group(0).split("=");
+                attributesList.add(parts[0] + "=" + parts[1]);
+            }
+        }
+
+        // Convert ArrayList to String array
+        String[] attributesArray = new String[attributesList.size()];
+        attributesArray = attributesList.toArray(attributesArray);
+
+        return attributesArray;
+    }
+
 
     public Pokemon parsePokemonFromString(String pokemonDetails) {
-        // Example format: "Pokemon{name='Charizard', health=100, ...}"
-        // Implement parsing logic to create a Pokemon object from string representation
-        // Split by comma and then parse each attribute
 
-        // Remove unnecessary characters and split by commas
-        String[] parts = pokemonDetails.replace("Pokemon{", "").replace("}", "").split(", ");
+        String[] parts = parsePokemon(pokemonDetails );
 
         // Initialize variables to store parsed values
         String name = null;
@@ -113,7 +130,6 @@ public class Player {
         int specialDefense = 0;
 
         // Iterate through parts to parse each attribute
-        // Iterate through parts to parse each attribute
         for (String part : parts) {
             // Split each part into key and value
             String[] keyValue = part.split("=");
@@ -123,7 +139,7 @@ public class Player {
             }
             String key = keyValue[0].trim();
             String value = keyValue[1].trim();
-            
+
             // Switch case to assign values based on key
             switch (key) {
                 case "name":

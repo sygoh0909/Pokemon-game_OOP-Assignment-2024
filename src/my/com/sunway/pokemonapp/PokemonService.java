@@ -107,6 +107,12 @@ public class PokemonService {
                 String typeName = typeMatcher.group(1);
                 types.add(typeName);
             }
+
+            // If there are three types, return only the last two
+            if (types.size() == 3) {
+                return types.subList(1, 3); //starting from index 1 and end before index 3
+            }
+
         } catch (Exception e) {
             e.printStackTrace();
         }
