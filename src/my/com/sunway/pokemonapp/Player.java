@@ -113,16 +113,17 @@ public class Player {
         int specialDefense = 0;
 
         // Iterate through parts to parse each attribute
+        // Iterate through parts to parse each attribute
         for (String part : parts) {
             // Split each part into key and value
-            String[] keyValue = part.split("=", 2);
+            String[] keyValue = part.split("=");
             if (keyValue.length != 2) {
                 // Handle unexpected format or skip if needed
                 continue;
             }
             String key = keyValue[0].trim();
             String value = keyValue[1].trim();
-
+            
             // Switch case to assign values based on key
             switch (key) {
                 case "name":
@@ -142,10 +143,7 @@ public class Player {
                     break;
                 case "types":
                     // Remove brackets and split by comma for types
-                    if (value.startsWith("[") && value.endsWith("]")) {
-                        value = value.substring(1, value.length() - 1);
-                    }
-                    types = Arrays.asList(value.split(", "));
+                    types.addAll(Arrays.asList(value.replaceAll("[\\[\\]]", "").split(", ")));
                     break;
                 case "speed":
                     speed = Integer.parseInt(value);

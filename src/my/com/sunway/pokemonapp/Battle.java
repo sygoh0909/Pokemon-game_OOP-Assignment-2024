@@ -10,12 +10,14 @@ public class Battle {
     private static final int MAX_TOP_SCORES = 5;
     private TypeChart typeChart;
     private Player player;
+    private BattleScoreCalculation scoreCalculation;
 
     public Battle() {
         this.qte = new QuickTimeEvent();
         this.rentalPokemons = new ArrayList<>();
         this.typeChart = new TypeChart();
         this.player = new Player("userID", "password");
+        this.scoreCalculation = new BattleScoreCalculation();
 
         //rental pokemon
         rentalPokemons.add(new Pokemon("Pikachu", 35, 55, 40, 3, List.of("electric"), 90, 50, 50));
@@ -42,7 +44,7 @@ public class Battle {
         Pokemon userPokemon1 = null;
         Pokemon userPokemon2 = null;
 
-    // Check if user has at least 2 Pokémon to choose
+        // Check if user has at least 2 Pokémon to choose
         if (userPokemons.size() < 2) {
             if (userPokemons.isEmpty()) {
                 System.out.println("You don't have any Pokémon. Choosing rental Pokémon.");
@@ -84,7 +86,7 @@ public class Battle {
             System.out.println("2: " + userPokemon2.getName() + " | Type: " + String.join(", ", userPokemon2.getTypes()) + " | Stars: " + userPokemon2.getStars());
         }
 
-    // If user only chose one Pokémon, assign second Pokémon to another user Pokémon or another rental Pokémon
+        // If user only chose one Pokémon, assign second Pokémon to another user Pokémon or another rental Pokémon
         if (userPokemon2 == null) {
             int rentalChoice2 = choosePokemon(rentalPokemons, scanner, -1);
             Pokemon rentalPokemon2 = rentalPokemons.get(rentalChoice2);
@@ -97,7 +99,9 @@ public class Battle {
 
         System.out.println("\nBattle start!");
 
-        int battleScore = 0;
+        int attackStrength1 = 0;
+        int attackStrength2 = 0;
+
         long startTime = System.currentTimeMillis();
         long battleTimeLimit = 3 * 60 * 1000; // 3 minutes in milliseconds
 
@@ -113,10 +117,9 @@ public class Battle {
                 waitForEnter(scanner); // Pause and wait for Enter
                 long reactionTime1 = qte.performQTE();
                 if (reactionTime1 != -1) {
-                    int attackStrength1 = calculateAttackStrength(userPokemon1, reactionTime1, wildPokemon1);
+                    attackStrength1 = calculateAttackStrength(userPokemon1, reactionTime1, wildPokemon1);
                     wildPokemon1.takeDamage(attackStrength1);
                     wildPokemon2.takeDamage(attackStrength1);
-                    battleScore += attackStrength1;
                     displayRemainingHP(wildPokemon1, wildPokemon2);
                 }
             }
@@ -139,10 +142,9 @@ public class Battle {
                 waitForEnter(scanner); // Pause and wait for Enter
                 long reactionTime2 = qte.performQTE();
                 if (reactionTime2 != -1) {
-                    int attackStrength2 = calculateAttackStrength(userPokemon2, reactionTime2, wildPokemon2);
+                    attackStrength2 = calculateAttackStrength(userPokemon2, reactionTime2, wildPokemon2);
                     wildPokemon1.takeDamage(attackStrength2);
                     wildPokemon2.takeDamage(attackStrength2);
-                    battleScore += attackStrength2;
                     displayRemainingHP(wildPokemon1, wildPokemon2);
                 }
             }
@@ -227,10 +229,17 @@ public class Battle {
             }
         }
 
+        int battleScore = scoreCalculation.calculateBattleScore(startTime, battleTimeLimit,
+                userPokemon1, userPokemon2,
+                wildPokemon1, wildPokemon2,
+                typeChart, attackStrength1, attackStrength2);
+
         System.out.println("\nBattle ended. Your score: " + battleScore);
         updateTopScores(userId, battleScore);
         displayTopScores();
 
+        //rank display
+        System.out.println("\n" + scoreCalculation.determineRankMessage(battleScore));
     }
 
     List<Pokemon> chooseWildPokemons(List<Pokemon> chosenStagePokemons) {
