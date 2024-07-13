@@ -27,6 +27,7 @@ public class QuickTimeEvent {
         AtomicBoolean success = new AtomicBoolean(false);
         Timer timer = new Timer();
         long startTime = System.currentTimeMillis();
+        tooSlow = false; // Initialize tooSlow to false at the start
 
         String randomSequence = generateRandomSequence(10);
         System.out.println("Enter the following sequence within 12 seconds: " + randomSequence);
@@ -35,8 +36,8 @@ public class QuickTimeEvent {
             @Override
             public void run() {
                 if (!success.get()) {
-                    System.out.println("Too slow! Attack failed.");
                     tooSlow = true;  // Set flag for too slow
+                    System.out.println("Too slow! Attack failed. Press Enter to continue...");
                     timer.cancel();
                 }
             }
@@ -46,12 +47,12 @@ public class QuickTimeEvent {
 
         Thread inputThread = new Thread(() -> {
             String input = scanner.nextLine();
-            if (input.equalsIgnoreCase(randomSequence)) {
+            if (!tooSlow && input.equalsIgnoreCase(randomSequence)) {
                 success.set(true);
                 reactionTime = System.currentTimeMillis() - startTime; // Calculate reaction time
                 System.out.println("Success! Attack successful.");
                 timer.cancel();
-            } else {
+            } else if (!tooSlow){
                 System.out.println("Wrong sequence! Attack failed.");
                 timer.cancel();
             }
