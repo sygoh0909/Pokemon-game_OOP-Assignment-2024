@@ -115,7 +115,7 @@ public class Player {
         // Iterate through parts to parse each attribute
         for (String part : parts) {
             // Split each part into key and value
-            String[] keyValue = part.split("=");
+            String[] keyValue = part.split("=", 2);
             if (keyValue.length != 2) {
                 // Handle unexpected format or skip if needed
                 continue;
@@ -126,7 +126,7 @@ public class Player {
             // Switch case to assign values based on key
             switch (key) {
                 case "name":
-                    name = value;
+                    name = value.replace("'", "");
                     break;
                 case "health":
                     health = Integer.parseInt(value);
@@ -142,7 +142,10 @@ public class Player {
                     break;
                 case "types":
                     // Remove brackets and split by comma for types
-                    types = Arrays.asList(value.substring(1, value.length() - 1).split(", "));
+                    if (value.startsWith("[") && value.endsWith("]")) {
+                        value = value.substring(1, value.length() - 1);
+                    }
+                    types = Arrays.asList(value.split(", "));
                     break;
                 case "speed":
                     speed = Integer.parseInt(value);

@@ -42,25 +42,33 @@ public class Battle {
         Pokemon userPokemon1 = null;
         Pokemon userPokemon2 = null;
 
-        // Check if user has at least 2 Pokémon to choose
+    // Check if user has at least 2 Pokémon to choose
         if (userPokemons.size() < 2) {
             if (userPokemons.isEmpty()) {
                 System.out.println("You don't have any Pokémon. Choosing rental Pokémon.");
-            } else {
-                System.out.println("You only have one Pokémon. Choosing one rental Pokémon.");
-            }
+                int rentalChoice1 = choosePokemon(rentalPokemons, scanner, -1);
+                Pokemon rentalPokemon1 = rentalPokemons.get(rentalChoice1);
 
-            int rentalChoice1 = choosePokemon(rentalPokemons, scanner, -1);
-            Pokemon rentalPokemon1 = rentalPokemons.get(rentalChoice1);
+                System.out.println("Rental Pokémon chosen:");
+                System.out.println("1: " + rentalPokemon1.getName() + " | Type: " + String.join(", ", rentalPokemon1.getTypes()) + " | Stars: " + rentalPokemon1.getStars());
 
-            System.out.println("Rental Pokémon chosen:");
-            System.out.println("1: " + rentalPokemon1.getName() + " | Type: " + String.join(", ", rentalPokemon1.getTypes()) + " | Stars: " + rentalPokemon1.getStars());
-
-            // If user has one Pokémon, use it for battle, otherwise, use rental Pokémon
-            if (userPokemons.isEmpty()) {
+                // Use the rental Pokémon for battle
                 userPokemon1 = rentalPokemon1;
             } else {
+                // Choose user's Pokémon
                 userPokemon1 = userPokemons.get(0); // Only one user Pokémon available
+                System.out.println("\nYour Pokémon:");
+                System.out.println("1: " + userPokemon1.getName() + " | Type: " + String.join(", ", userPokemon1.getTypes()) + " | Stars: " + userPokemon1.getStars());
+                System.out.println("You only have one Pokémon. Choosing one rental Pokémon.");
+
+                // Choose one rental Pokémon
+                int rentalChoice1 = choosePokemon(rentalPokemons, scanner, -1);
+                Pokemon rentalPokemon1 = rentalPokemons.get(rentalChoice1);
+
+                System.out.println("Rental Pokémon chosen:");
+                System.out.println("2: " + rentalPokemon1.getName() + " | Type: " + String.join(", ", rentalPokemon1.getTypes()) + " | Stars: " + rentalPokemon1.getStars());
+
+                userPokemon2 = rentalPokemon1;
             }
         } else {
             System.out.println("Choose your Pokémon for battle:");
@@ -76,7 +84,7 @@ public class Battle {
             System.out.println("2: " + userPokemon2.getName() + " | Type: " + String.join(", ", userPokemon2.getTypes()) + " | Stars: " + userPokemon2.getStars());
         }
 
-        // If user only chose one Pokémon, assign second Pokémon to another user Pokémon or another rental Pokémon
+    // If user only chose one Pokémon, assign second Pokémon to another user Pokémon or another rental Pokémon
         if (userPokemon2 == null) {
             int rentalChoice2 = choosePokemon(rentalPokemons, scanner, -1);
             Pokemon rentalPokemon2 = rentalPokemons.get(rentalChoice2);
@@ -119,7 +127,14 @@ public class Battle {
                 displayRemainingHP(userPokemon1, userPokemon2);
             }
 
-            if (userPokemon2.getHealth() > 0) {
+            // Check if both wild Pokémon are defeated after Wild Pokémon 1's turn
+            if (wildPokemon1.getHealth() <= 0 && wildPokemon2.getHealth() <= 0) {
+                System.out.println("You won the battle!");
+                break;
+            }
+
+            // Only allow Pokémon 2 to attack if Wild Pokémon 1 or 2 is still active
+            if (userPokemon2.getHealth() > 0 && (wildPokemon1.getHealth() > 0 || wildPokemon2.getHealth() > 0)) {
                 System.out.println("\nPlayer's Pokémon 2 turn!");
                 waitForEnter(scanner); // Pause and wait for Enter
                 long reactionTime2 = qte.performQTE();
@@ -138,17 +153,19 @@ public class Battle {
                 displayRemainingHP(userPokemon1, userPokemon2);
             }
 
-            if (userPokemon1.getHealth() <= 0 && userPokemon2.getHealth() <= 0) {
-                System.out.println("You lost the battle!");
-                break;
-            }
+            // Check if both wild Pokémon are defeated after Wild Pokémon 2's turn
             if (wildPokemon1.getHealth() <= 0 && wildPokemon2.getHealth() <= 0) {
                 System.out.println("You won the battle!");
                 break;
             }
+
+            if (userPokemon1.getHealth() <= 0 && userPokemon2.getHealth() <= 0) {
+                System.out.println("You lost the battle!");
+                break;
+            }
         }
 
-// Handle catching a Pokémon if applicable
+        // Handle catching a Pokémon if applicable
         if ((wildPokemon1.getHealth() <= 0 && wildPokemon2.getHealth() > 0 && (userPokemon1.getHealth() > 0 || userPokemon2.getHealth() > 0)) ||
                 (wildPokemon2.getHealth() <= 0 && wildPokemon1.getHealth() > 0 && (userPokemon1.getHealth() > 0 || userPokemon2.getHealth() > 0)) ||
                 (wildPokemon1.getHealth() <= 0 && wildPokemon2.getHealth() <= 0 && (System.currentTimeMillis() - startTime) < battleTimeLimit && (userPokemon1.getHealth() > 0 || userPokemon2.getHealth() > 0))) {
@@ -239,11 +256,10 @@ public class Battle {
         }
 
         System.out.println("\nAvailable Pokémon:");
-
         for (int i = 0; i < availablePokemons.size(); i++) {
             Pokemon pokemon = availablePokemons.get(i);
             String typesString = String.join(", ", pokemon.getTypes()); // Join types with a comma
-            System.out.println(pokemon.getName() + " | Type: " + typesString + " | Stars: " + pokemon.getStars());
+            System.out.println((i + 1) + ". " + pokemon.getName() + " | Type: " + typesString + " | Stars: " + pokemon.getStars());
         }
 
         while (userChoice < 0 || userChoice >= availablePokemons.size() || userChoice == previousChoice) {
