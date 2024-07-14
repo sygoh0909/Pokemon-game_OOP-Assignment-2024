@@ -1,15 +1,10 @@
 package my.com.sunway.pokemonapp;
 
-public enum Pokeball {
-    POKEBALL(0.28, 0.6),
-    GREATBALL(0.41, 0.4),
-    ULTRABALL(0.624, 0.2),
-    MASTERBALL(1.0, 0.1);
-
+public abstract class Pokeball {
     private final double catchRate;
     private final double appearanceRate;
 
-    Pokeball(double catchRate, double appearanceRate) {
+    public Pokeball(double catchRate, double appearanceRate) {
         this.catchRate = catchRate;
         this.appearanceRate = appearanceRate;
     }
@@ -21,4 +16,7 @@ public enum Pokeball {
     public double getAppearanceRate() {
         return appearanceRate;
     }
+
+    @Override
+    public abstract String toString(); // Abstract method to be implemented by subclasses
 }

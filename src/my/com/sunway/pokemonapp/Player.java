@@ -42,13 +42,20 @@ public class Player {
     public Pokeball chooseRandomPokeball() {
         double randomValue = Math.random();
         double cumulativeProbability = 0.0;
-        for (Pokeball pokeball : Pokeball.values()) {
+
+        List<Pokeball> pokeballs = new ArrayList<>();
+        pokeballs.add(new PokeballType());
+        pokeballs.add(new GreatBall());
+        pokeballs.add(new UltraBall());
+        pokeballs.add(new MasterBall());
+
+        for (Pokeball pokeball : pokeballs) {
             cumulativeProbability += pokeball.getAppearanceRate();
             if (randomValue <= cumulativeProbability) {
                 return pokeball;
             }
         }
-        return Pokeball.POKEBALL; // Default case, should never occur if appearance rates sum to 1
+        return new PokeballType(); // Default case, should never occur if appearance rates sum to 1
     }
 
     public boolean attemptCatch(Pokeball pokeball) {
