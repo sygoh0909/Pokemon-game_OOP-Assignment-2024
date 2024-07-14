@@ -6,11 +6,10 @@ import java.util.*;
 public class Battle {
     private QuickTimeEvent qte;
     private List<Pokemon> rentalPokemons;
-    private static final String SCORE_FILE = "top_scores.txt";
-    private static final int MAX_TOP_SCORES = 5;
     private TypeChart typeChart;
     private Player player;
     private BattleScoreCalculation scoreCalculation;
+    private boolean battleWins;
 
     public Battle() {
         this.qte = new QuickTimeEvent();
@@ -18,6 +17,7 @@ public class Battle {
         this.typeChart = new TypeChart();
         this.player = new Player("userID", "password");
         this.scoreCalculation = new BattleScoreCalculation();
+        this.battleWins = false; // Initialize battleWins to false
 
         //rental pokemon
         rentalPokemons.add(new Pokemon("Pikachu", 35, 55, 40, 3, List.of("electric"), 90, 50, 50));
@@ -27,6 +27,7 @@ public class Battle {
     }
 
     public void startBattle(List<Pokemon> userPokemons, List<Pokemon> stageWildPokemons, String userId) {
+        this.battleWins = false;
         if (stageWildPokemons.isEmpty()) {
             System.out.println("No wild Pokémon available for battle. Exiting.");
             return;
@@ -101,6 +102,12 @@ public class Battle {
 
         int attackStrength1 = 0;
         int attackStrength2 = 0;
+        int defenseStrength1 = 0;
+        int defenseStrength2 = 0;
+        int specialAttackStrength1 = 0;
+        int specialAttackStrength2 = 0;
+        int specialDefenseStrength1 = 0;
+        int specialDefenseStrength2 = 0;
 
         long startTime = System.currentTimeMillis();
         long battleTimeLimit = 3 * 60 * 1000; // 3 minutes in milliseconds
@@ -117,47 +124,74 @@ public class Battle {
                 waitForEnter(scanner); // Pause and wait for Enter
                 long reactionTime1 = qte.performQTE();
                 if (reactionTime1 != -1) {
+                    // Calculate attack strengths
                     attackStrength1 = calculateAttackStrength(userPokemon1, reactionTime1, wildPokemon1);
+                    specialAttackStrength1 = calculateSpecialAttackStrength(userPokemon1, reactionTime1, wildPokemon1);
+
+                    // Apply attack and special attack to wild Pokémon
                     wildPokemon1.takeDamage(attackStrength1);
-                    wildPokemon2.takeDamage(attackStrength1);
+                    wildPokemon2.takeDamage(specialAttackStrength1);
+
                     displayRemainingHP(wildPokemon1, wildPokemon2);
                 }
             }
 
             if (wildPokemon1.getHealth() > 0) {
                 System.out.println("\nWild Pokémon 1's turn!");
-                userPokemon1.takeDamage(wildPokemon1.getAttack());
+
+                // Calculate defense and special defense
+                defenseStrength1 = calculateDefenseStrength(userPokemon1, System.currentTimeMillis(), wildPokemon1);
+                specialDefenseStrength1 = calculateSpecialDefenseStrength(userPokemon1, System.currentTimeMillis(), wildPokemon1);
+
+                // Apply wild Pokémon's attack to user's Pokémon
+                userPokemon1.takeDamage(Math.max(0, wildPokemon1.getAttack() - defenseStrength1));
+                userPokemon1.takeDamage(Math.max(0, wildPokemon1.getSpecialAttack() - specialDefenseStrength1));
+
                 displayRemainingHP(userPokemon1, userPokemon2);
             }
 
-            // Check if both wild Pokémon are defeated after Wild Pokémon 1's turn
+        // Check if both wild Pokémon are defeated after Wild Pokémon 1's turn
             if (wildPokemon1.getHealth() <= 0 && wildPokemon2.getHealth() <= 0) {
                 System.out.println("You won the battle!");
                 break;
             }
 
-            // Only allow Pokémon 2 to attack if Wild Pokémon 1 or 2 is still active
+        // Only allow Pokémon 2 to attack if Wild Pokémon 1 or 2 is still active
             if (userPokemon2.getHealth() > 0 && (wildPokemon1.getHealth() > 0 || wildPokemon2.getHealth() > 0)) {
                 System.out.println("\nPlayer's Pokémon 2 turn!");
                 waitForEnter(scanner); // Pause and wait for Enter
                 long reactionTime2 = qte.performQTE();
                 if (reactionTime2 != -1) {
+                    // Calculate attack strengths
                     attackStrength2 = calculateAttackStrength(userPokemon2, reactionTime2, wildPokemon2);
+                    specialAttackStrength2 = calculateSpecialAttackStrength(userPokemon2, reactionTime2, wildPokemon2);
+
+                    // Apply attack and special attack to wild Pokémon
                     wildPokemon1.takeDamage(attackStrength2);
-                    wildPokemon2.takeDamage(attackStrength2);
+                    wildPokemon2.takeDamage(specialAttackStrength2);
+
                     displayRemainingHP(wildPokemon1, wildPokemon2);
                 }
             }
 
             if (wildPokemon2.getHealth() > 0) {
                 System.out.println("\nWild Pokémon 2's turn!");
-                userPokemon2.takeDamage(wildPokemon2.getAttack());
+
+                // Calculate defense and special defense
+                defenseStrength2 = calculateDefenseStrength(userPokemon2, System.currentTimeMillis(), wildPokemon2);
+                specialDefenseStrength2 = calculateSpecialDefenseStrength(userPokemon2, System.currentTimeMillis(), wildPokemon2);
+
+                // Apply wild Pokémon's attack to user's Pokémon
+                userPokemon2.takeDamage(Math.max(0, wildPokemon2.getAttack() - defenseStrength2));
+                userPokemon2.takeDamage(Math.max(0, wildPokemon2.getSpecialAttack() - specialDefenseStrength2));
+
                 displayRemainingHP(userPokemon1, userPokemon2);
             }
 
             // Check if both wild Pokémon are defeated after Wild Pokémon 2's turn
             if (wildPokemon1.getHealth() <= 0 && wildPokemon2.getHealth() <= 0) {
                 System.out.println("You won the battle!");
+                battleWins = true;
                 break;
             }
 
@@ -171,6 +205,8 @@ public class Battle {
         if ((wildPokemon1.getHealth() <= 0 && wildPokemon2.getHealth() > 0 && (userPokemon1.getHealth() > 0 || userPokemon2.getHealth() > 0)) ||
                 (wildPokemon2.getHealth() <= 0 && wildPokemon1.getHealth() > 0 && (userPokemon1.getHealth() > 0 || userPokemon2.getHealth() > 0)) ||
                 (wildPokemon1.getHealth() <= 0 && wildPokemon2.getHealth() <= 0 && (System.currentTimeMillis() - startTime) < battleTimeLimit && (userPokemon1.getHealth() > 0 || userPokemon2.getHealth() > 0))) {
+
+            battleWins = true;
 
             System.out.println("You have the chance to catch one of the defeated wild Pokémon!");
 
@@ -232,11 +268,17 @@ public class Battle {
         int battleScore = scoreCalculation.calculateBattleScore(startTime, battleTimeLimit,
                 userPokemon1, userPokemon2,
                 wildPokemon1, wildPokemon2,
-                typeChart, attackStrength1, attackStrength2);
+                typeChart, attackStrength1, attackStrength2,
+                defenseStrength1, defenseStrength2,
+                specialAttackStrength1, specialAttackStrength2,
+                specialDefenseStrength1, specialDefenseStrength2);
 
         System.out.println("\nBattle ended. Your score: " + battleScore);
-        updateTopScores(userId, battleScore);
-        displayTopScores();
+
+        pokemonUpgrade(battleScore, userPokemon1, userPokemon2);
+
+        scoreCalculation.updateTopScores(userId, battleScore);
+        scoreCalculation.displayTopScores();
 
         //rank display
         System.out.println("\n" + scoreCalculation.determineRankMessage(battleScore));
@@ -316,6 +358,66 @@ public class Battle {
         }
     }
 
+    private int calculateDefenseStrength(Pokemon defender, long reactionTime, Pokemon attacker) {
+        // Calculate base defense strength based on reaction time
+        int baseDefense = calculateBaseDefense(defender, reactionTime);
+        // Get type effectiveness from TypeChart
+        double effectiveness = typeChart.getEffectiveness(attacker.getTypes().get(0), defender.getTypes().get(0));
+        // Apply type effectiveness to defense strength
+        return (int) (baseDefense / effectiveness);
+    }
+
+    private int calculateBaseDefense(Pokemon pokemon, long reactionTime) {
+        // Example implementation of calculating base defense
+        if (reactionTime < 1000) {
+            return pokemon.getDefense() * 2;
+        } else if (reactionTime < 2000) {
+            return pokemon.getDefense();
+        } else {
+            return pokemon.getDefense() / 2;
+        }
+    }
+
+    private int calculateSpecialAttackStrength(Pokemon attacker, long reactionTime, Pokemon defender) {
+        // Calculate base special attack strength based on reaction time
+        int baseSpecialAttack = calculateBaseSpecialAttack(attacker, reactionTime);
+        // Get type effectiveness from TypeChart
+        double effectiveness = typeChart.getEffectiveness(attacker.getTypes().get(0), defender.getTypes().get(0));
+        // Apply type effectiveness to special attack strength
+        return (int) (baseSpecialAttack * effectiveness);
+    }
+
+    private int calculateBaseSpecialAttack(Pokemon pokemon, long reactionTime) {
+        // Example implementation of calculating base special attack
+        if (reactionTime < 1000) {
+            return pokemon.getSpecialAttack() * 2;
+        } else if (reactionTime < 2000) {
+            return pokemon.getSpecialAttack();
+        } else {
+            return pokemon.getSpecialAttack() / 2;
+        }
+    }
+
+    private int calculateSpecialDefenseStrength(Pokemon defender, long reactionTime, Pokemon attacker) {
+        // Calculate base special defense strength based on reaction time
+        int baseSpecialDefense = calculateBaseSpecialDefense(defender, reactionTime);
+        // Get type effectiveness from TypeChart
+        double effectiveness = typeChart.getEffectiveness(attacker.getTypes().get(0), defender.getTypes().get(0));
+        // Apply type effectiveness to special defense strength
+        return (int) (baseSpecialDefense / effectiveness);
+    }
+
+    private int calculateBaseSpecialDefense(Pokemon pokemon, long reactionTime) {
+        // Example implementation of calculating base special defense
+        if (reactionTime < 1000) {
+            return pokemon.getSpecialDefense() * 2;
+        } else if (reactionTime < 2000) {
+            return pokemon.getSpecialDefense();
+        } else {
+            return pokemon.getSpecialDefense() / 2;
+        }
+    }
+
     private void displayRemainingHP(Pokemon... pokemons) {
         System.out.println("\nRemaining HP:");
         for (Pokemon pokemon : pokemons) {
@@ -323,82 +425,42 @@ public class Battle {
         }
     }
 
-    private void updateTopScores(String userId, int newScore) {
-        List<Score> topScores = readTopScores();
-        topScores.add(new Score(userId, newScore));
-        Collections.sort(topScores, Collections.reverseOrder());
-        if (topScores.size() > MAX_TOP_SCORES) {
-            topScores = topScores.subList(0, MAX_TOP_SCORES);
-        }
-        writeTopScores(topScores);
-    }
+    public void pokemonUpgrade(int battleScore, Pokemon userPokemon1, Pokemon userPokemon2) {
+        if (battleWins) {
+            System.out.println("Increasing attack and defense stats for your Pokémon...");
 
-    private List<Score> readTopScores() {
-        List<Score> topScores = new ArrayList<>();
-        File file = new File(SCORE_FILE);
-
-        try {
-            if (!file.exists()) {
-                file.createNewFile(); // Create a new file if it doesn't exist
+            if (userPokemon1 != null) {
+                userPokemon1.increaseAttack(5);
+                userPokemon1.increaseDefense(5);
             }
 
-            Scanner scanner = new Scanner(file);
-            while (scanner.hasNextLine()) {
-                String line = scanner.nextLine();
-                String[] parts = line.split(",");
-                if (parts.length == 2) {
-                    String userId = parts[0].trim();
-                    int score = Integer.parseInt(parts[1].trim());
-                    topScores.add(new Score(userId, score));
+            if (userPokemon2 != null) {
+                userPokemon2.increaseAttack(5);
+                userPokemon2.increaseDefense(5);
+            }
+
+            if (battleScore > 2000) {
+                System.out.println("Increasing special attack and defense stats for your Pokémon...");
+
+                if (userPokemon1 != null) {
+                    userPokemon1.increaseSpecialAttack(3);
+                    userPokemon1.increaseSpecialDefense(3);
+                }
+
+                if (userPokemon2 != null) {
+                    userPokemon2.increaseSpecialAttack(3);
+                    userPokemon2.increaseSpecialDefense(3);
                 }
             }
-            scanner.close();
-        } catch (IOException e) {
-            System.out.println("Failed to read top scores: " + e.getMessage());
-        }
 
-        return topScores;
-    }
-
-
-    private void writeTopScores(List<Score> topScores) {
-        try (PrintWriter writer = new PrintWriter(new FileWriter(SCORE_FILE))) {
-            for (Score score : topScores) {
-                writer.println(score.getUserId() + "," + score.getScore());
+            // Update the details of the modified Pokémon
+            if (userPokemon1 != null) {
+                player.updatePokemonDetailsToFile(userPokemon1);
             }
-        } catch (IOException e) {
-            System.out.println("Failed to write top scores: " + e.getMessage());
-        }
-    }
 
-    private void displayTopScores() {
-        List<Score> topScores = readTopScores();
-        System.out.println("\nTop Scores:");
-        for (Score score : topScores) {
-            System.out.println(score.getUserId() + ": " + score.getScore());
-        }
-    }
-
-    static class Score implements Comparable<Score> {
-        private final String userId;
-        private final int score;
-
-        public Score(String userId, int score) {
-            this.userId = userId;
-            this.score = score;
-        }
-
-        public String getUserId() {
-            return userId;
-        }
-
-        public int getScore() {
-            return score;
-        }
-
-        @Override
-        public int compareTo(Score other) {
-            return Integer.compare(this.score, other.score);
+            if (userPokemon2 != null) {
+                player.updatePokemonDetailsToFile(userPokemon2);
+            }
         }
     }
 }

@@ -2,7 +2,6 @@ package my.com.sunway.pokemonapp;
 
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.*;
@@ -25,7 +24,33 @@ public class Game {
         setupStages();
     }
 
+    public static void main(String[] args) throws IOException, InterruptedException {
+        System.out.println("Game loading...Please be patient...");
+        Game game = new Game();
+
+        boolean loggedIn = game.login();
+
+        if (loggedIn) {
+            game.player.loadUserPokemons();
+            game.player.getUserPokemons();
+            System.out.println("Login successful for user ID: " + game.player.getUserId());
+
+            game.displayStages();
+
+            // Choose stage and get wild Pokémon for battle
+            List<Pokemon> wildPokemons = game.chooseStageAndPokemon();
+
+            /// Pass user ID to Battle class when starting battle
+            game.battle.startBattle(game.player.getUserPokemons(), wildPokemons, game.player.getUserId());
+
+        } else {
+            System.out.println("Login failed!"); //login fail
+        }
+    }
+
+
     public boolean login() {
+        System.out.println("Game succesfully loaded."); //pretty pokemon word icon here
         Scanner scanner = new Scanner(System.in);
         boolean isAuthenticated = false;
 
@@ -228,28 +253,6 @@ public class Game {
 
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
-        }
-    }
-
-    public static void main(String[] args) throws IOException, InterruptedException {
-        Game game = new Game();
-        boolean loggedIn = game.login();
-
-        if (loggedIn) {
-            game.player.loadUserPokemons();
-            List<Pokemon> userPokemons = game.player.getUserPokemons();
-            System.out.println("Login successful for user ID: " + game.player.getUserId());
-
-            game.displayStages();
-
-            // Choose stage and get wild Pokémon for battle
-            List<Pokemon> wildPokemons = game.chooseStageAndPokemon();
-
-            /// Pass user ID to Battle class when starting battle
-            game.battle.startBattle(game.player.getUserPokemons(), wildPokemons, game.player.getUserId());
-
-        } else {
-            System.out.println("Login failed!"); //login fail
         }
     }
 

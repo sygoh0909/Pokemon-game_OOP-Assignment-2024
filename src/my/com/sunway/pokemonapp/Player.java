@@ -1,5 +1,7 @@
 package my.com.sunway.pokemonapp;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -49,7 +51,7 @@ public class Player {
     }
 
     public void saveChosenPokemon(Pokemon pokemon) {
-        String fileName = "user_pokemon_list_" + getUserId() + ".txt";
+        String fileName = "user_pokemon_list_" + userId + ".txt";
         try {
             String pokemonDetails = pokemon.toString();
             Files.write(Paths.get(fileName), (pokemonDetails + System.lineSeparator()).getBytes(), StandardOpenOption.CREATE, StandardOpenOption.APPEND);
@@ -63,7 +65,7 @@ public class Player {
     }
 
     public void loadUserPokemons() {
-        String fileName = "user_pokemon_list_" + getUserId() + ".txt";
+        String fileName = "user_pokemon_list_" + userId + ".txt";
         Path filePath = Paths.get(fileName);
 
         try {
@@ -82,6 +84,63 @@ public class Player {
             }
         } catch (IOException e) {
             e.printStackTrace();
+        }
+    }
+
+    // Method to rewrite user's Pokémon list to a file
+    public void rewritePokemonDetailsToFile() { //for initial writes and major updates
+        String fileName = "user_pokemon_list_" + userId + ".txt";
+
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(fileName))) {
+            for (Pokemon pokemon : userPokemons) {
+                writer.write(pokemon.getName() + "," +
+                        pokemon.getHealth() + "," +
+                        pokemon.getAttack() + "," +
+                        pokemon.getDefense() + "," +
+                        pokemon.getSpecialAttack() + "," +
+                        pokemon.getSpecialDefense() + "," +
+                        pokemon.getStars() + "," +
+                        String.join("/", pokemon.getTypes()) + "\n");
+            }
+            System.out.println("Pokémon details saved to " + fileName);
+        } catch (IOException e) {
+            System.out.println("Error writing Pokémon details to file: " + e.getMessage());
+        }
+    }
+
+    // Method to update specific Pokémon details in the file
+    public void updatePokemonDetailsToFile(Pokemon pokemonToUpdate) {
+        String fileName = "user_pokemon_list_" + userId + ".txt";
+        Path filePath = Paths.get(fileName);
+
+        try {
+            // Read existing details
+            List<String> lines = Files.readAllLines(filePath);
+
+            // Clear existing file contents
+            Files.write(filePath, new byte[0]);
+
+            try (BufferedWriter writer = new BufferedWriter(new FileWriter(fileName))) {
+                for (String line : lines) {
+                    if (line.startsWith(pokemonToUpdate.getName() + ",")) {
+                        // Write updated details
+                        writer.write(pokemonToUpdate.getName() + "," +
+                                pokemonToUpdate.getHealth() + "," +
+                                pokemonToUpdate.getAttack() + "," +
+                                pokemonToUpdate.getDefense() + "," +
+                                pokemonToUpdate.getSpecialAttack() + "," +
+                                pokemonToUpdate.getSpecialDefense() + "," +
+                                pokemonToUpdate.getStars() + "," +
+                                String.join("/", pokemonToUpdate.getTypes()) + "\n");
+                    } else {
+                        // Write existing details
+                        writer.write(line + "\n");
+                    }
+                }
+            }
+            System.out.println("Updated Pokémon details saved to " + fileName);
+        } catch (IOException e) {
+            System.out.println("Error updating Pokémon details to file: " + e.getMessage());
         }
     }
 

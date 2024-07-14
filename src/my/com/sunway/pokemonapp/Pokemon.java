@@ -113,6 +113,22 @@ public class Pokemon {
         return this.health <= 0;
     }
 
+    public void increaseAttack(int amount){
+        this.attack += amount;
+    }
+
+    public void increaseDefense(int amount){
+        this.defense += amount;
+    }
+
+    public void increaseSpecialAttack(int amount){
+        this.specialAttack += amount;
+    }
+
+    public void increaseSpecialDefense(int amount){
+        this.specialDefense += amount;
+    }
+
     @Override
     public String toString() {
         return "Pokemon{" +
