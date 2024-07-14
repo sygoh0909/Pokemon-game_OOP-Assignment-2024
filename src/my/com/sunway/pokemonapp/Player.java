@@ -19,7 +19,9 @@ public class Player {
     private List<Pokemon> userPokemons;
     private int battlePoints;
 
-    public Player() {}
+    public Player() {
+        this.userPokemons = new ArrayList<>();
+    }
 
     public String getUserId() {
         return userId;
@@ -114,34 +116,37 @@ public class Player {
 
     // Method to update specific Pokémon details in the file
     public void updatePokemonDetailsToFile(Pokemon pokemonToUpdate) {
-        String fileName = "user_pokemon_list_" + userId + ".txt";
+        String fileName = "user_pokemon_list_" + userId + ".txt"; // Use userId from Player instance
         Path filePath = Paths.get(fileName);
 
         try {
-            // Read existing details
+            List<String> updatedLines = new ArrayList<>();
             List<String> lines = Files.readAllLines(filePath);
 
-            // Clear existing file contents
-            Files.write(filePath, new byte[0]);
-
-            try (BufferedWriter writer = new BufferedWriter(new FileWriter(fileName))) {
-                for (String line : lines) {
-                    if (line.startsWith(pokemonToUpdate.getName() + ",")) {
-                        // Write updated details
-                        writer.write(pokemonToUpdate.getName() + "," +
-                                pokemonToUpdate.getHealth() + "," +
-                                pokemonToUpdate.getAttack() + "," +
-                                pokemonToUpdate.getDefense() + "," +
-                                pokemonToUpdate.getSpecialAttack() + "," +
-                                pokemonToUpdate.getSpecialDefense() + "," +
-                                pokemonToUpdate.getStars() + "," +
-                                String.join("/", pokemonToUpdate.getTypes()) + "\n");
-                    } else {
-                        // Write existing details
-                        writer.write(line + "\n");
-                    }
+            for (String line : lines) {
+                if (line.startsWith(pokemonToUpdate.getName() + ",")) {
+                    // Update the line for the specific Pokémon
+                    String updatedLine = pokemonToUpdate.getName() + "," +
+                            pokemonToUpdate.getHealth() + "," +
+                            pokemonToUpdate.getAttack() + "," +
+                            pokemonToUpdate.getDefense() + "," +
+                            pokemonToUpdate.getSpecialAttack() + "," +
+                            pokemonToUpdate.getSpecialDefense() + "," +
+                            pokemonToUpdate.getStars() + "," +
+                            String.join("/", pokemonToUpdate.getTypes());
+                    updatedLines.add(updatedLine);
+                } else {
+                    updatedLines.add(line);
                 }
             }
+
+            // Write the updated lines back to the file
+            try (BufferedWriter writer = new BufferedWriter(new FileWriter(fileName))) {
+                for (String updatedLine : updatedLines) {
+                    writer.write(updatedLine + "\n");
+                }
+            }
+
             System.out.println("Updated Pokémon details saved to " + fileName);
         } catch (IOException e) {
             System.out.println("Error updating Pokémon details to file: " + e.getMessage());

@@ -11,7 +11,6 @@ public class Game {
     private List<List<Pokemon>> stages; // Pokémon in the stages
     private List<String> stageNames;
     private PokemonService pokemonService;
-    //private List<Pokemon> userPokemons;
     private Battle battle; // Add Battle instance
 
     public Game() {
@@ -19,7 +18,6 @@ public class Game {
         this.stages = new ArrayList<>();
         this.stageNames = new ArrayList<>();
         this.pokemonService = new PokemonService();
-        //this.userPokemons = new ArrayList<>(); // Initialize the userPokemons list
         this.battle = new Battle(); // Initialize the Battle instance
         setupStages();
     }
@@ -32,16 +30,17 @@ public class Game {
 
         if (loggedIn) {
             game.player.loadUserPokemons();
-            game.player.getUserPokemons();
-            System.out.println("Login successful for user ID: " + game.player.getUserId());
+            List<Pokemon> userPokemons = game.player.getUserPokemons();
+            String userId = game.player.getUserId();
+            System.out.println("Login successful for user ID: " + userId);
 
             game.displayStages();
 
             // Choose stage and get wild Pokémon for battle
-            List<Pokemon> wildPokemons = game.chooseStageAndPokemon();
+            List<Pokemon> stageWildPokemons = game.chooseStageAndPokemon();
 
-            /// Pass user ID to Battle class when starting battle
-            game.battle.startBattle(game.player.getUserPokemons(), wildPokemons, game.player.getUserId());
+            // Pass user ID to Battle class when starting battle
+            game.battle.startBattle(userPokemons, stageWildPokemons, userId);
 
         } else {
             System.out.println("Login failed!"); //login fail

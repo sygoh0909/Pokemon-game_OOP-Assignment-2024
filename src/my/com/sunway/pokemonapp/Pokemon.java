@@ -25,42 +25,6 @@ public class Pokemon {
         this.specialDefense = specialDefense;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void setHealth(int health) {
-        this.health = health;
-    }
-
-    public void setAttack(int attack) {
-        this.attack = attack;
-    }
-
-    public void setDefense(int defense) {
-        this.defense = defense;
-    }
-
-    public void setStars(int stars) {
-        this.stars = stars;
-    }
-
-    public void setTypes(List<String> types) {
-        this.types = types;
-    }
-
-    public void setSpeed(int speed) {
-        this.speed = speed;
-    }
-
-    public void setSpecialAttack(int specialAttack) {
-        this.specialAttack = specialAttack;
-    }
-
-    public void setSpecialDefense(int specialDefense) {
-        this.specialDefense = specialDefense;
-    }
-
     public String getName() {
         return name;
     }
@@ -102,15 +66,6 @@ public class Pokemon {
         if (this.health < 0) {
             this.health = 0;
         }
-    }
-
-    public int attack() {
-        // Simple attack calculation, can be expanded
-        return (int) (Math.random() * attack) + 1;
-    }
-
-    public boolean isFainted() {
-        return this.health <= 0;
     }
 
     public void increaseAttack(int amount){

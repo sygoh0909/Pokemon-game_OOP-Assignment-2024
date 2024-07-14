@@ -7,17 +7,17 @@ public class Battle {
     private QuickTimeEvent qte;
     private List<Pokemon> rentalPokemons;
     private TypeChart typeChart;
-    private Player player;
     private BattleScoreCalculation scoreCalculation;
     private boolean battleWins;
+    private Player player;
 
     public Battle() {
         this.qte = new QuickTimeEvent();
         this.rentalPokemons = new ArrayList<>();
         this.typeChart = new TypeChart();
-        this.player = new Player();
         this.scoreCalculation = new BattleScoreCalculation();
         this.battleWins = false; // Initialize battleWins to false
+        this.player = new Player();
 
         //rental pokemon
         rentalPokemons.add(new Pokemon("Pikachu", 35, 55, 40, 3, List.of("electric"), 90, 50, 50));
@@ -27,7 +27,9 @@ public class Battle {
     }
 
     public void startBattle(List<Pokemon> userPokemons, List<Pokemon> stageWildPokemons, String userId) {
+        this.player.setUserId( userId );
         this.battleWins = false;
+
         if (stageWildPokemons.isEmpty()) {
             System.out.println("No wild Pokémon available for battle. Exiting.");
             return;
@@ -119,6 +121,7 @@ public class Battle {
                 break;
             }
 
+            // Player's Pokémon 1 turn
             if (userPokemon1.getHealth() > 0) {
                 System.out.println("\nPlayer's Pokémon 1 turn!");
                 waitForEnter(scanner); // Pause and wait for Enter
@@ -136,6 +139,7 @@ public class Battle {
                 }
             }
 
+            // Wild Pokémon 1 turn
             if (wildPokemon1.getHealth() > 0) {
                 System.out.println("\nWild Pokémon 1's turn!");
 
@@ -150,13 +154,14 @@ public class Battle {
                 displayRemainingHP(userPokemon1, userPokemon2);
             }
 
-        // Check if both wild Pokémon are defeated after Wild Pokémon 1's turn
+            // Check if both wild Pokémon are defeated after Wild Pokémon 1's turn
             if (wildPokemon1.getHealth() <= 0 && wildPokemon2.getHealth() <= 0) {
                 System.out.println("You won the battle!");
+                battleWins = true;
                 break;
             }
 
-        // Only allow Pokémon 2 to attack if Wild Pokémon 1 or 2 is still active
+            // Player's Pokémon 2 turn, only if wild Pokémon are still active
             if (userPokemon2.getHealth() > 0 && (wildPokemon1.getHealth() > 0 || wildPokemon2.getHealth() > 0)) {
                 System.out.println("\nPlayer's Pokémon 2 turn!");
                 waitForEnter(scanner); // Pause and wait for Enter
@@ -174,6 +179,7 @@ public class Battle {
                 }
             }
 
+            // Wild Pokémon 2 turn
             if (wildPokemon2.getHealth() > 0) {
                 System.out.println("\nWild Pokémon 2's turn!");
 
@@ -195,6 +201,7 @@ public class Battle {
                 break;
             }
 
+            // Check if player's Pokémon are both defeated
             if (userPokemon1.getHealth() <= 0 && userPokemon2.getHealth() <= 0) {
                 System.out.println("You lost the battle!");
                 break;
@@ -453,7 +460,7 @@ public class Battle {
                 }
             }
 
-            // Update the details of the modified Pokémon
+            // Update the details of the modified Pokémon in the file
             if (userPokemon1 != null) {
                 player.updatePokemonDetailsToFile(userPokemon1);
             }
