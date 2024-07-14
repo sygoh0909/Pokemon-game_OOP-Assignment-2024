@@ -14,28 +14,24 @@ public class TypeChart {
         }
 
         // Populate the type effectiveness chart
-        addEffectiveness("Normal", new String[]{"Rock", "Steel"}, new String[]{"Ghost"});
+        addEffectiveness("Normal", new String[]{}, new String[]{"Rock", "Steel"}, new String[]{"Ghost"});
         addEffectiveness("Fighting", new String[]{"Normal", "Rock", "Steel", "Ice", "Dark"}, new String[]{"Flying", "Poison", "Bug", "Psychic", "Fairy"}, new String[]{"Ghost"});
         addEffectiveness("Poison", new String[]{"Grass", "Fairy"}, new String[]{"Poison", "Ground", "Rock", "Ghost"}, new String[]{"Steel"});
         addEffectiveness("Ground", new String[]{"Poison", "Rock", "Steel", "Fire", "Electric"}, new String[]{"Bug", "Grass"}, new String[]{"Flying"});
-        addEffectiveness("Flying", new String[]{"Fighting", "Bug", "Grass"}, new String[]{"Rock", "Steel", "Electric"});
-        addEffectiveness("Bug", new String[]{"Grass", "Psychic", "Dark"}, new String[]{"Fighting", "Flying", "Poison", "Ghost", "Steel", "Fire", "Fairy"});
-        addEffectiveness("Rock", new String[]{"Flying", "Bug", "Fire", "Ice"}, new String[]{"Fighting", "Ground", "Steel"});
+        addEffectiveness("Flying", new String[]{"Fighting", "Bug", "Grass"}, new String[]{"Rock", "Steel", "Electric"}, new String[]{});
+        addEffectiveness("Bug", new String[]{"Grass", "Psychic", "Dark"}, new String[]{"Fighting", "Flying", "Poison", "Ghost", "Steel", "Fire", "Fairy"}, new String[]{});
+        addEffectiveness("Rock", new String[]{"Flying", "Bug", "Fire", "Ice"}, new String[]{"Fighting", "Ground", "Steel"}, new String[]{});
         addEffectiveness("Ghost", new String[]{"Ghost", "Psychic"}, new String[]{"Dark"}, new String[]{"Normal"});
-        addEffectiveness("Steel", new String[]{"Rock", "Ice", "Fairy"}, new String[]{"Steel", "Fire", "Water", "Electric"});
-        addEffectiveness("Fire", new String[]{"Bug", "Steel", "Grass", "Ice"}, new String[]{"Rock", "Fire", "Water", "Dragon"});
-        addEffectiveness("Water", new String[]{"Ground", "Rock", "Fire"}, new String[]{"Water", "Grass", "Dragon"});
+        addEffectiveness("Steel", new String[]{"Rock", "Ice", "Fairy"}, new String[]{"Steel", "Fire", "Water", "Electric"}, new String[]{});
+        addEffectiveness("Fire", new String[]{"Bug", "Steel", "Grass", "Ice"}, new String[]{"Rock", "Fire", "Water", "Dragon"}, new String[]{});
+        addEffectiveness("Water", new String[]{"Ground", "Rock", "Fire"}, new String[]{"Water", "Grass", "Dragon"}, new String[]{});
         addEffectiveness("Electric", new String[]{"Flying", "Water"}, new String[]{"Grass", "Electric", "Dragon"}, new String[]{"Ground"});
-        addEffectiveness("Grass", new String[]{"Ground", "Rock", "Water"}, new String[]{"Flying", "Poison", "Bug", "Steel", "Fire", "Grass", "Dragon"});
-        addEffectiveness("Ice", new String[]{"Flying", "Ground", "Grass", "Dragon"}, new String[]{"Steel", "Fire", "Water", "Ice"});
+        addEffectiveness("Grass", new String[]{"Ground", "Rock", "Water"}, new String[]{"Flying", "Poison", "Bug", "Steel", "Fire", "Grass", "Dragon"}, new String[]{});
+        addEffectiveness("Ice", new String[]{"Flying", "Ground", "Grass", "Dragon"}, new String[]{"Steel", "Fire", "Water", "Ice"}, new String[]{});
         addEffectiveness("Psychic", new String[]{"Fighting", "Poison"}, new String[]{"Steel", "Psychic"}, new String[]{"Dark"});
         addEffectiveness("Dragon", new String[]{"Dragon"}, new String[]{"Steel"}, new String[]{"Fairy"});
-        addEffectiveness("Dark", new String[]{"Ghost", "Psychic"}, new String[]{"Fighting", "Dark", "Fairy"});
-        addEffectiveness("Fairy", new String[]{"Fighting", "Dragon", "Dark"}, new String[]{"Poison", "Steel", "Fire"});
-    }
-
-    private static void addEffectiveness(String type, String[] superEffective, String[] notVeryEffective) {
-        addEffectiveness(type, superEffective, notVeryEffective, new String[]{});
+        addEffectiveness("Dark", new String[]{"Ghost", "Psychic"}, new String[]{"Fighting", "Dark", "Fairy"}, new String[]{});
+        addEffectiveness("Fairy", new String[]{"Fighting", "Dragon", "Dark"}, new String[]{"Poison", "Steel", "Fire"}, new String[]{});
     }
 
     private static void addEffectiveness(String type, String[] superEffective, String[] notVeryEffective, String[] noEffect) {
@@ -46,7 +42,7 @@ public class TypeChart {
             typeEffectiveness.get(type).put(targetType, 0.5);
         }
         for (String targetType : noEffect) {
-            typeEffectiveness.get(type).put(targetType, 0.0);
+            typeEffectiveness.get(type).put(targetType, 0.25);
         }
     }
 
