@@ -15,7 +15,7 @@ public class Battle {
         this.qte = new QuickTimeEvent();
         this.rentalPokemons = new ArrayList<>();
         this.typeChart = new TypeChart();
-        this.player = new Player("userID", "password");
+        this.player = new Player();
         this.scoreCalculation = new BattleScoreCalculation();
         this.battleWins = false; // Initialize battleWins to false
 

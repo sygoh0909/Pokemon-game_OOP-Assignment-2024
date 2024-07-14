@@ -14,16 +14,12 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Player {
-    private final String userId;
-    private final String password;
-    private final List<Pokemon> userPokemons;
+    private String userId;
+    private String password;
+    private List<Pokemon> userPokemons;
     private int battlePoints;
 
-    public Player(String userId, String password) {
-        this.userId = userId;
-        this.password = password;
-        this.userPokemons = new ArrayList<>();
-    }
+    public Player() {}
 
     public String getUserId() {
         return userId;
@@ -31,6 +27,14 @@ public class Player {
 
     public List<Pokemon> getUserPokemons() {
         return userPokemons;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public Pokeball chooseRandomPokeball() {

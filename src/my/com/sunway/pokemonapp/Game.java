@@ -15,7 +15,7 @@ public class Game {
     private Battle battle; // Add Battle instance
 
     public Game() {
-        this.player = new Player("userID", "password");
+        this.player = new Player();
         this.stages = new ArrayList<>();
         this.stageNames = new ArrayList<>();
         this.pokemonService = new PokemonService();
@@ -74,8 +74,12 @@ public class Game {
                     saveUserCredentials(userId, newPassword);
 
                     // Authenticate with newly created credentials
-                    this.player = new Player(userId, newPassword);
+                    Player newPlayer = new Player();
+                    newPlayer.setUserId(userId);
+                    newPlayer.setPassword( newPassword );
+                    this.player = newPlayer;
                     isAuthenticated = true;
+
                 } else {
                     System.out.println("Returning to login...");
                 }
@@ -87,7 +91,11 @@ public class Game {
                 String password = scanner.nextLine().trim();
 
                 if (storedPassword.equals(password)) {
-                    this.player = new Player(storedUserId, storedPassword);
+
+                    Player player = new Player();
+                    player.setUserId(userId);
+
+                    this.player = player;
                     System.out.println("Login successful!");
                     isAuthenticated = true;
                 } else {
