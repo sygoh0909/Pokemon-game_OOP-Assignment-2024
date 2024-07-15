@@ -1,6 +1,6 @@
 package my.com.sunway.pokemonapp;
 
-public class GreatBall extends Pokeball {
+public class GreatBall extends PokeballType {
     public GreatBall() {
         super(0.41, 0.4);
     }

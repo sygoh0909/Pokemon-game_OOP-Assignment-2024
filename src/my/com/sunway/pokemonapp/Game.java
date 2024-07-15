@@ -202,7 +202,7 @@ public class Game {
         Pokemon chosenPokemon = chosenStagePokemons.get(pokemonChoice);
         System.out.println("You chose: " + chosenPokemon.getName());
 
-        Pokeball chosenPokeball = player.chooseRandomPokeball();
+        PokeballType chosenPokeball = player.chooseRandomPokeball();
         System.out.println("A " + chosenPokeball + " appeared!");
 
         System.out.println("Press Enter to continue...");

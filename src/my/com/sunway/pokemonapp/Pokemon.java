@@ -12,6 +12,9 @@ public class Pokemon {
     private int speed;
     private int specialAttack;
     private int specialDefense;
+    private int maxHealth;
+    private int maxSpecialAttack;
+    private int maxSpecialDefense;
 
     public Pokemon(String name, int health, int attack, int defense, int stars, List<String> types, int speed, int specialAttack, int specialDefense) {
         this.name = name;
@@ -23,6 +26,9 @@ public class Pokemon {
         this.speed = speed;
         this.specialAttack = specialAttack;
         this.specialDefense = specialDefense;
+        this.maxHealth = health; // Initialize maxHealth to the initial health value
+        this.maxSpecialAttack = specialAttack;
+        this.maxSpecialDefense = specialDefense;
     }
 
     public String getName() {
@@ -82,6 +88,19 @@ public class Pokemon {
 
     public void increaseSpecialDefense(int amount){
         this.specialDefense += amount;
+    }
+
+    // Method to reset health to maxHealth
+    public void resetHealth() {
+        this.health = this.maxHealth;
+    }
+
+    public void resetSpecialAttack(){
+        this.specialAttack = this.maxSpecialAttack;
+    }
+
+    public void resetSpecialDefense(){
+        this.specialDefense = this.maxSpecialDefense;
     }
 
     @Override

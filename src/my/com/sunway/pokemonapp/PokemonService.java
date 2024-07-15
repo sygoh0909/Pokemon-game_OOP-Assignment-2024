@@ -178,18 +178,4 @@ public class PokemonService {
         }
     }
 
-    // Example main method for testing the service
-    public static void main(String[] args) {
-        PokemonService pokemonService = new PokemonService();
-        List<Integer> habitatIds = Arrays.asList(1, 2); // Example habitat IDs
-
-        try {
-            List<Pokemon> pokemonList = pokemonService.fetchPokemonsByMultipleHabitats(habitatIds);
-            for (Pokemon pokemon : pokemonList) {
-                System.out.println(pokemon);
-            }
-        } catch (IOException | InterruptedException e) {
-            e.printStackTrace();
         }
-    }
-}

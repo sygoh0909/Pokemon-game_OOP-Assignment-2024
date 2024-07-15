@@ -27,7 +27,7 @@ public class Battle {
     }
 
     public void startBattle(List<Pokemon> userPokemons, List<Pokemon> stageWildPokemons, String userId) {
-        this.player.setUserId( userId );
+        this.player.setUserId(userId);
         this.battleWins = false;
 
         if (stageWildPokemons.isEmpty()) {
@@ -132,8 +132,8 @@ public class Battle {
                     specialAttackStrength1 = calculateSpecialAttackStrength(userPokemon1, reactionTime1, wildPokemon1);
 
                     // Apply attack and special attack to wild Pokémon
-                    wildPokemon1.takeDamage(attackStrength1);
-                    wildPokemon2.takeDamage(specialAttackStrength1);
+                    wildPokemon1.takeDamage(attackStrength1 + specialAttackStrength1);
+                    wildPokemon2.takeDamage(attackStrength1 + specialAttackStrength1);
 
                     displayRemainingHP(wildPokemon1, wildPokemon2);
                 }
@@ -172,8 +172,8 @@ public class Battle {
                     specialAttackStrength2 = calculateSpecialAttackStrength(userPokemon2, reactionTime2, wildPokemon2);
 
                     // Apply attack and special attack to wild Pokémon
-                    wildPokemon1.takeDamage(attackStrength2);
-                    wildPokemon2.takeDamage(specialAttackStrength2);
+                    wildPokemon1.takeDamage(attackStrength2 + specialAttackStrength2);
+                    wildPokemon2.takeDamage(attackStrength2 + specialAttackStrength2);
 
                     displayRemainingHP(wildPokemon1, wildPokemon2);
                 }
@@ -233,7 +233,7 @@ public class Battle {
             int choice = scanner.nextInt();
 
             if (choice == 1 && wildPokemon1.getHealth() <= 0) {
-                Pokeball chosenPokeball = player.chooseRandomPokeball();
+                PokeballType chosenPokeball = player.chooseRandomPokeball();
                 System.out.println("A " + chosenPokeball + " appeared!");
 
                 System.out.println("Press Enter to continue...");
@@ -243,13 +243,14 @@ public class Battle {
                 boolean isCaught = player.attemptCatch(chosenPokeball);
                 if (isCaught) {
                     System.out.println("You caught " + wildPokemon1.getName() + "!");
+                    wildPokemon1.resetHealth(); // Reset health to maxHealth before saving
                     player.saveChosenPokemon(wildPokemon1);
                     caughtAnyPokemon = true;
                 } else {
                     System.out.println(wildPokemon1.getName() + " escaped!");
                 }
             } else if (choice == 2 && wildPokemon2.getHealth() <= 0) {
-                Pokeball chosenPokeball = player.chooseRandomPokeball();
+                PokeballType chosenPokeball = player.chooseRandomPokeball();
                 System.out.println("A " + chosenPokeball + " appeared!");
 
                 System.out.println("Press Enter to continue...");
@@ -259,6 +260,7 @@ public class Battle {
                 boolean isCaught = player.attemptCatch(chosenPokeball);
                 if (isCaught) {
                     System.out.println("You caught " + wildPokemon2.getName() + "!");
+                    wildPokemon2.resetHealth(); // Reset health to maxHealth before saving
                     player.saveChosenPokemon(wildPokemon2);
                     caughtAnyPokemon = true;
                 } else {
@@ -346,16 +348,12 @@ public class Battle {
     }
 
     private int calculateAttackStrength(Pokemon attacker, long reactionTime, Pokemon defender) {
-        // Calculate base attack strength based on reaction time
         int baseAttack = calculateBaseAttack(attacker, reactionTime);
-        // Get type effectiveness from TypeChart
         double effectiveness = typeChart.getEffectiveness(attacker.getTypes().get(0), defender.getTypes().get(0));
-        // Apply type effectiveness to attack strength
         return (int) (baseAttack * effectiveness);
     }
 
     private int calculateBaseAttack(Pokemon pokemon, long reactionTime) {
-        // Example implementation of calculating base attack
         if (reactionTime < 1000) {
             return pokemon.getAttack() * 2;
         } else if (reactionTime < 2000) {
@@ -365,37 +363,13 @@ public class Battle {
         }
     }
 
-    private int calculateDefenseStrength(Pokemon defender, long reactionTime, Pokemon attacker) {
-        // Calculate base defense strength based on reaction time
-        int baseDefense = calculateBaseDefense(defender, reactionTime);
-        // Get type effectiveness from TypeChart
-        double effectiveness = typeChart.getEffectiveness(attacker.getTypes().get(0), defender.getTypes().get(0));
-        // Apply type effectiveness to defense strength
-        return (int) (baseDefense / effectiveness);
-    }
-
-    private int calculateBaseDefense(Pokemon pokemon, long reactionTime) {
-        // Example implementation of calculating base defense
-        if (reactionTime < 1000) {
-            return pokemon.getDefense() * 2;
-        } else if (reactionTime < 2000) {
-            return pokemon.getDefense();
-        } else {
-            return pokemon.getDefense() / 2;
-        }
-    }
-
     private int calculateSpecialAttackStrength(Pokemon attacker, long reactionTime, Pokemon defender) {
-        // Calculate base special attack strength based on reaction time
         int baseSpecialAttack = calculateBaseSpecialAttack(attacker, reactionTime);
-        // Get type effectiveness from TypeChart
         double effectiveness = typeChart.getEffectiveness(attacker.getTypes().get(0), defender.getTypes().get(0));
-        // Apply type effectiveness to special attack strength
         return (int) (baseSpecialAttack * effectiveness);
     }
 
     private int calculateBaseSpecialAttack(Pokemon pokemon, long reactionTime) {
-        // Example implementation of calculating base special attack
         if (reactionTime < 1000) {
             return pokemon.getSpecialAttack() * 2;
         } else if (reactionTime < 2000) {
@@ -405,17 +379,29 @@ public class Battle {
         }
     }
 
-    private int calculateSpecialDefenseStrength(Pokemon defender, long reactionTime, Pokemon attacker) {
-        // Calculate base special defense strength based on reaction time
-        int baseSpecialDefense = calculateBaseSpecialDefense(defender, reactionTime);
-        // Get type effectiveness from TypeChart
+    private int calculateDefenseStrength(Pokemon defender, long reactionTime, Pokemon attacker) {
+        int baseDefense = calculateBaseDefense(defender, reactionTime);
         double effectiveness = typeChart.getEffectiveness(attacker.getTypes().get(0), defender.getTypes().get(0));
-        // Apply type effectiveness to special defense strength
+        return (int) (baseDefense / effectiveness);
+    }
+
+    private int calculateBaseDefense(Pokemon pokemon, long reactionTime) {
+        if (reactionTime < 1000) {
+            return pokemon.getDefense() * 2;
+        } else if (reactionTime < 2000) {
+            return pokemon.getDefense();
+        } else {
+            return pokemon.getDefense() / 2;
+        }
+    }
+
+    private int calculateSpecialDefenseStrength(Pokemon defender, long reactionTime, Pokemon attacker) {
+        int baseSpecialDefense = calculateBaseSpecialDefense(defender, reactionTime);
+        double effectiveness = typeChart.getEffectiveness(attacker.getTypes().get(0), defender.getTypes().get(0));
         return (int) (baseSpecialDefense / effectiveness);
     }
 
     private int calculateBaseSpecialDefense(Pokemon pokemon, long reactionTime) {
-        // Example implementation of calculating base special defense
         if (reactionTime < 1000) {
             return pokemon.getSpecialDefense() * 2;
         } else if (reactionTime < 2000) {
@@ -460,12 +446,18 @@ public class Battle {
                 }
             }
 
-            // Update the details of the modified Pokémon in the file
+            // Update the details of the modified Pokémon in the file without resetting special stats
             if (userPokemon1 != null) {
+                userPokemon1.resetHealth(); // Reset health to max
+                userPokemon1.resetSpecialAttack(); // Reset special attack to original
+                userPokemon1.resetSpecialDefense(); // Reset special defense to original
                 player.updatePokemonDetailsToFile(userPokemon1);
             }
 
             if (userPokemon2 != null) {
+                userPokemon2.resetHealth(); // Reset health to max
+                userPokemon2.resetSpecialAttack(); // Reset special attack to original
+                userPokemon2.resetSpecialDefense(); // Reset special defense to original
                 player.updatePokemonDetailsToFile(userPokemon2);
             }
         }

@@ -1,12 +1,22 @@
 package my.com.sunway.pokemonapp;
 
-public class PokeballType extends Pokeball {
-    public PokeballType() {
-        super(0.28, 0.6); // Default values for POKEBALL
+public abstract class PokeballType {
+    private final double catchRate;
+    private final double appearanceRate;
+
+    public PokeballType (double catchRate, double appearanceRate) {
+        this.catchRate = catchRate;
+        this.appearanceRate = appearanceRate;
+    }
+
+    public double getCatchRate() {
+        return catchRate;
+    }
+
+    public double getAppearanceRate() {
+        return appearanceRate;
     }
 
     @Override
-    public String toString() {
-        return "PokeballType";
-    }
+    public abstract String toString(); // Abstract method to be implemented by subclasses
 }

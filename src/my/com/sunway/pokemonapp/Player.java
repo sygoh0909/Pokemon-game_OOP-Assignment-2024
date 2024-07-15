@@ -39,26 +39,26 @@ public class Player {
         this.password = password;
     }
 
-    public Pokeball chooseRandomPokeball() {
+    public PokeballType chooseRandomPokeball() {
         double randomValue = Math.random();
         double cumulativeProbability = 0.0;
 
-        List<Pokeball> pokeballs = new ArrayList<>();
-        pokeballs.add(new PokeballType());
+        List<PokeballType> pokeballs = new ArrayList<>();
+        pokeballs.add(new Pokeball());
         pokeballs.add(new GreatBall());
         pokeballs.add(new UltraBall());
         pokeballs.add(new MasterBall());
 
-        for (Pokeball pokeball : pokeballs) {
+        for (PokeballType pokeball : pokeballs) {
             cumulativeProbability += pokeball.getAppearanceRate();
             if (randomValue <= cumulativeProbability) {
                 return pokeball;
             }
         }
-        return new PokeballType(); // Default case, should never occur if appearance rates sum to 1
+        return new Pokeball(); // Default case, should never occur if appearance rates sum to 1
     }
 
-    public boolean attemptCatch(Pokeball pokeball) {
+    public boolean attemptCatch(PokeballType pokeball) {
         double catchChance = Math.random();
         return catchChance <= pokeball.getCatchRate();
     }
@@ -100,28 +100,6 @@ public class Player {
         }
     }
 
-    // Method to rewrite user's Pokémon list to a file
-    public void rewritePokemonDetailsToFile() { //for initial writes and major updates
-        String fileName = "user_pokemon_list_" + userId + ".txt";
-
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(fileName))) {
-            for (Pokemon pokemon : userPokemons) {
-                writer.write(pokemon.getName() + "," +
-                        pokemon.getHealth() + "," +
-                        pokemon.getAttack() + "," +
-                        pokemon.getDefense() + "," +
-                        pokemon.getSpecialAttack() + "," +
-                        pokemon.getSpecialDefense() + "," +
-                        pokemon.getStars() + "," +
-                        String.join("/", pokemon.getTypes()) + "\n");
-            }
-            System.out.println("Pokémon details saved to " + fileName);
-        } catch (IOException e) {
-            System.out.println("Error writing Pokémon details to file: " + e.getMessage());
-        }
-    }
-
-    // Method to update specific Pokémon details in the file
     public void updatePokemonDetailsToFile(Pokemon pokemonToUpdate) {
         String fileName = "user_pokemon_list_" + userId + ".txt"; // Use userId from Player instance
         Path filePath = Paths.get(fileName);
@@ -129,28 +107,31 @@ public class Player {
         try {
             List<String> updatedLines = new ArrayList<>();
             List<String> lines = Files.readAllLines(filePath);
+            boolean found = false;
 
             for (String line : lines) {
-                if (line.startsWith(pokemonToUpdate.getName() + ",")) {
+                if (line.contains("name='" + pokemonToUpdate.getName() + "'")) {
                     // Update the line for the specific Pokémon
-                    String updatedLine = pokemonToUpdate.getName() + "," +
-                            pokemonToUpdate.getHealth() + "," +
-                            pokemonToUpdate.getAttack() + "," +
-                            pokemonToUpdate.getDefense() + "," +
-                            pokemonToUpdate.getSpecialAttack() + "," +
-                            pokemonToUpdate.getSpecialDefense() + "," +
-                            pokemonToUpdate.getStars() + "," +
-                            String.join("/", pokemonToUpdate.getTypes());
-                    updatedLines.add(updatedLine);
+                    updatedLines.add(pokemonToUpdate.toString());
+                    found = true;
+                    System.out.println("Updated line: " + pokemonToUpdate.toString());
                 } else {
                     updatedLines.add(line);
                 }
             }
 
+            if (!found) {
+                System.out.println("Pokémon not found in file. Adding as new entry.");
+                // If the Pokémon was not found in the file, add it as a new entry
+                updatedLines.add(pokemonToUpdate.toString());
+                System.out.println("New line: " + pokemonToUpdate.toString());
+            }
+
             // Write the updated lines back to the file
             try (BufferedWriter writer = new BufferedWriter(new FileWriter(fileName))) {
                 for (String updatedLine : updatedLines) {
-                    writer.write(updatedLine + "\n");
+                    writer.write(updatedLine);
+                    writer.newLine(); // Use newLine() for cross-platform compatibility
                 }
             }
 
