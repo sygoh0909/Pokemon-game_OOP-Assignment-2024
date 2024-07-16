@@ -21,6 +21,7 @@ public class Player {
 
     public Player() {
         this.userPokemons = new ArrayList<>();
+        this.battlePoints = 2000;
     }
 
     public String getUserId() {
@@ -37,6 +38,23 @@ public class Player {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public int getBattlePoints(){
+        return battlePoints;
+    }
+
+    public void setBattlePoints(int battlePoints) {
+        this.battlePoints = battlePoints;
+    }
+
+    public void addBattlePoints(int pointsToAdd) {
+        this.battlePoints += pointsToAdd;
+    }
+
+    // Method to deduct points
+    public void deductPoints(int pointsToDeduct) {
+        battlePoints -= pointsToDeduct;
     }
 
     public PokeballType chooseRandomPokeball() {
@@ -220,10 +238,10 @@ public class Player {
                 case "speed":
                     speed = Integer.parseInt(value);
                     break;
-                case "special attack":
+                case "specialAttack":
                     specialAttack = Integer.parseInt(value);
                     break;
-                case "special defense":
+                case "specialDefense":
                     specialDefense = Integer.parseInt(value);
                     break;
                 default:

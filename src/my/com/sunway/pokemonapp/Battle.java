@@ -284,13 +284,22 @@ public class Battle {
 
         System.out.println("\nBattle ended. Your score: " + battleScore);
 
+        // Save the score to the user's file
+        scoreCalculation.saveUserScore(player.getUserId(), battleScore);
+
+        // Calculate battle points using instance method
+        scoreCalculation.calculateBattlePoints(player, battleScore);
+
+        // Display battle points earned
+        System.out.println("Battle points earned: " + player.getBattlePoints());
+
         pokemonUpgrade(battleScore, userPokemon1, userPokemon2);
 
         scoreCalculation.updateTopScores(userId, battleScore);
         scoreCalculation.displayTopScores();
 
         //rank display
-        System.out.println("\n" + scoreCalculation.determineRankMessage(battleScore));
+        System.out.println("\nYou got rank " + scoreCalculation.determineRankMessage(battleScore));
     }
 
     List<Pokemon> chooseWildPokemons(List<Pokemon> chosenStagePokemons) {

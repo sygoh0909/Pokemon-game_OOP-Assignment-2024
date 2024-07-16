@@ -4,8 +4,12 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
 
@@ -20,8 +24,9 @@ public class BattleScoreCalculation {
     private static final int HIGHEST_SPECIAL_DAMAGE_MULTIPLIER = 10;
     private static final int DEFENSE_MULTIPLIER = 5;
     private static final int SPECIAL_DEFENSE_MULTIPLIER = 5;
+    private Player player = new Player();
 
-    private static final String SCORE_FILE = "top_scores.txt";
+    private static final String SCORES_DIRECTORY = "user_scores/";
     private static final int MAX_TOP_SCORES = 5;
 
     public int calculateBattleScore(long startTime, long battleTimeLimit,
@@ -76,14 +81,27 @@ public class BattleScoreCalculation {
         return battleScore;
     }
 
+    public void calculateBattlePoints(Player player, int battleScore) {
+        // Example logic: 1 point for every 1000 score
+        int points = battleScore / 1000; // Adjust this logic based on your specific requirements
+        player.setBattlePoints(points); // Set the calculated points to player's battle points
+    }
 
     public String determineRankMessage(int score) {
-        if (score >= 1000000000) {
-            return "WOW YOU ARE A POKÉMON MASTER!!!! AMAZING!";
+        if (score >= 5000) {
+            return "SSS";
+        } else if (score >= 4000) {
+            return "SS";
+        } else if (score >= 3000) {
+            return "S";
+        } else if (score >= 2000) {
+            return "A";
         } else if (score >= 1000) {
-            return "Great job!";
+            return "B";
+        } else if (score >= 500) {
+            return "C";
         } else {
-            return "WOW YOU SUCK, YOU NEED TO LEARN YOUR TYPES BRO, YOU ARE WORSE THAN A 10YO";
+            return "F";
         }
     }
 
@@ -99,7 +117,7 @@ public class BattleScoreCalculation {
 
     private List<Score> readTopScores() {
         List<Score> topScores = new ArrayList<>();
-        File file = new File(SCORE_FILE);
+        File file = new File(SCORES_DIRECTORY + "top_scores.txt");
 
         try {
             if (!file.exists()) {
@@ -124,9 +142,8 @@ public class BattleScoreCalculation {
         return topScores;
     }
 
-
     private void writeTopScores(List<Score> topScores) {
-        try (PrintWriter writer = new PrintWriter(new FileWriter(SCORE_FILE))) {
+        try (PrintWriter writer = new PrintWriter(new FileWriter(SCORES_DIRECTORY + "top_scores.txt"))) {
             for (Score score : topScores) {
                 writer.println(score.getUserId() + "," + score.getScore());
             }
@@ -140,6 +157,30 @@ public class BattleScoreCalculation {
         System.out.println("\nTop Scores:");
         for (Score score : topScores) {
             System.out.println(score.getUserId() + ": " + score.getScore());
+        }
+    }
+
+    public void saveUserScore(String userId, int score) {
+        // Create user's score directory if it doesn't exist
+        File directory = new File(SCORES_DIRECTORY);
+        if (!directory.exists()) {
+            directory.mkdir();
+        }
+
+        // Check if user's score file exists
+        String userScoreFile = SCORES_DIRECTORY + userId + "_scores.txt";
+        File file = new File(userScoreFile);
+
+        try {
+            // Append score to existing file or create new file
+            FileWriter fw = new FileWriter(file, true); // true for append mode
+            PrintWriter pw = new PrintWriter(fw);
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            String dateTime = dateFormat.format(new Date());
+            pw.println("Score: " + score + "," + dateTime);
+            pw.close();
+        } catch (IOException e) {
+            System.out.println("Failed to save user score: " + e.getMessage());
         }
     }
 

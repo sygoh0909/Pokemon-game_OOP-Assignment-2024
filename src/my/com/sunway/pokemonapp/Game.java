@@ -179,45 +179,82 @@ public class Game {
         Collections.shuffle(chosenStagePokemons);
         int printCount = Math.min(3, chosenStagePokemons.size());
 
-        System.out.println("Choose a Pokémon from the following list:");
-        for (int i = 0; i < printCount; i++) {
-            Pokemon pokemon = chosenStagePokemons.get(i);
-            String typesString = String.join(", ", pokemon.getTypes()); // Join types with a comma
-            System.out.println((i + 1) + ": " + pokemon.getName() + " | Type: " + typesString + " | Stars: " + pokemon.getStars());
-        }
+        Set<Pokemon> chosenPokemons = new HashSet<>(); // Track chosen Pokémon
 
-        int pokemonChoice = -1;
-        while (pokemonChoice < 0 || pokemonChoice >= printCount) {
-            try {
-                pokemonChoice = scanner.nextInt() - 1;
-                if (pokemonChoice < 0 || pokemonChoice >= printCount) {
-                    System.out.println("Invalid Pokémon choice. Please try again.");
+// List of availablePokemons directly from chosenStagePokemons
+        List<Pokemon> availablePokemons = new ArrayList<>(chosenStagePokemons.subList(0, printCount)); // Copy the first 3 Pokémon from the shuffled list
+
+        while (true) {
+            // Display the list of available Pokémon
+            System.out.println("Choose a Pokémon from the following list:");
+            for (int i = 0; i < availablePokemons.size(); i++) {
+                Pokemon pokemon = availablePokemons.get(i);
+                String typesString = String.join(", ", pokemon.getTypes()); // Join types with a comma
+                System.out.println((i + 1) + ": " + pokemon.getName() + " | Type: " + typesString + " | Stars: " + pokemon.getStars());
+            }
+
+            int pokemonChoice = -1;
+            while (pokemonChoice < 0 || pokemonChoice >= availablePokemons.size()) {
+                try {
+                    pokemonChoice = scanner.nextInt() - 1;
+                    scanner.nextLine(); // Consume the newline character left by nextInt()
+                    if (pokemonChoice < 0 || pokemonChoice >= availablePokemons.size()) {
+                        System.out.println("Invalid Pokémon choice. Please try again.");
+                    }
+                } catch (InputMismatchException e) {
+                    System.out.println("Invalid input. Please enter a number.");
+                    scanner.next(); // Clear the invalid input
+                    scanner.nextLine(); // Clear the newline character left by next()
                 }
-            } catch (InputMismatchException e) {
-                System.out.println("Invalid input. Please enter a number.");
-                scanner.next(); // Clear the invalid input
+            }
+
+            Pokemon chosenPokemon = availablePokemons.get(pokemonChoice);
+            System.out.println("You chose: " + chosenPokemon.getName());
+
+            PokeballType chosenPokeball = player.chooseRandomPokeball();
+            System.out.println("A " + chosenPokeball + " appeared!");
+
+            System.out.println("Press Enter to continue...");
+            scanner.nextLine(); // Wait for the user to press Enter
+
+            boolean isCaught = player.attemptCatch(chosenPokeball);
+            if (isCaught) {
+                System.out.println("You caught " + chosenPokemon.getName() + "!");
+                player.saveChosenPokemon(chosenPokemon);
+                chosenPokemons.add(chosenPokemon); // Add to chosenPokemons
+            } else {
+                System.out.println(chosenPokemon.getName() + " escaped!");
+            }
+
+            // Remove the chosen Pokémon from availablePokemons
+            availablePokemons.remove(pokemonChoice);
+
+            // Display current battle points and ask if they want to catch another Pokémon if they have enough battle points
+            System.out.println("Current battle points: " + player.getBattlePoints());
+            if (player.getBattlePoints() >= 200) {
+                System.out.println("Do you want to catch another Pokémon? (yes/no)");
+                // Exit the main loop if no more Pokémon are available to choose
+                if (availablePokemons.isEmpty()) {
+                    System.out.println("No more Pokémon available to catch.");
+                    break;
+                }
+                String choice = scanner.nextLine().trim().toLowerCase();
+
+                if (!choice.equals("yes")) {
+                    break; // Exit loop if they don't want to catch another Pokémon
+                } else {
+                    // Deduct points, do not refresh the list of availablePokemons
+                    player.deductPoints(200);
+                    System.out.println("Points deducted. Current battle points: " + player.getBattlePoints());
+                }
+            } else {
+                System.out.println("Not enough points to catch another Pokémon.");
+                break; // Exit loop if there are not enough points to catch another Pokémon
             }
         }
 
-        Pokemon chosenPokemon = chosenStagePokemons.get(pokemonChoice);
-        System.out.println("You chose: " + chosenPokemon.getName());
 
-        PokeballType chosenPokeball = player.chooseRandomPokeball();
-        System.out.println("A " + chosenPokeball + " appeared!");
 
-        System.out.println("Press Enter to continue...");
-        Scanner keyboard = new Scanner(System.in);
-        keyboard.nextLine(); // Wait for user to press Enter
-
-        boolean isCaught = player.attemptCatch(chosenPokeball);
-        if (isCaught) {
-            System.out.println("You caught " + chosenPokemon.getName() + "!");
-            player.saveChosenPokemon(chosenPokemon);
-            player.loadUserPokemons(); //reload to save the newest caught pokemon to list
-        } else {
-            System.out.println(chosenPokemon.getName() + " escaped!");
-        }
-        
         // Randomly generate wild Pokémon for battle
         List<Pokemon> wildPokemons = battle.chooseWildPokemons(chosenStagePokemons);
 
