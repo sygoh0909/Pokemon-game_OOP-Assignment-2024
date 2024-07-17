@@ -20,10 +20,10 @@ public class Battle {
         this.player = new Player();
 
         //rental pokemon
-        rentalPokemons.add(new Pokemon("Pikachu", 35, 55, 40, 3, List.of("electric"), 90, 50, 50, 1));
+        rentalPokemons.add(new Pokemon("Pikachu", 35, 55, 40, 3, List.of("electric"), 90, 50, 50, 3));
         rentalPokemons.add(new Pokemon("Typhlosion", 78, 84, 78, 3, List.of("fire"), 100, 109, 85, 2));
-        rentalPokemons.add(new Pokemon("Snorlax", 160, 110, 65, 3, List.of("normal"), 30, 65, 110, 3));
-        rentalPokemons.add(new Pokemon("Tyrunt", 58, 89, 77, 3, List.of("rock", "dragon"), 48, 45, 45, 4));
+        rentalPokemons.add(new Pokemon("Snorlax", 160, 110, 65, 3, List.of("normal"), 30, 65, 110, 1));
+        rentalPokemons.add(new Pokemon("Tyrunt", 58, 89, 77, 3, List.of("rock", "dragon"), 48, 45, 45, 7));
     }
 
     public void startBattle(List<Pokemon> userPokemons, List<Pokemon> stageWildPokemons, String userId) {
@@ -115,42 +115,71 @@ public class Battle {
         long battleTimeLimit = 3 * 60 * 1000; // 3 minutes in milliseconds
 
         while (true) {
+            Scanner enter = new Scanner(System.in);
+
             long elapsedTime = System.currentTimeMillis() - startTime;
             if (elapsedTime >= battleTimeLimit) {
                 System.out.println("Time's up!");
                 break;
             }
 
-            // Player's Pokémon 1 turn
             if (userPokemon1.getHealth() > 0) {
                 System.out.println("\nPlayer's Pokémon 1 turn!");
-                waitForEnter(scanner); // Pause and wait for Enter
+                waitForEnter(enter);
                 long reactionTime1 = qte.performQTE();
                 if (reactionTime1 != -1) {
-                    // Calculate attack strengths
+                    System.out.print(wildPokemon1.getName() + " being attacked!!");
+                    // Calculate attack strengths against wildPokemon1
                     attackStrength1 = calculateAttackStrength(userPokemon1, reactionTime1, wildPokemon1);
                     specialAttackStrength1 = calculateSpecialAttackStrength(userPokemon1, reactionTime1, wildPokemon1);
+                    System.out.print(userPokemon1.getName() + " attacks! Attack: " + (attackStrength1 + specialAttackStrength1) + ", HP: " + userPokemon1.getHealth());
+                    printEffectivenessMessage(userPokemon1, wildPokemon1);
 
-                    // Apply attack and special attack to wild Pokémon
+                    System.out.println();
+                    System.out.print(wildPokemon2.getName() + " being attacked!!");
+                    // Calculate attack strengths against wildPokemon2
+                    attackStrength2 = calculateAttackStrength(userPokemon1, reactionTime1, wildPokemon2);
+                    specialAttackStrength2 = calculateSpecialAttackStrength(userPokemon1, reactionTime1, wildPokemon2);
+                    System.out.print(userPokemon1.getName() + " attacks! Attack: " + (attackStrength2 + specialAttackStrength2) + ", HP: " + userPokemon1.getHealth());
+                    printEffectivenessMessage(userPokemon1, wildPokemon2);
+
+                    // Apply attack and special attack to wild Pokémons
                     wildPokemon1.takeDamage(attackStrength1 + specialAttackStrength1);
-                    wildPokemon2.takeDamage(attackStrength1 + specialAttackStrength1);
+                    wildPokemon2.takeDamage(attackStrength2 + specialAttackStrength2);
 
-                    displayRemainingHP(wildPokemon1, wildPokemon2);
+                } else {
+                    System.out.print(userPokemon1.getName() + " attack failed!");
                 }
+                System.out.println("\nOpponent's Remaining HP:");
+                displayRemainingHP(wildPokemon1, wildPokemon2);
             }
 
-            // Wild Pokémon 1 turn
             if (wildPokemon1.getHealth() > 0) {
                 System.out.println("\nWild Pokémon 1's turn!");
 
-                // Calculate defense and special defense
+                System.out.print(userPokemon1.getName() + " being attacked!!");
+                // Calculate defense and special defense for userPokemon1
                 defenseStrength1 = calculateDefenseStrength(userPokemon1, System.currentTimeMillis(), wildPokemon1);
                 specialDefenseStrength1 = calculateSpecialDefenseStrength(userPokemon1, System.currentTimeMillis(), wildPokemon1);
-
                 // Apply wild Pokémon's attack to user's Pokémon
-                userPokemon1.takeDamage(Math.max(0, wildPokemon1.getAttack() - defenseStrength1));
-                userPokemon1.takeDamage(Math.max(0, wildPokemon1.getSpecialAttack() - specialDefenseStrength1));
+                int wildAttack1 = wildPokemon1.getAttack() + wildPokemon1.getSpecialAttack() - (defenseStrength1 + specialDefenseStrength1);
+                System.out.println("Opponent " + wildPokemon1.getName() + " attacks! Attack: " + wildAttack1 + ", HP: " + wildPokemon1.getHealth());
+                printEffectivenessMessage(wildPokemon1, userPokemon1);
 
+                System.out.println();
+                System.out.print(userPokemon2.getName() + " being attacked!!");
+                // Calculate defense and special defense for userPokemon1
+                defenseStrength2 = calculateDefenseStrength(userPokemon2, System.currentTimeMillis(), wildPokemon1);
+                specialDefenseStrength2 = calculateSpecialDefenseStrength(userPokemon2, System.currentTimeMillis(), wildPokemon1);
+                // Apply wild Pokémon's attack to user's Pokémon
+                int wildAttack2 = wildPokemon1.getAttack() + wildPokemon1.getSpecialAttack() - (defenseStrength2 + specialDefenseStrength2);
+                System.out.println("Opponent " + wildPokemon1.getName() + " attacks! Attack: " + wildAttack2 + ", HP: " + wildPokemon1.getHealth());
+                printEffectivenessMessage(wildPokemon1, userPokemon2);
+
+                userPokemon1.takeDamage(wildAttack1);
+                userPokemon2.takeDamage(wildAttack2);
+
+                System.out.println("\nPlayer's Remaining HP:");
                 displayRemainingHP(userPokemon1, userPokemon2);
             }
 
@@ -161,36 +190,62 @@ public class Battle {
                 break;
             }
 
-            // Player's Pokémon 2 turn, only if wild Pokémon are still active
-            if (userPokemon2.getHealth() > 0 && (wildPokemon1.getHealth() > 0 || wildPokemon2.getHealth() > 0)) {
+            // Only allow Pokémon 2 to attack if Wild Pokémon 1 or 2 is till active
+            if (userPokemon2.getHealth() > 0 && (wildPokemon1.getHealth() > 0 || wildPokemon2.getHealth() > 0 )) {
                 System.out.println("\nPlayer's Pokémon 2 turn!");
-                waitForEnter(scanner); // Pause and wait for Enter
+                waitForEnter(enter);
                 long reactionTime2 = qte.performQTE();
                 if (reactionTime2 != -1) {
-                    // Calculate attack strengths
+                    System.out.print(wildPokemon1.getName() + " being attacked!!");
+                    // Calculate attack strengths against wildPokemon1
+                    attackStrength1 = calculateAttackStrength(userPokemon2, reactionTime2, wildPokemon1);
+                    specialAttackStrength1 = calculateSpecialAttackStrength(userPokemon2, reactionTime2, wildPokemon1);
+                    System.out.println(userPokemon2.getName() + " attacks! Attack: " + (attackStrength1 + specialAttackStrength1) + ", HP: " + userPokemon2.getHealth());
+                    printEffectivenessMessage(userPokemon2, wildPokemon1);
+
+                    System.out.println();
+                    System.out.print(wildPokemon2.getName() + " being attacked!!");
+                    // Calculate attack strengths against wildPokemon2
                     attackStrength2 = calculateAttackStrength(userPokemon2, reactionTime2, wildPokemon2);
                     specialAttackStrength2 = calculateSpecialAttackStrength(userPokemon2, reactionTime2, wildPokemon2);
+                    System.out.println(userPokemon2.getName() + " attacks! Attack: " + (attackStrength2 + specialAttackStrength2) + ", HP: " + userPokemon2.getHealth());
+                    printEffectivenessMessage(userPokemon2, wildPokemon2);
 
-                    // Apply attack and special attack to wild Pokémon
-                    wildPokemon1.takeDamage(attackStrength2 + specialAttackStrength2);
+                    // Apply attack and special attack to wild Pokémons
+                    wildPokemon1.takeDamage(attackStrength1 + specialAttackStrength1);
                     wildPokemon2.takeDamage(attackStrength2 + specialAttackStrength2);
-
-                    displayRemainingHP(wildPokemon1, wildPokemon2);
+                } else {
+                    System.out.println(userPokemon2.getName()+ " attack failed!");
                 }
+                System.out.println("Opponent's Remaining HP:");
+                displayRemainingHP(wildPokemon1, wildPokemon2);
             }
 
-            // Wild Pokémon 2 turn
             if (wildPokemon2.getHealth() > 0) {
                 System.out.println("\nWild Pokémon 2's turn!");
 
-                // Calculate defense and special defense
+                System.out.print(userPokemon1.getName() + " being attacked!!");
+                // Calculate defense and special defense for userPokemon1
+                defenseStrength1 = calculateDefenseStrength(userPokemon1, System.currentTimeMillis(), wildPokemon2);
+                specialDefenseStrength1 = calculateSpecialDefenseStrength(userPokemon1, System.currentTimeMillis(), wildPokemon2);
+                // Apply wild Pokémon's attack to user's Pokémon
+                int wildAttack1 = wildPokemon2.getAttack() + wildPokemon2.getSpecialAttack() - (defenseStrength1 + specialDefenseStrength1);
+                System.out.println("Opponent " + wildPokemon2.getName() + " attacks! Attack: " + wildAttack1 + ", HP: " + wildPokemon2.getHealth());
+                printEffectivenessMessage(wildPokemon2, userPokemon1);
+
+                System.out.println();
+                System.out.print(userPokemon2.getName() + " being attacked!!");
+                // Calculate defense and special defense for userPokemon1
                 defenseStrength2 = calculateDefenseStrength(userPokemon2, System.currentTimeMillis(), wildPokemon2);
                 specialDefenseStrength2 = calculateSpecialDefenseStrength(userPokemon2, System.currentTimeMillis(), wildPokemon2);
-
                 // Apply wild Pokémon's attack to user's Pokémon
-                userPokemon2.takeDamage(Math.max(0, wildPokemon2.getAttack() - defenseStrength2));
-                userPokemon2.takeDamage(Math.max(0, wildPokemon2.getSpecialAttack() - specialDefenseStrength2));
+                int wildAttack2 = wildPokemon2.getAttack() + wildPokemon2.getSpecialAttack() - (defenseStrength2 + specialDefenseStrength2);
+                System.out.println("Opponent " + wildPokemon2.getName() + " attacks! Attack: " + wildAttack2 + ", HP: " + wildPokemon2.getHealth());
+                printEffectivenessMessage(wildPokemon2, userPokemon2);
 
+                userPokemon1.takeDamage(wildAttack1);
+                userPokemon2.takeDamage(wildAttack2);
+                System.out.println("Player's Remaining HP:");
                 displayRemainingHP(userPokemon1, userPokemon2);
             }
 
@@ -201,11 +256,11 @@ public class Battle {
                 break;
             }
 
-            // Check if player's Pokémon are both defeated
             if (userPokemon1.getHealth() <= 0 && userPokemon2.getHealth() <= 0) {
                 System.out.println("You lost the battle!");
                 break;
             }
+
         }
 
         // Handle catching a Pokémon if applicable
@@ -356,6 +411,28 @@ public class Battle {
         }
     }
 
+    private String capitalize(String type) {
+        if (type == null || type.isEmpty()) {
+            return type;
+        }
+        return type.substring(0, 1).toUpperCase() + type.substring(1).toLowerCase();
+    }
+
+    public void printEffectivenessMessage(Pokemon attacker, Pokemon defender) {
+        double effectiveness = typeChart.getEffectiveness(capitalize(attacker.getTypes().get(0)), capitalize(defender.getTypes().get(0))); // get(0) is used to only get the first type of a pokemon
+        System.out.println("Effectiveness value: " + effectiveness);
+        if (effectiveness == 2.0) {
+            System.out.print("It's super effective! ");
+        } else if (effectiveness == 0.5) {
+            System.out.print("It's not very effective... ");
+        } else if (effectiveness == 0.0) {
+            System.out.print("It has no effect... ");
+        } else {
+            System.out.print("It's a normal hit ");
+        }
+    }
+
+
     private int calculateAttackStrength(Pokemon attacker, long reactionTime, Pokemon defender) {
         int baseAttack = calculateBaseAttack(attacker, reactionTime);
         double effectiveness = typeChart.getEffectiveness(attacker.getTypes().get(0), defender.getTypes().get(0));
@@ -421,7 +498,6 @@ public class Battle {
     }
 
     private void displayRemainingHP(Pokemon... pokemons) {
-        System.out.println("\nRemaining HP:");
         for (Pokemon pokemon : pokemons) {
             System.out.println(pokemon.getName() + ": " + pokemon.getHealth());
         }

@@ -280,8 +280,6 @@ public class Game {
             }
         }
 
-
-
         // Randomly generate wild Pokémon for battle
         List<Pokemon> wildPokemons = battle.chooseWildPokemons(chosenStagePokemons);
 
