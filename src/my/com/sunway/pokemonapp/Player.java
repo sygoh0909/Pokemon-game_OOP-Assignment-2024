@@ -21,7 +21,7 @@ public class Player {
 
     public Player() {
         this.userPokemons = new ArrayList<>();
-        this.battlePoints = 2000;
+        this.battlePoints = 0;
     }
 
     public String getUserId() {

@@ -221,6 +221,42 @@ Pokemon{name='aggron', health=70, attack=110, defense=180, stars=4, types=[steel
 Pokemon{name='medicham', health=60, attack=60, defense=75, stars=3, types=[fighting, psychic], speed=80, specialAttack=60, specialDefense=75, habitatId=4}
 Pokemon{name='camerupt', health=70, attack=100, defense=70, stars=3, types=[fire, ground], speed=40, specialAttack=105, specialDefense=75, habitatId=4}
 Pokemon{name='grumpig', health=80, attack=45, defense=65, stars=3, types=[psychic], speed=80, specialAttack=90, specialDefense=110, habitatId=4}
+Pokemon{name='articuno', health=90, attack=85, defense=100, stars=5, types=[ice, flying], speed=85, specialAttack=95, specialDefense=125, habitatId=5}
+Pokemon{name='zapdos', health=90, attack=90, defense=85, stars=5, types=[electric, flying], speed=100, specialAttack=125, specialDefense=90, habitatId=5}
+Pokemon{name='moltres', health=90, attack=100, defense=90, stars=5, types=[fire, flying], speed=90, specialAttack=125, specialDefense=85, habitatId=5}
+Pokemon{name='mewtwo', health=106, attack=110, defense=90, stars=5, types=[psychic], speed=130, specialAttack=154, specialDefense=90, habitatId=5}
+Pokemon{name='mew', health=100, attack=100, defense=100, stars=5, types=[psychic], speed=100, specialAttack=100, specialDefense=100, habitatId=5}
+Pokemon{name='unown', health=48, attack=72, defense=48, stars=2, types=[psychic], speed=48, specialAttack=72, specialDefense=48, habitatId=5}
+Pokemon{name='lugia', health=106, attack=90, defense=130, stars=5, types=[psychic, flying], speed=110, specialAttack=90, specialDefense=154, habitatId=5}
+Pokemon{name='rayquaza', health=105, attack=150, defense=90, stars=5, types=[dragon, flying], speed=95, specialAttack=150, specialDefense=90, habitatId=5}
+Pokemon{name='deoxys', health=50, attack=150, defense=50, stars=5, types=[psychic], speed=150, specialAttack=150, specialDefense=50, habitatId=5}
+Pokemon{name='spearow', health=40, attack=60, defense=30, stars=2, types=[normal, flying], speed=70, specialAttack=31, specialDefense=31, habitatId=6}
+Pokemon{name='sandshrew', health=50, attack=75, defense=85, stars=2, types=[ground], speed=40, specialAttack=20, specialDefense=30, habitatId=6}
+Pokemon{name='magnemite', health=25, attack=35, defense=70, stars=2, types=[electric, steel], speed=45, specialAttack=95, specialDefense=55, habitatId=6}
+Pokemon{name='rhyhorn', health=80, attack=85, defense=95, stars=2, types=[ground, rock], speed=25, specialAttack=30, specialDefense=30, habitatId=6}
+Pokemon{name='skarmory', health=65, attack=80, defense=140, stars=3, types=[steel, flying], speed=70, specialAttack=40, specialDefense=70, habitatId=6}
+Pokemon{name='houndour', health=45, attack=60, defense=30, stars=2, types=[dark, fire], speed=65, specialAttack=80, specialDefense=50, habitatId=6}
+Pokemon{name='phanpy', health=90, attack=60, defense=60, stars=2, types=[ground], speed=40, specialAttack=40, specialDefense=40, habitatId=6}
+Pokemon{name='trapinch', health=45, attack=100, defense=45, stars=2, types=[ground], speed=10, specialAttack=45, specialDefense=45, habitatId=6}
+Pokemon{name='cacnea', health=50, attack=85, defense=40, stars=2, types=[grass], speed=35, specialAttack=85, specialDefense=40, habitatId=6}
+Pokemon{name='baltoy', health=40, attack=40, defense=55, stars=2, types=[ground, psychic], speed=55, specialAttack=40, specialDefense=70, habitatId=6}
+Pokemon{name='bagon', health=45, attack=75, defense=60, stars=2, types=[dragon], speed=50, specialAttack=40, specialDefense=30, habitatId=6}
+Pokemon{name='beldum', health=40, attack=55, defense=80, stars=2, types=[steel, psychic], speed=30, specialAttack=35, specialDefense=60, habitatId=6}
+Pokemon{name='groudon', health=100, attack=150, defense=140, stars=5, types=[ground], speed=90, specialAttack=100, specialDefense=90, habitatId=6}
+Pokemon{name='fearow', health=65, attack=90, defense=65, stars=3, types=[normal, flying], speed=100, specialAttack=61, specialDefense=61, habitatId=6}
+Pokemon{name='sandslash', health=75, attack=100, defense=110, stars=3, types=[ground], speed=65, specialAttack=45, specialDefense=55, habitatId=6}
+Pokemon{name='magneton', health=50, attack=60, defense=95, stars=3, types=[electric, steel], speed=70, specialAttack=120, specialDefense=70, habitatId=6}
+Pokemon{name='rhydon', health=105, attack=130, defense=120, stars=3, types=[ground, rock], speed=40, specialAttack=45, specialDefense=45, habitatId=6}
+Pokemon{name='houndoom', health=75, attack=90, defense=50, stars=3, types=[dark, fire], speed=95, specialAttack=110, specialDefense=80, habitatId=6}
+Pokemon{name='donphan', health=90, attack=120, defense=120, stars=3, types=[ground], speed=50, specialAttack=60, specialDefense=60, habitatId=6}
+Pokemon{name='vibrava', health=50, attack=70, defense=50, stars=2, types=[ground, dragon], speed=70, specialAttack=50, specialDefense=50, habitatId=6}
+Pokemon{name='flygon', health=80, attack=100, defense=80, stars=4, types=[ground, dragon], speed=100, specialAttack=80, specialDefense=80, habitatId=6}
+Pokemon{name='cacturne', health=70, attack=115, defense=60, stars=3, types=[grass, dark], speed=55, specialAttack=115, specialDefense=60, habitatId=6}
+Pokemon{name='claydol', health=60, attack=70, defense=105, stars=3, types=[ground, psychic], speed=75, specialAttack=70, specialDefense=120, habitatId=6}
+Pokemon{name='shelgon', health=65, attack=95, defense=100, stars=3, types=[dragon], speed=50, specialAttack=60, specialDefense=50, habitatId=6}
+Pokemon{name='salamence', health=95, attack=135, defense=80, stars=5, types=[dragon, flying], speed=100, specialAttack=110, specialDefense=80, habitatId=6}
+Pokemon{name='metang', health=60, attack=75, defense=100, stars=3, types=[steel, psychic], speed=50, specialAttack=55, specialDefense=80, habitatId=6}
+Pokemon{name='metagross', health=80, attack=135, defense=130, stars=5, types=[steel, psychic], speed=70, specialAttack=95, specialDefense=90, habitatId=6}
 Pokemon{name='tentacool', health=40, attack=40, defense=35, stars=2, types=[water, poison], speed=70, specialAttack=50, specialDefense=100, habitatId=7}
 Pokemon{name='seel', health=65, attack=45, defense=55, stars=2, types=[water], speed=45, specialAttack=45, specialDefense=70, habitatId=7}
 Pokemon{name='shellder', health=30, attack=65, defense=100, stars=2, types=[water], speed=40, specialAttack=45, specialDefense=25, habitatId=7}

@@ -342,13 +342,22 @@ public class Battle {
         // Save the score to the user's file
         scoreCalculation.saveUserScore(player.getUserId(), battleScore);
 
-        // Calculate battle points using instance method
-        scoreCalculation.calculateBattlePoints(player, battleScore);
+        // Calculate and update battle points
+        int battlePoints = BattleScoreCalculation.calculateBattlePoints(battleScore);
 
-        // Display battle points earned
-        System.out.println("Battle points earned: " + player.getBattlePoints());
+        // Load the player data
+        Player player = Game.readPlayerData(userId);
 
-        pokemonUpgrade(battleScore, userPokemon1, userPokemon2);
+        // Add battle points to the player
+        player.addBattlePoints(battlePoints);
+
+        // Save the updated player data
+        Game.savePlayerData(player);
+
+        System.out.println("Battle finished! Points earned: " + battlePoints);
+        System.out.println("Total Battle Points: " + player.getBattlePoints());
+
+    pokemonUpgrade(battleScore, userPokemon1, userPokemon2);
 
         scoreCalculation.updateTopScores(userId, battleScore);
         scoreCalculation.displayTopScores();

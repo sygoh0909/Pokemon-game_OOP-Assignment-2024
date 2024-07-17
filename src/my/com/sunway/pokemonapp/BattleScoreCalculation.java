@@ -4,8 +4,6 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -81,10 +79,9 @@ public class BattleScoreCalculation {
         return battleScore;
     }
 
-    public void calculateBattlePoints(Player player, int battleScore) {
-        // Example logic: 1 point for every 1000 score
-        int points = battleScore / 100; // Adjust this logic based on your specific requirements
-        player.setBattlePoints(points); // Set the calculated points to player's battle points
+    public static int calculateBattlePoints(int battleScore) {
+        // Example logic: 1 point for every 100 score
+        return battleScore / 100; // Adjust this logic based on your specific requirements
     }
 
     public String determineRankMessage(int score) {

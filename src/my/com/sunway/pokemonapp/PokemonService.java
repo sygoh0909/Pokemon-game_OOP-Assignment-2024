@@ -16,6 +16,8 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import java.util.Arrays;
+
 public class PokemonService {
     private static final String API_URL = "https://pokeapi.co/api/v2/"; // Base URL for PokeAPI
     private static final String POKEMONS_FILENAME = "pokemons.txt";
@@ -116,7 +118,7 @@ public class PokemonService {
 
             // Check if file is empty before appending data
             if (Files.size(path) == 0) {
-                try (PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter(POKEMONS_FILENAME, true)))) {
+                try (PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter(POKEMONS_FILENAME, true)))) { //true means open in append mode
                     for (Pokemon pokemon : pokemons) {
                         out.println("Pokemon{name='" + pokemon.getName() + "', health=" + pokemon.getHealth() +
                                 ", attack=" + pokemon.getAttack() + ", defense=" + pokemon.getDefense() +
@@ -126,7 +128,7 @@ public class PokemonService {
                     }
                 }
             } else {
-                try (PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter(POKEMONS_FILENAME, false)))) {
+                try (PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter(POKEMONS_FILENAME, true)))) { //pverwrite the existing content of file
                     for (Pokemon pokemon : pokemons) {
                         out.println("Pokemon{name='" + pokemon.getName() + "', health=" + pokemon.getHealth() +
                                 ", attack=" + pokemon.getAttack() + ", defense=" + pokemon.getDefense() +
@@ -223,6 +225,25 @@ public class PokemonService {
             return 2;
         } else {
             return 1;
+        }
+    }
+
+    public static void main(String[] args) {
+        PokemonService pokemonService = new PokemonService();
+
+        // Example: Fetch Pokémon by multiple habitat IDs (you can change the IDs as needed)
+        List<Integer> habitatIds = Arrays.asList(1, 2, 3, 4, 7, 8, 9); // Example habitat IDs
+        try {
+            List<Pokemon> pokemonList = pokemonService.fetchPokemonsByMultipleHabitats(habitatIds);
+
+            // Display API response and count the number of Pokémon fetched
+            System.out.println("Pokémon Fetched:");
+            for (Pokemon pokemon : pokemonList) {
+                System.out.println(pokemon);
+            }
+            System.out.println("Total Pokémon fetched: " + pokemonList.size());
+        } catch (IOException | InterruptedException e) {
+            e.printStackTrace();
         }
     }
 }

@@ -1,9 +1,6 @@
 package my.com.sunway.pokemonapp;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
@@ -61,9 +58,9 @@ public class Game {
             String userId = game.player.getUserId();
             System.out.println("Login successful for user ID: " + userId);
 
-            Player player = new Player();
-            System.out.println("Your battle points: " + player.getBattlePoints());
-            System.out.println();
+            Player loadedPlayer = readPlayerData(userId);
+            System.out.println("User ID: " + loadedPlayer.getUserId());
+            System.out.println("Battle Points: " + loadedPlayer.getBattlePoints());
 
             game.displayStages();
 
@@ -155,6 +152,40 @@ public class Game {
         }
         return null;
     }
+    public static void savePlayerData(Player player) {
+        String filename = "player_" + player.getUserId() + ".txt";
+        try (PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter(filename)))) {
+            out.println(player.getUserId());
+            out.println(player.getBattlePoints());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static Player readPlayerData(String userId) {
+        String filename = "player_" + userId + ".txt";
+        Player player = new Player();
+        try (BufferedReader br = new BufferedReader(new FileReader(filename))) {
+            player.setUserId(userId); // Set the userId in the player object
+            br.readLine(); // Skip the first line (userId)
+            int battlePoints = Integer.parseInt(br.readLine());
+            player.setBattlePoints(battlePoints);
+        } catch (FileNotFoundException e) {
+            // File does not exist, create a new one and initialize player with default values
+            System.out.println("File not found. Creating new file for user: " + userId);
+            try (PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter(filename)))) {
+                out.println(userId); // Write userId to the file
+                out.println("0"); // Initialize battle points to 0
+                player.setUserId(userId); // Set the userId in the player object
+                player.setBattlePoints(0); // Initialize battle points in the player object
+            } catch (IOException ioException) {
+                ioException.printStackTrace();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return player;
+    }
 
     public void displayStages() {
         if (stages.isEmpty()) {
@@ -211,7 +242,7 @@ public class Game {
 
         Set<Pokemon> chosenPokemons = new HashSet<>(); // Track chosen Pokémon
 
-// List of availablePokemons directly from chosenStagePokemons
+        // List of availablePokemons directly from chosenStagePokemons
         List<Pokemon> availablePokemons = new ArrayList<>(chosenStagePokemons.subList(0, printCount)); // Copy the first 3 Pokémon from the shuffled list
 
         while (true) {
@@ -276,6 +307,7 @@ public class Game {
                     // Deduct points, do not refresh the list of availablePokemons
                     player.deductPoints(200);
                     System.out.println("Points deducted. Current battle points: " + player.getBattlePoints());
+                    Game.savePlayerData(player);
                 }
             } else {
                 System.out.println("Not enough points to catch another Pokémon.");
@@ -305,6 +337,28 @@ public class Game {
         try {
             // Read Pokémon data from file
             List<Pokemon> pokemonList = readPokemonsFromFile(POKEMONS_FILENAME);
+
+            if (pokemonList.size()<=0) { //if no found any pokemon in the list, then call it from api
+                PokemonService pokemonService = new PokemonService();
+                List<Integer> habitatIds = new ArrayList<>();
+                habitatIds.add(1);
+                habitatIds.add(2);
+                habitatIds.add(3);
+                habitatIds.add(4);
+                habitatIds.add(5);
+                habitatIds.add(6);
+                habitatIds.add(7);
+                habitatIds.add(8);
+                habitatIds.add(9);
+
+                try {
+                    pokemonService.fetchPokemonsByMultipleHabitats(habitatIds);
+                    pokemonList = readPokemonsFromFile(POKEMONS_FILENAME);
+
+                } catch (InterruptedException e){
+                    throw new RuntimeException(e);
+                }
+            }
 
             // Define habitat combinations
             List<HabitatData> predefinedHabitats = new ArrayList<>();
