@@ -15,8 +15,9 @@ public class Pokemon {
     private int maxHealth;
     private int maxSpecialAttack;
     private int maxSpecialDefense;
+    private int habitatId;
 
-    public Pokemon(String name, int health, int attack, int defense, int stars, List<String> types, int speed, int specialAttack, int specialDefense) {
+    public Pokemon(String name, int health, int attack, int defense, int stars, List<String> types, int speed, int specialAttack, int specialDefense, int habitatId) {
         this.name = name;
         this.health = health;
         this.attack = attack;
@@ -29,6 +30,7 @@ public class Pokemon {
         this.maxHealth = health; // Initialize maxHealth to the initial health value
         this.maxSpecialAttack = specialAttack;
         this.maxSpecialDefense = specialDefense;
+        this.habitatId = habitatId;
     }
 
     public String getName() {
@@ -90,6 +92,13 @@ public class Pokemon {
         this.specialDefense += amount;
     }
 
+    public void setHabitatId(int habitatId) {
+        this.habitatId = habitatId;
+    }
+    public int getHabitatId() {
+        return habitatId;
+    }
+
     // Method to reset health to maxHealth
     public void resetHealth() {
         this.health = this.maxHealth;
@@ -115,6 +124,7 @@ public class Pokemon {
                 ", speed=" + speed +
                 ", special attack=" + specialAttack +
                 ", specialDefense=" + specialDefense +
+                ", habitatId=" + habitatId +
                 '}';
     }
 }

@@ -1,18 +1,24 @@
 package my.com.sunway.pokemonapp;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class PokemonService {
     private static final String API_URL = "https://pokeapi.co/api/v2/"; // Base URL for PokeAPI
+    private static final String POKEMONS_FILENAME = "pokemons.txt";
 
     // Method to fetch Pokemons based on multiple habitat IDs
     public List<Pokemon> fetchPokemonsByMultipleHabitats(List<Integer> habitatIds) throws IOException, InterruptedException {
@@ -85,12 +91,54 @@ public class PokemonService {
                         int stars = calculateStars(attack, defense, health, speed, specialAttack, specialDefense);
 
                         // Create Pokémon object and add to list
-                        pokemonList.add(new Pokemon(name, health, attack, defense, stars, types, speed, specialAttack, specialDefense));
+                        Pokemon pokemon = new Pokemon(name, health, attack, defense, stars, types, speed, specialAttack, specialDefense, habitatId);
+                        pokemonList.add(pokemon);
                     }
                 }
             }
         }
+
+        // Write all fetched Pokémon data to file
+        writePokemonsToFile(pokemonList, POKEMONS_FILENAME);
+
         return pokemonList;
+    }
+
+    // Method to write Pokémon data to a text file
+    private void writePokemonsToFile(List<Pokemon> pokemons, String POKEMONS_FILENAME) {
+        try {
+            Path path = Paths.get(POKEMONS_FILENAME);
+
+            // Check if file exists; create it if it doesn't
+            if (!Files.exists(path)) {
+                Files.createFile(path);
+            }
+
+            // Check if file is empty before appending data
+            if (Files.size(path) == 0) {
+                try (PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter(POKEMONS_FILENAME, true)))) {
+                    for (Pokemon pokemon : pokemons) {
+                        out.println("Pokemon{name='" + pokemon.getName() + "', health=" + pokemon.getHealth() +
+                                ", attack=" + pokemon.getAttack() + ", defense=" + pokemon.getDefense() +
+                                ", stars=" + pokemon.getStars() + ", types=" + pokemon.getTypes() +
+                                ", speed=" + pokemon.getSpeed() + ", specialAttack=" + pokemon.getSpecialAttack() +
+                                ", specialDefense=" + pokemon.getSpecialDefense() + ", habitatId=" + pokemon.getHabitatId() + "}");
+                    }
+                }
+            } else {
+                try (PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter(POKEMONS_FILENAME, false)))) {
+                    for (Pokemon pokemon : pokemons) {
+                        out.println("Pokemon{name='" + pokemon.getName() + "', health=" + pokemon.getHealth() +
+                                ", attack=" + pokemon.getAttack() + ", defense=" + pokemon.getDefense() +
+                                ", stars=" + pokemon.getStars() + ", types=" + pokemon.getTypes() +
+                                ", speed=" + pokemon.getSpeed() + ", specialAttack=" + pokemon.getSpecialAttack() +
+                                ", specialDefense=" + pokemon.getSpecialDefense() + ", habitatId=" + pokemon.getHabitatId() + "}");
+                    }
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     // Method to extract Pokémon types from JSON response
@@ -110,7 +158,7 @@ public class PokemonService {
 
             // If there are three types, return only the last two
             if (types.size() == 3) {
-                return types.subList(1, 3); //starting from index 1 and end before index 3
+                return types.subList(1, 3); // starting from index 1 and end before index 3
             }
 
         } catch (Exception e) {
@@ -177,5 +225,4 @@ public class PokemonService {
             return 1;
         }
     }
-
-        }
+}

@@ -202,6 +202,7 @@ public class Player {
         int speed = 0;
         int specialAttack = 0;
         int specialDefense = 0;
+        int habitatId = 0;
 
         // Iterate through parts to parse each attribute
         for (String part : parts) {
@@ -244,6 +245,8 @@ public class Player {
                 case "specialDefense":
                     specialDefense = Integer.parseInt(value);
                     break;
+                case "habitatId":
+                    habitatId = Integer.parseInt(value);
                 default:
                     // Handle unrecognized keys or ignore
                     break;
@@ -251,7 +254,7 @@ public class Player {
         }
 
         // Create and return Pokemon object
-        return new Pokemon(name, health, attack, defense, stars, types, speed, specialAttack, specialDefense);
+        return new Pokemon(name, health, attack, defense, stars, types, speed, specialAttack, specialDefense, habitatId);
     }
 
     @Override

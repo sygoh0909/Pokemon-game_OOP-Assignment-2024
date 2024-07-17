@@ -83,7 +83,7 @@ public class BattleScoreCalculation {
 
     public void calculateBattlePoints(Player player, int battleScore) {
         // Example logic: 1 point for every 1000 score
-        int points = battleScore / 1000; // Adjust this logic based on your specific requirements
+        int points = battleScore / 100; // Adjust this logic based on your specific requirements
         player.setBattlePoints(points); // Set the calculated points to player's battle points
     }
 

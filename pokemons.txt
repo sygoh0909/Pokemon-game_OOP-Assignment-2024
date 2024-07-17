@@ -1,0 +1,178 @@
+Pokemon{name='zubat', health=40, attack=45, defense=35, stars=1, types=[poison, flying], speed=55, specialAttack=30, specialDefense=40, habitatId=1}
+Pokemon{name='diglett', health=10, attack=55, defense=25, stars=2, types=[ground], speed=95, specialAttack=35, specialDefense=45, habitatId=1}
+Pokemon{name='gastly', health=30, attack=35, defense=30, stars=2, types=[ghost, poison], speed=80, specialAttack=100, specialDefense=35, habitatId=1}
+Pokemon{name='onix', health=35, attack=45, defense=160, stars=3, types=[rock, ground], speed=70, specialAttack=30, specialDefense=45, habitatId=1}
+Pokemon{name='misdreavus', health=60, attack=60, defense=60, stars=3, types=[ghost], speed=85, specialAttack=85, specialDefense=85, habitatId=1}
+Pokemon{name='dunsparce', health=100, attack=70, defense=70, stars=3, types=[normal], speed=45, specialAttack=65, specialDefense=65, habitatId=1}
+Pokemon{name='swinub', health=50, attack=50, defense=40, stars=1, types=[ice, ground], speed=50, specialAttack=30, specialDefense=30, habitatId=1}
+Pokemon{name='whismur', health=64, attack=51, defense=23, stars=1, types=[normal], speed=28, specialAttack=51, specialDefense=23, habitatId=1}
+Pokemon{name='nosepass', health=30, attack=45, defense=135, stars=3, types=[rock], speed=30, specialAttack=45, specialDefense=90, habitatId=1}
+Pokemon{name='sableye', health=50, attack=75, defense=75, stars=3, types=[dark, ghost], speed=50, specialAttack=65, specialDefense=65, habitatId=1}
+Pokemon{name='mawile', health=50, attack=85, defense=85, stars=3, types=[steel, fairy], speed=50, specialAttack=55, specialDefense=55, habitatId=1}
+Pokemon{name='lunatone', health=90, attack=55, defense=65, stars=3, types=[rock, psychic], speed=70, specialAttack=95, specialDefense=85, habitatId=1}
+Pokemon{name='solrock', health=90, attack=95, defense=85, stars=3, types=[rock, psychic], speed=70, specialAttack=55, specialDefense=65, habitatId=1}
+Pokemon{name='wynaut', health=95, attack=23, defense=48, stars=2, types=[psychic], speed=23, specialAttack=23, specialDefense=48, habitatId=1}
+Pokemon{name='snorunt', health=50, attack=50, defense=50, stars=2, types=[ice], speed=50, specialAttack=50, specialDefense=50, habitatId=1}
+Pokemon{name='regirock', health=80, attack=100, defense=200, stars=5, types=[rock], speed=50, specialAttack=50, specialDefense=100, habitatId=1}
+Pokemon{name='regice', health=80, attack=50, defense=100, stars=5, types=[ice], speed=50, specialAttack=100, specialDefense=200, habitatId=1}
+Pokemon{name='registeel', health=80, attack=75, defense=150, stars=5, types=[steel], speed=50, specialAttack=75, specialDefense=150, habitatId=1}
+Pokemon{name='golbat', health=75, attack=80, defense=70, stars=3, types=[poison, flying], speed=90, specialAttack=65, specialDefense=75, habitatId=1}
+Pokemon{name='dugtrio', health=35, attack=100, defense=50, stars=3, types=[ground], speed=120, specialAttack=50, specialDefense=70, habitatId=1}
+Pokemon{name='haunter', health=45, attack=50, defense=45, stars=3, types=[ghost, poison], speed=95, specialAttack=115, specialDefense=55, habitatId=1}
+Pokemon{name='gengar', health=60, attack=65, defense=60, stars=3, types=[ghost, poison], speed=110, specialAttack=130, specialDefense=75, habitatId=1}
+Pokemon{name='crobat', health=85, attack=90, defense=80, stars=4, types=[poison, flying], speed=130, specialAttack=70, specialDefense=80, habitatId=1}
+Pokemon{name='wobbuffet', health=190, attack=33, defense=58, stars=3, types=[psychic], speed=33, specialAttack=33, specialDefense=58, habitatId=1}
+Pokemon{name='steelix', health=75, attack=85, defense=200, stars=4, types=[steel, ground], speed=30, specialAttack=55, specialDefense=65, habitatId=1}
+Pokemon{name='piloswine', health=100, attack=100, defense=80, stars=3, types=[ice, ground], speed=50, specialAttack=60, specialDefense=60, habitatId=1}
+Pokemon{name='loudred', health=84, attack=71, defense=43, stars=3, types=[normal], speed=48, specialAttack=71, specialDefense=43, habitatId=1}
+Pokemon{name='exploud', health=104, attack=91, defense=63, stars=3, types=[normal], speed=68, specialAttack=91, specialDefense=73, habitatId=1}
+Pokemon{name='glalie', health=80, attack=80, defense=80, stars=3, types=[ice], speed=80, specialAttack=80, specialDefense=80, habitatId=1}
+Pokemon{name='caterpie', health=45, attack=30, defense=35, stars=1, types=[bug], speed=45, specialAttack=20, specialDefense=20, habitatId=2}
+Pokemon{name='weedle', health=40, attack=35, defense=30, stars=1, types=[bug, poison], speed=50, specialAttack=20, specialDefense=20, habitatId=2}
+Pokemon{name='pidgey', health=40, attack=45, defense=40, stars=2, types=[normal, flying], speed=56, specialAttack=35, specialDefense=35, habitatId=2}
+Pokemon{name='paras', health=35, attack=70, defense=55, stars=2, types=[bug, grass], speed=25, specialAttack=45, specialDefense=55, habitatId=2}
+Pokemon{name='venonat', health=60, attack=55, defense=50, stars=2, types=[bug, poison], speed=45, specialAttack=40, specialDefense=55, habitatId=2}
+Pokemon{name='bellsprout', health=50, attack=75, defense=35, stars=2, types=[grass, poison], speed=40, specialAttack=70, specialDefense=30, habitatId=2}
+Pokemon{name='exeggcute', health=60, attack=40, defense=80, stars=2, types=[grass, psychic], speed=40, specialAttack=60, specialDefense=45, habitatId=2}
+Pokemon{name='pinsir', health=65, attack=125, defense=100, stars=3, types=[bug], speed=85, specialAttack=55, specialDefense=70, habitatId=2}
+Pokemon{name='hoothoot', health=60, attack=30, defense=30, stars=2, types=[normal, flying], speed=50, specialAttack=36, specialDefense=56, habitatId=2}
+Pokemon{name='ledyba', health=40, attack=20, defense=30, stars=2, types=[bug, flying], speed=55, specialAttack=40, specialDefense=80, habitatId=2}
+Pokemon{name='spinarak', health=40, attack=60, defense=40, stars=1, types=[bug, poison], speed=30, specialAttack=40, specialDefense=40, habitatId=2}
+Pokemon{name='pichu', health=20, attack=40, defense=15, stars=1, types=[electric], speed=60, specialAttack=35, specialDefense=35, habitatId=2}
+Pokemon{name='togepi', health=35, attack=20, defense=65, stars=1, types=[normal, fairy], speed=20, specialAttack=40, specialDefense=65, habitatId=2}
+Pokemon{name='natu', health=40, attack=50, defense=45, stars=2, types=[psychic, flying], speed=70, specialAttack=70, specialDefense=45, habitatId=2}
+Pokemon{name='aipom', health=55, attack=70, defense=55, stars=3, types=[normal], speed=85, specialAttack=40, specialDefense=55, habitatId=2}
+Pokemon{name='yanma', health=65, attack=65, defense=45, stars=3, types=[bug, flying], speed=95, specialAttack=75, specialDefense=45, habitatId=2}
+Pokemon{name='murkrow', health=60, attack=85, defense=42, stars=3, types=[dark, flying], speed=91, specialAttack=85, specialDefense=42, habitatId=2}
+Pokemon{name='pineco', health=50, attack=65, defense=90, stars=2, types=[bug], speed=15, specialAttack=35, specialDefense=35, habitatId=2}
+Pokemon{name='heracross', health=80, attack=125, defense=75, stars=3, types=[bug, fighting], speed=85, specialAttack=40, specialDefense=95, habitatId=2}
+Pokemon{name='sneasel', health=55, attack=95, defense=55, stars=3, types=[dark, ice], speed=115, specialAttack=35, specialDefense=75, habitatId=2}
+Pokemon{name='stantler', health=73, attack=95, defense=62, stars=3, types=[normal], speed=85, specialAttack=85, specialDefense=65, habitatId=2}
+Pokemon{name='celebi', health=100, attack=100, defense=100, stars=5, types=[psychic, grass], speed=100, specialAttack=100, specialDefense=100, habitatId=2}
+Pokemon{name='treecko', health=40, attack=45, defense=35, stars=2, types=[grass], speed=70, specialAttack=65, specialDefense=55, habitatId=2}
+Pokemon{name='wurmple', health=45, attack=45, defense=35, stars=1, types=[bug], speed=20, specialAttack=20, specialDefense=30, habitatId=2}
+Pokemon{name='seedot', health=40, attack=40, defense=50, stars=1, types=[grass], speed=30, specialAttack=30, specialDefense=30, habitatId=2}
+Pokemon{name='shroomish', health=60, attack=40, defense=60, stars=2, types=[grass], speed=35, specialAttack=40, specialDefense=60, habitatId=2}
+Pokemon{name='slakoth', health=60, attack=60, defense=60, stars=2, types=[normal], speed=30, specialAttack=35, specialDefense=35, habitatId=2}
+Pokemon{name='nincada', health=31, attack=45, defense=90, stars=2, types=[bug, ground], speed=40, specialAttack=30, specialDefense=30, habitatId=2}
+Pokemon{name='skitty', health=50, attack=45, defense=45, stars=2, types=[normal], speed=50, specialAttack=35, specialDefense=35, habitatId=2}
+Pokemon{name='volbeat', health=65, attack=73, defense=75, stars=3, types=[bug], speed=85, specialAttack=47, specialDefense=85, habitatId=2}
+Pokemon{name='illumise', health=65, attack=47, defense=75, stars=3, types=[bug], speed=85, specialAttack=73, specialDefense=85, habitatId=2}
+Pokemon{name='swablu', health=45, attack=40, defense=60, stars=2, types=[normal, flying], speed=50, specialAttack=40, specialDefense=75, habitatId=2}
+Pokemon{name='kecleon', health=60, attack=90, defense=70, stars=3, types=[normal], speed=40, specialAttack=60, specialDefense=120, habitatId=2}
+Pokemon{name='duskull', health=20, attack=40, defense=90, stars=2, types=[ghost], speed=25, specialAttack=30, specialDefense=90, habitatId=2}
+Pokemon{name='tropius', health=99, attack=68, defense=83, stars=3, types=[grass, flying], speed=51, specialAttack=72, specialDefense=87, habitatId=2}
+Pokemon{name='metapod', health=50, attack=20, defense=55, stars=1, types=[bug], speed=30, specialAttack=25, specialDefense=25, habitatId=2}
+Pokemon{name='butterfree', health=60, attack=45, defense=50, stars=3, types=[bug, flying], speed=70, specialAttack=90, specialDefense=80, habitatId=2}
+Pokemon{name='kakuna', health=45, attack=25, defense=50, stars=1, types=[bug, poison], speed=35, specialAttack=25, specialDefense=25, habitatId=2}
+Pokemon{name='beedrill', health=65, attack=90, defense=40, stars=3, types=[bug, poison], speed=75, specialAttack=45, specialDefense=80, habitatId=2}
+Pokemon{name='pidgeotto', health=63, attack=60, defense=55, stars=2, types=[normal, flying], speed=71, specialAttack=50, specialDefense=50, habitatId=2}
+Pokemon{name='pidgeot', health=83, attack=80, defense=75, stars=3, types=[normal, flying], speed=101, specialAttack=70, specialDefense=70, habitatId=2}
+Pokemon{name='pikachu', health=35, attack=55, defense=40, stars=2, types=[electric], speed=90, specialAttack=50, specialDefense=50, habitatId=2}
+Pokemon{name='raichu', health=60, attack=90, defense=55, stars=3, types=[electric], speed=110, specialAttack=90, specialDefense=80, habitatId=2}
+Pokemon{name='parasect', health=60, attack=95, defense=80, stars=3, types=[bug, grass], speed=30, specialAttack=60, specialDefense=80, habitatId=2}
+Pokemon{name='venomoth', health=70, attack=65, defense=60, stars=3, types=[bug, poison], speed=90, specialAttack=90, specialDefense=75, habitatId=2}
+Pokemon{name='weepinbell', health=65, attack=90, defense=50, stars=3, types=[grass, poison], speed=55, specialAttack=85, specialDefense=45, habitatId=2}
+Pokemon{name='victreebel', health=80, attack=105, defense=65, stars=3, types=[grass, poison], speed=70, specialAttack=100, specialDefense=70, habitatId=2}
+Pokemon{name='exeggutor', health=95, attack=95, defense=85, stars=4, types=[grass, psychic], speed=55, specialAttack=125, specialDefense=75, habitatId=2}
+Pokemon{name='noctowl', health=100, attack=50, defense=50, stars=3, types=[normal, flying], speed=70, specialAttack=86, specialDefense=96, habitatId=2}
+Pokemon{name='ledian', health=55, attack=35, defense=50, stars=3, types=[bug, flying], speed=85, specialAttack=55, specialDefense=110, habitatId=2}
+Pokemon{name='ariados', health=70, attack=90, defense=70, stars=3, types=[bug, poison], speed=40, specialAttack=60, specialDefense=70, habitatId=2}
+Pokemon{name='togetic', health=55, attack=40, defense=85, stars=3, types=[normal, flying, fairy, flying], speed=40, specialAttack=80, specialDefense=105, habitatId=2}
+Pokemon{name='xatu', health=65, attack=75, defense=70, stars=3, types=[psychic, flying], speed=95, specialAttack=95, specialDefense=70, habitatId=2}
+Pokemon{name='sudowoodo', health=70, attack=100, defense=115, stars=3, types=[rock], speed=30, specialAttack=30, specialDefense=65, habitatId=2}
+Pokemon{name='forretress', health=75, attack=90, defense=140, stars=3, types=[bug, steel], speed=40, specialAttack=60, specialDefense=60, habitatId=2}
+Pokemon{name='grovyle', health=50, attack=65, defense=45, stars=3, types=[grass], speed=95, specialAttack=85, specialDefense=65, habitatId=2}
+Pokemon{name='sceptile', health=70, attack=85, defense=65, stars=4, types=[grass], speed=120, specialAttack=105, specialDefense=85, habitatId=2}
+Pokemon{name='silcoon', health=50, attack=35, defense=55, stars=1, types=[bug], speed=15, specialAttack=25, specialDefense=25, habitatId=2}
+Pokemon{name='beautifly', health=60, attack=70, defense=50, stars=3, types=[bug, flying], speed=65, specialAttack=100, specialDefense=50, habitatId=2}
+Pokemon{name='cascoon', health=50, attack=35, defense=55, stars=1, types=[bug], speed=15, specialAttack=25, specialDefense=25, habitatId=2}
+Pokemon{name='dustox', health=60, attack=50, defense=70, stars=3, types=[bug, poison], speed=65, specialAttack=50, specialDefense=90, habitatId=2}
+Pokemon{name='nuzleaf', health=70, attack=70, defense=40, stars=2, types=[grass, dark], speed=60, specialAttack=60, specialDefense=40, habitatId=2}
+Pokemon{name='shiftry', health=90, attack=100, defense=60, stars=3, types=[grass, dark], speed=80, specialAttack=90, specialDefense=60, habitatId=2}
+Pokemon{name='breloom', health=60, attack=130, defense=80, stars=3, types=[grass, fighting], speed=70, specialAttack=60, specialDefense=60, habitatId=2}
+Pokemon{name='vigoroth', health=80, attack=80, defense=80, stars=3, types=[normal], speed=90, specialAttack=55, specialDefense=55, habitatId=2}
+Pokemon{name='slaking', health=150, attack=160, defense=100, stars=5, types=[normal], speed=100, specialAttack=95, specialDefense=65, habitatId=2}
+Pokemon{name='ninjask', health=61, attack=90, defense=45, stars=3, types=[bug, flying], speed=160, specialAttack=50, specialDefense=50, habitatId=2}
+Pokemon{name='shedinja', health=1, attack=90, defense=45, stars=1, types=[bug, ghost], speed=40, specialAttack=30, specialDefense=30, habitatId=2}
+Pokemon{name='delcatty', health=70, attack=65, defense=65, stars=3, types=[normal], speed=90, specialAttack=55, specialDefense=55, habitatId=2}
+Pokemon{name='altaria', health=75, attack=70, defense=90, stars=3, types=[dragon, flying], speed=80, specialAttack=70, specialDefense=105, habitatId=2}
+Pokemon{name='dusclops', health=40, attack=70, defense=130, stars=3, types=[ghost], speed=25, specialAttack=60, specialDefense=130, habitatId=2}
+Pokemon{name='bulbasaur', health=45, attack=49, defense=49, stars=2, types=[grass, poison], speed=45, specialAttack=65, specialDefense=65, habitatId=3}
+Pokemon{name='rattata', health=30, attack=56, defense=35, stars=2, types=[normal], speed=72, specialAttack=25, specialDefense=35, habitatId=3}
+Pokemon{name='ekans', health=35, attack=60, defense=44, stars=2, types=[poison], speed=55, specialAttack=40, specialDefense=54, habitatId=3}
+Pokemon{name='vulpix', health=38, attack=41, defense=40, stars=2, types=[fire], speed=65, specialAttack=50, specialDefense=65, habitatId=3}
+Pokemon{name='oddish', health=45, attack=50, defense=55, stars=2, types=[grass, poison], speed=30, specialAttack=75, specialDefense=65, habitatId=3}
+Pokemon{name='growlithe', health=55, attack=70, defense=45, stars=2, types=[fire], speed=60, specialAttack=70, specialDefense=50, habitatId=3}
+Pokemon{name='ponyta', health=50, attack=85, defense=55, stars=3, types=[fire], speed=90, specialAttack=65, specialDefense=65, habitatId=3}
+Pokemon{name='farfetchd', health=52, attack=90, defense=55, stars=3, types=[normal, flying], speed=60, specialAttack=58, specialDefense=62, habitatId=3}
+Pokemon{name='doduo', health=35, attack=85, defense=45, stars=2, types=[normal, flying], speed=75, specialAttack=35, specialDefense=35, habitatId=3}
+Pokemon{name='drowzee', health=60, attack=48, defense=45, stars=2, types=[psychic], speed=42, specialAttack=43, specialDefense=90, habitatId=3}
+Pokemon{name='lickitung', health=90, attack=55, defense=75, stars=3, types=[normal], speed=30, specialAttack=60, specialDefense=75, habitatId=3}
+Pokemon{name='tangela', health=65, attack=55, defense=115, stars=3, types=[grass], speed=60, specialAttack=100, specialDefense=40, habitatId=3}
+Pokemon{name='kangaskhan', health=105, attack=95, defense=80, stars=3, types=[normal], speed=90, specialAttack=40, specialDefense=80, habitatId=3}
+Pokemon{name='scyther', health=70, attack=110, defense=80, stars=3, types=[bug, flying], speed=105, specialAttack=55, specialDefense=80, habitatId=3}
+Pokemon{name='tauros', health=75, attack=100, defense=95, stars=3, types=[normal], speed=110, specialAttack=40, specialDefense=70, habitatId=3}
+Pokemon{name='chikorita', health=45, attack=49, defense=65, stars=2, types=[grass], speed=45, specialAttack=49, specialDefense=65, habitatId=3}
+Pokemon{name='cyndaquil', health=39, attack=52, defense=43, stars=2, types=[fire], speed=65, specialAttack=60, specialDefense=50, habitatId=3}
+Pokemon{name='sentret', health=35, attack=46, defense=34, stars=1, types=[normal], speed=20, specialAttack=35, specialDefense=45, habitatId=3}
+Pokemon{name='igglybuff', health=90, attack=30, defense=15, stars=1, types=[normal, fairy], speed=15, specialAttack=40, specialDefense=20, habitatId=3}
+Pokemon{name='mareep', health=55, attack=40, defense=40, stars=2, types=[electric], speed=35, specialAttack=65, specialDefense=45, habitatId=3}
+Pokemon{name='hoppip', health=35, attack=35, defense=40, stars=1, types=[grass, flying], speed=50, specialAttack=35, specialDefense=55, habitatId=3}
+Pokemon{name='sunkern', health=30, attack=30, defense=30, stars=1, types=[grass], speed=30, specialAttack=30, specialDefense=30, habitatId=3}
+Pokemon{name='girafarig', health=70, attack=80, defense=65, stars=3, types=[normal, psychic], speed=85, specialAttack=90, specialDefense=65, habitatId=3}
+Pokemon{name='elekid', health=45, attack=63, defense=37, stars=3, types=[electric], speed=95, specialAttack=65, specialDefense=55, habitatId=3}
+Pokemon{name='miltank', health=95, attack=80, defense=105, stars=3, types=[normal], speed=100, specialAttack=40, specialDefense=70, habitatId=3}
+Pokemon{name='raikou', health=90, attack=85, defense=75, stars=5, types=[electric], speed=115, specialAttack=115, specialDefense=100, habitatId=3}
+Pokemon{name='entei', health=115, attack=115, defense=85, stars=5, types=[fire], speed=100, specialAttack=90, specialDefense=75, habitatId=3}
+Pokemon{name='suicune', health=100, attack=75, defense=115, stars=5, types=[water], speed=85, specialAttack=90, specialDefense=115, habitatId=3}
+Pokemon{name='torchic', health=45, attack=60, defense=40, stars=2, types=[fire], speed=45, specialAttack=70, specialDefense=50, habitatId=3}
+Pokemon{name='poochyena', health=35, attack=55, defense=35, stars=1, types=[dark], speed=35, specialAttack=30, specialDefense=30, habitatId=3}
+Pokemon{name='zigzagoon', health=38, attack=30, defense=41, stars=1, types=[normal], speed=60, specialAttack=30, specialDefense=41, habitatId=3}
+Pokemon{name='taillow', health=40, attack=55, defense=30, stars=2, types=[normal, flying], speed=85, specialAttack=30, specialDefense=30, habitatId=3}
+Pokemon{name='electrike', health=40, attack=45, defense=40, stars=2, types=[electric], speed=65, specialAttack=65, specialDefense=40, habitatId=3}
+Pokemon{name='plusle', health=60, attack=50, defense=40, stars=3, types=[electric], speed=95, specialAttack=85, specialDefense=75, habitatId=3}
+Pokemon{name='minun', health=60, attack=40, defense=50, stars=3, types=[electric], speed=95, specialAttack=75, specialDefense=85, habitatId=3}
+Pokemon{name='gulpin', health=70, attack=43, defense=53, stars=2, types=[poison], speed=40, specialAttack=43, specialDefense=53, habitatId=3}
+Pokemon{name='zangoose', health=73, attack=115, defense=60, stars=3, types=[normal], speed=90, specialAttack=60, specialDefense=60, habitatId=3}
+Pokemon{name='seviper', health=73, attack=100, defense=60, stars=3, types=[poison], speed=65, specialAttack=100, specialDefense=60, habitatId=3}
+Pokemon{name='castform', health=70, attack=70, defense=70, stars=3, types=[normal], speed=70, specialAttack=70, specialDefense=70, habitatId=3}
+Pokemon{name='ivysaur', health=60, attack=62, defense=63, stars=3, types=[grass, poison], speed=60, specialAttack=80, specialDefense=80, habitatId=3}
+Pokemon{name='venusaur', health=80, attack=82, defense=83, stars=4, types=[grass, poison], speed=80, specialAttack=100, specialDefense=100, habitatId=3}
+Pokemon{name='raticate', health=55, attack=81, defense=60, stars=3, types=[normal], speed=97, specialAttack=50, specialDefense=70, habitatId=3}
+Pokemon{name='arbok', health=60, attack=95, defense=69, stars=3, types=[poison], speed=80, specialAttack=65, specialDefense=79, habitatId=3}
+Pokemon{name='nidorina', health=70, attack=62, defense=67, stars=3, types=[poison], speed=56, specialAttack=55, specialDefense=55, habitatId=3}
+Pokemon{name='nidoqueen', health=90, attack=92, defense=87, stars=4, types=[poison, ground], speed=76, specialAttack=75, specialDefense=85, habitatId=3}
+Pokemon{name='nidorino', health=61, attack=72, defense=57, stars=3, types=[poison], speed=65, specialAttack=55, specialDefense=55, habitatId=3}
+Pokemon{name='nidoking', health=81, attack=102, defense=77, stars=4, types=[poison, ground], speed=85, specialAttack=85, specialDefense=75, habitatId=3}
+Pokemon{name='ninetales', health=73, attack=76, defense=75, stars=4, types=[fire], speed=100, specialAttack=81, specialDefense=100, habitatId=3}
+Pokemon{name='jigglypuff', health=115, attack=45, defense=20, stars=2, types=[normal, fairy], speed=20, specialAttack=45, specialDefense=25, habitatId=3}
+Pokemon{name='wigglytuff', health=140, attack=70, defense=45, stars=3, types=[normal, fairy], speed=45, specialAttack=85, specialDefense=50, habitatId=3}
+Pokemon{name='gloom', health=60, attack=65, defense=70, stars=3, types=[grass, poison], speed=40, specialAttack=85, specialDefense=75, habitatId=3}
+Pokemon{name='vileplume', health=75, attack=80, defense=85, stars=3, types=[grass, poison], speed=50, specialAttack=110, specialDefense=90, habitatId=3}
+Pokemon{name='arcanine', health=90, attack=110, defense=80, stars=4, types=[fire], speed=95, specialAttack=100, specialDefense=80, habitatId=3}
+Pokemon{name='rapidash', health=65, attack=100, defense=70, stars=3, types=[fire], speed=105, specialAttack=80, specialDefense=80, habitatId=3}
+Pokemon{name='dodrio', health=60, attack=110, defense=70, stars=3, types=[normal, flying], speed=110, specialAttack=60, specialDefense=60, habitatId=3}
+Pokemon{name='hypno', health=85, attack=73, defense=70, stars=3, types=[psychic], speed=67, specialAttack=73, specialDefense=115, habitatId=3}
+Pokemon{name='electabuzz', health=65, attack=83, defense=57, stars=3, types=[electric], speed=105, specialAttack=95, specialDefense=85, habitatId=3}
+Pokemon{name='bayleef', health=60, attack=62, defense=80, stars=3, types=[grass], speed=60, specialAttack=63, specialDefense=80, habitatId=3}
+Pokemon{name='meganium', health=80, attack=82, defense=100, stars=4, types=[grass], speed=80, specialAttack=83, specialDefense=100, habitatId=3}
+Pokemon{name='quilava', health=58, attack=64, defense=58, stars=3, types=[fire], speed=80, specialAttack=80, specialDefense=65, habitatId=3}
+Pokemon{name='typhlosion', health=78, attack=84, defense=78, stars=4, types=[fire], speed=100, specialAttack=109, specialDefense=85, habitatId=3}
+Pokemon{name='furret', health=85, attack=76, defense=64, stars=3, types=[normal], speed=90, specialAttack=45, specialDefense=55, habitatId=3}
+Pokemon{name='flaaffy', health=70, attack=55, defense=55, stars=3, types=[electric], speed=45, specialAttack=80, specialDefense=60, habitatId=3}
+Pokemon{name='ampharos', health=90, attack=75, defense=85, stars=4, types=[electric], speed=55, specialAttack=115, specialDefense=90, habitatId=3}
+Pokemon{name='bellossom', health=75, attack=80, defense=95, stars=3, types=[grass], speed=50, specialAttack=90, specialDefense=100, habitatId=3}
+Pokemon{name='skiploom', health=55, attack=45, defense=50, stars=2, types=[grass, flying], speed=80, specialAttack=45, specialDefense=65, habitatId=3}
+Pokemon{name='jumpluff', health=75, attack=55, defense=70, stars=3, types=[grass, flying], speed=110, specialAttack=55, specialDefense=95, habitatId=3}
+Pokemon{name='sunflora', health=75, attack=75, defense=55, stars=3, types=[grass], speed=30, specialAttack=105, specialDefense=85, habitatId=3}
+Pokemon{name='scizor', health=70, attack=130, defense=100, stars=3, types=[bug, steel], speed=65, specialAttack=55, specialDefense=80, habitatId=3}
+Pokemon{name='combusken', health=60, attack=85, defense=60, stars=3, types=[fire, fighting], speed=55, specialAttack=85, specialDefense=60, habitatId=3}
+Pokemon{name='blaziken', health=80, attack=120, defense=70, stars=4, types=[fire, fighting], speed=80, specialAttack=110, specialDefense=70, habitatId=3}
+Pokemon{name='mightyena', health=70, attack=90, defense=70, stars=3, types=[dark], speed=70, specialAttack=60, specialDefense=60, habitatId=3}
+Pokemon{name='linoone', health=78, attack=70, defense=61, stars=3, types=[normal], speed=100, specialAttack=50, specialDefense=61, habitatId=3}
+Pokemon{name='swellow', health=60, attack=85, defense=60, stars=3, types=[normal, flying], speed=125, specialAttack=75, specialDefense=50, habitatId=3}
+Pokemon{name='manectric', health=70, attack=75, defense=60, stars=3, types=[electric], speed=105, specialAttack=105, specialDefense=60, habitatId=3}
+Pokemon{name='roselia', health=50, attack=60, defense=45, stars=3, types=[grass, poison], speed=65, specialAttack=100, specialDefense=80, habitatId=3}
+Pokemon{name='swalot', health=100, attack=73, defense=83, stars=3, types=[poison], speed=55, specialAttack=73, specialDefense=83, habitatId=3}
+Pokemon{name='chimecho', health=75, attack=50, defense=80, stars=3, types=[psychic], speed=65, specialAttack=95, specialDefense=90, habitatId=3}
