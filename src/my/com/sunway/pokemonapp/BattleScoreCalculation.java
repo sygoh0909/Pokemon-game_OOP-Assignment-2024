@@ -175,9 +175,9 @@ public class BattleScoreCalculation {
             // Append score to existing file or create new file
             FileWriter fw = new FileWriter(file, true); // true for append mode
             PrintWriter pw = new PrintWriter(fw);
-            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd  HH:mm:ss");
             String dateTime = dateFormat.format(new Date());
-            pw.println("Score: " + score + "," + dateTime);
+            pw.println("Score: " + score + ", " + dateTime);
             pw.close();
         } catch (IOException e) {
             System.out.println("Failed to save user score: " + e.getMessage());

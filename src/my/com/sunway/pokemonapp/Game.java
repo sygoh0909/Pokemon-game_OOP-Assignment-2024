@@ -61,6 +61,10 @@ public class Game {
             String userId = game.player.getUserId();
             System.out.println("Login successful for user ID: " + userId);
 
+            Player player = new Player();
+            System.out.println("Your battle points: " + player.getBattlePoints());
+            System.out.println();
+
             game.displayStages();
 
             // Choose stage and get wild Pokémon for battle
@@ -122,7 +126,6 @@ public class Game {
                     player.setUserId(userId);
 
                     this.player = player;
-                    System.out.println("Login successful!");
                     isAuthenticated = true;
                 } else {
                     System.out.println("Incorrect password. Login failed. Retry? (yes/no)");
