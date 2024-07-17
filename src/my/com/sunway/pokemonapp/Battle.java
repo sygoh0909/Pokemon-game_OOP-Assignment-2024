@@ -264,81 +264,62 @@ public class Battle {
         }
 
         // Handle catching a Pokémon if applicable
-        if ((wildPokemon1.getHealth() <= 0 && wildPokemon2.getHealth() <= 0 && (System.currentTimeMillis() - startTime) < battleTimeLimit && (userPokemon1.getHealth() > 0 || userPokemon2.getHealth() > 0))) {
+        if ((wildPokemon1.getHealth() <= 0 && wildPokemon2.getHealth() > 0 && (userPokemon1.getHealth() > 0 || userPokemon2.getHealth() > 0)) ||
+                (wildPokemon2.getHealth() <= 0 && wildPokemon1.getHealth() > 0 && (userPokemon1.getHealth() > 0 || userPokemon2.getHealth() > 0)) ||
+                (wildPokemon1.getHealth() <= 0 && wildPokemon2.getHealth() <= 0 && (System.currentTimeMillis() - startTime) < battleTimeLimit && (userPokemon1.getHealth() > 0 || userPokemon2.getHealth() > 0))) {
 
             battleWins = true;
 
-            System.out.println("You have the chance to catch one of the defeated wild Pokémon for free!");
+            System.out.println("You have the chance to catch one of the defeated wild Pokémon!");
 
             boolean caughtAnyPokemon = false; // Flag to track if any Pokémon was caught
-            boolean chooseAnother = true; // Flag to track if user wants to catch another Pokémon
 
-            while (chooseAnother) {
-                // Check if wildPokemon1 is defeated
-                if (wildPokemon1.getHealth() <= 0) {
-                    System.out.println("1. Catch " + wildPokemon1.getName());
+            // Check if wildPokemon1 is defeated
+            if (wildPokemon1.getHealth() <= 0) {
+                System.out.println("1. Catch " + wildPokemon1.getName());
+            }
+
+            // Check if wildPokemon2 is defeated
+            if (wildPokemon2.getHealth() <= 0) {
+                System.out.println("2. Catch " + wildPokemon2.getName());
+            }
+
+            System.out.println("Choose which Pokémon you want to catch (enter number): ");
+            int choice = scanner.nextInt();
+
+            if (choice == 1 && wildPokemon1.getHealth() <= 0) {
+                PokeballType chosenPokeball = player.chooseRandomPokeball();
+                System.out.println("A " + chosenPokeball + " appeared!");
+
+                System.out.println("Press Enter to continue...");
+                Scanner keyboard = new Scanner(System.in);
+                keyboard.nextLine(); // Wait for user to press Enter
+
+                boolean isCaught = player.attemptCatch(chosenPokeball);
+                if (isCaught) {
+                    System.out.println("You caught " + wildPokemon1.getName() + "!");
+                    wildPokemon1.resetHealth(); // Reset health to maxHealth before saving
+                    player.saveChosenPokemon(wildPokemon1);
+                    caughtAnyPokemon = true;
+                } else {
+                    System.out.println(wildPokemon1.getName() + " escaped!");
                 }
+            } else if (choice == 2 && wildPokemon2.getHealth() <= 0) {
+                PokeballType chosenPokeball = player.chooseRandomPokeball();
+                System.out.println("A " + chosenPokeball + " appeared!");
 
-                // Check if wildPokemon2 is defeated
-                if (wildPokemon2.getHealth() <= 0) {
-                    System.out.println("2. Catch " + wildPokemon2.getName());
-                }
+                System.out.println("Press Enter to continue...");
+                Scanner keyboard = new Scanner(System.in);
+                keyboard.nextLine(); // Wait for user to press Enter
 
-                System.out.println("Choose which Pokémon you want to catch (enter number, or 0 to stop): ");
-                int choice = scanner.nextInt();
-
-                if (choice == 0) {
-                    chooseAnother = false; // Stop catching more Pokémon
-                    break;
-                }
-
-                if (choice == 1 && wildPokemon1.getHealth() <= 0) {
-                    PokeballType chosenPokeball = player.chooseRandomPokeball();
-                    System.out.println("A " + chosenPokeball + " appeared!");
-
-                    System.out.println("Press Enter to continue...");
-                    Scanner keyboard = new Scanner(System.in);
-                    keyboard.nextLine(); // Wait for user to press Enter
-
-                    boolean isCaught = player.attemptCatch(chosenPokeball);
-                    if (isCaught) {
-                        System.out.println("You caught " + wildPokemon1.getName() + "!");
-                        wildPokemon1.resetHealth(); // Reset health to maxHealth before saving
-                        player.saveChosenPokemon(wildPokemon1);
-                        caughtAnyPokemon = true;
-                    } else {
-                        System.out.println(wildPokemon1.getName() + " escaped!");
-                    }
-                } else if (choice == 2 && wildPokemon2.getHealth() <= 0) {
-                    PokeballType chosenPokeball = player.chooseRandomPokeball();
-                    System.out.println("A " + chosenPokeball + " appeared!");
-
-                    System.out.println("Press Enter to continue...");
-                    Scanner keyboard = new Scanner(System.in);
-                    keyboard.nextLine(); // Wait for user to press Enter
-
-                    boolean isCaught = player.attemptCatch(chosenPokeball);
-                    if (isCaught) {
-                        System.out.println("You caught " + wildPokemon2.getName() + "!");
-                        wildPokemon2.resetHealth(); // Reset health to maxHealth before saving
-                        player.saveChosenPokemon(wildPokemon2);
-                        caughtAnyPokemon = true;
-                    } else {
-                        System.out.println(wildPokemon2.getName() + " escaped!");
-                    }
-                }
-
-                if (caughtAnyPokemon) {
-                    System.out.println("Do you want to catch another Pokémon? (Yes/No)");
-                    String anotherChoice = scanner.next();
-
-                    if (anotherChoice.equalsIgnoreCase("Yes")) {
-                        // Deduct 400 battle points from the player
-                        player.deductBattlePoints(400);
-                        Game.savePlayerData(player);
-                    } else {
-                        chooseAnother = false; // Stop catching more Pokémon
-                    }
+                boolean isCaught = player.attemptCatch(chosenPokeball);
+                if (isCaught) {
+                    System.out.println("You caught " + wildPokemon2.getName() + "!");
+                    wildPokemon2.resetHealth(); // Reset health to maxHealth before saving
+                    player.saveChosenPokemon(wildPokemon2);
+                    caughtAnyPokemon = true;
+                } else {
+                    System.out.println(wildPokemon2.getName() + " escaped!");
                 }
             }
 
@@ -347,7 +328,6 @@ public class Battle {
                 System.out.println("No Pokémon were caught during this opportunity.");
             }
         }
-
 
         int battleScore = scoreCalculation.calculateBattleScore(startTime, battleTimeLimit,
                 userPokemon1, userPokemon2,
