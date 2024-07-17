@@ -305,7 +305,7 @@ public class Game {
                     break; // Exit loop if they don't want to catch another Pokémon
                 } else {
                     // Deduct points, do not refresh the list of availablePokemons
-                    player.deductPoints(200);
+                   player.deductBattlePoints(200);
                     System.out.println("Points deducted. Current battle points: " + player.getBattlePoints());
                     Game.savePlayerData(player);
                 }

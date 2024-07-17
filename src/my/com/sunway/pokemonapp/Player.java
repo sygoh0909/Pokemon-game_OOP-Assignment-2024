@@ -21,7 +21,6 @@ public class Player {
 
     public Player() {
         this.userPokemons = new ArrayList<>();
-        this.battlePoints = 0;
     }
 
     public String getUserId() {
@@ -53,7 +52,7 @@ public class Player {
     }
 
     // Method to deduct points
-    public void deductPoints(int pointsToDeduct) {
+    public void deductBattlePoints(int pointsToDeduct) {
         battlePoints -= pointsToDeduct;
     }
 
