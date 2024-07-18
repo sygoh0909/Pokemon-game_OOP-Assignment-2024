@@ -143,8 +143,8 @@ public class Battle {
                 }
 
                 if (attacker == userPokemon1 || attacker == userPokemon2) {
-                    System.out.println("\nPlayer's Pokémon " + attacker.getName() + " turn!");
-                    waitForEnter(enter);
+                    System.out.println("\nPlayer's Pokémon " + attacker.getName() + " turn! Press Enter to continue...");
+                    enter.nextLine();
                     long reactionTime = qte.performQTE();
                     if (reactionTime != -1) {
                         System.out.print(wildPokemon1.getName() + " being attacked!! ");
@@ -358,15 +358,6 @@ public class Battle {
         }
 
         return userChoice;
-    }
-
-    private void waitForEnter(Scanner scanner) {
-        System.out.println("Press Enter to continue...");
-        try {
-            System.in.read();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
     private String capitalize(String type) {

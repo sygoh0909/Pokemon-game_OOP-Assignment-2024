@@ -285,7 +285,6 @@ public class Game {
                 System.out.println("You caught " + chosenPokemon.getName() + "!");
                 player.saveChosenPokemon(chosenPokemon);
                 chosenPokemons.add(chosenPokemon); // Add to chosenPokemons
-                player.loadUserPokemons(); // Reload user's Pokémon list from file
 
             } else {
                 System.out.println(chosenPokemon.getName() + " escaped!");
@@ -293,6 +292,8 @@ public class Game {
 
             // Remove the chosen Pokémon from availablePokemons
             availablePokemons.remove(pokemonChoice);
+
+            player.loadUserPokemons();
 
             // Display current battle points and ask if they want to catch another Pokémon if they have enough battle points
             System.out.println("Current battle points: " + player.getBattlePoints());
