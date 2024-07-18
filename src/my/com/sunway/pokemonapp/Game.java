@@ -59,8 +59,9 @@ public class Game {
             System.out.println("Login successful for user ID: " + userId);
 
             Player loadedPlayer = readPlayerData(userId);
-            System.out.println("User ID: " + loadedPlayer.getUserId());
-            System.out.println("Battle Points: " + loadedPlayer.getBattlePoints());
+            game.player = loadedPlayer; // Update the player object with loaded data
+            System.out.println("User ID: " + game.player.getUserId());
+            System.out.println("Battle Points: " + game.player.getBattlePoints());
 
             game.displayStages();
 
@@ -283,6 +284,7 @@ public class Game {
                 System.out.println("You caught " + chosenPokemon.getName() + "!");
                 player.saveChosenPokemon(chosenPokemon);
                 chosenPokemons.add(chosenPokemon); // Add to chosenPokemons
+                player.loadUserPokemons();
             } else {
                 System.out.println(chosenPokemon.getName() + " escaped!");
             }
