@@ -305,6 +305,7 @@ public class Game {
                 }
                 String choice = scanner.nextLine().trim().toLowerCase();
 
+                // error handling for this
                 if (!choice.equals("yes")) {
                     break; // Exit loop if they don't want to catch another Pokémon
                 } else {
