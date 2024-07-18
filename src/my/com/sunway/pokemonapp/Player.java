@@ -94,8 +94,6 @@ public class Player {
         }
     }
 
-    
-
     public void loadUserPokemons() {
         String fileName = "user_pokemon_list_" + userId + ".txt";
         Path filePath = Paths.get(fileName);

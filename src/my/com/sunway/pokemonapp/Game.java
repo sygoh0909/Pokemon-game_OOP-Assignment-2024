@@ -69,6 +69,7 @@ public class Game {
             List<Pokemon> stageWildPokemons = game.chooseStageAndPokemon();
 
             // Pass user ID to Battle class when starting battle
+            userPokemons = game.player.getUserPokemons();
             game.battle.startBattle(userPokemons, stageWildPokemons, userId);
 
         } else {
@@ -284,7 +285,8 @@ public class Game {
                 System.out.println("You caught " + chosenPokemon.getName() + "!");
                 player.saveChosenPokemon(chosenPokemon);
                 chosenPokemons.add(chosenPokemon); // Add to chosenPokemons
-                player.loadUserPokemons();
+                player.loadUserPokemons(); // Reload user's Pokémon list from file
+
             } else {
                 System.out.println(chosenPokemon.getName() + " escaped!");
             }

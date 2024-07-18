@@ -44,6 +44,7 @@ public class Battle {
         System.out.println("2: " + wildPokemon2.getName() + " | Type: " + String.join(", ", wildPokemon2.getTypes()) + " | Stars: " + wildPokemon2.getStars());
 
         Scanner scanner = new Scanner(System.in);
+
         Pokemon userPokemon1 = null;
         Pokemon userPokemon2 = null;
 
