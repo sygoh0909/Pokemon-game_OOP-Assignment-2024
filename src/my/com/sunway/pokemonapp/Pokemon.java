@@ -116,11 +116,12 @@ public class Pokemon {
     public String toString() {
         return "Pokemon{" +
                 "name='" + name + '\'' +
+                ", types=" + types +
+                ", stars=" + stars +
                 ", health=" + health +
                 ", attack=" + attack +
                 ", defense=" + defense +
                 ", stars=" + stars +
-                ", types=" + types +
                 ", speed=" + speed +
                 ", special attack=" + specialAttack +
                 ", specialDefense=" + specialDefense +
