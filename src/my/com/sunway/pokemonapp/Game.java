@@ -30,12 +30,14 @@ public class Game {
             return habitatIds;
         }
     }
-
+    
+    
     private Player player;
     private List<List<Pokemon>> stages; // Pokémon in the stages
     private List<String> stageNames;
     private PokemonService pokemonService;
     private Battle battle; // Add Battle instance
+    
 
     public Game() {
         this.player = new Player();
@@ -45,89 +47,153 @@ public class Game {
         this.battle = new Battle(); // Initialize the Battle instance
         setupStages();
     }
-
+   
     public static void main(String[] args) throws IOException, InterruptedException {
-        System.out.println("Game loading...Please be patient...");
+    	System.out.println("Game loading...Please be patient...");
         Game game = new Game();
-
+        
+        
         boolean loggedIn = game.login();
 
+        
         if (loggedIn) {
-            game.player.loadUserPokemons();
+        	game.player.loadUserPokemons();
             List<Pokemon> userPokemons = game.player.getUserPokemons();
-            String userId = game.player.getUserId();
-            System.out.println("Login successful for user ID: " + userId);
-
+            String userId =  game.player.getUserId();
+            println("Login successful for user ID: " + userId);
+           
+            
             Player loadedPlayer = readPlayerData(userId);
             game.player = loadedPlayer; // Update the player object with loaded data
-            System.out.println("User ID: " + game.player.getUserId());
-            System.out.println("Battle Points: " + game.player.getBattlePoints());
-
+            println("User ID: " + game.player.getUserId());
+            println("Battle Points: " + game.player.getBattlePoints());
+           
+            
             game.displayStages();
 
+            
             // Choose stage and get wild Pokémon for battle
             List<Pokemon> stageWildPokemons = game.chooseStageAndPokemon();
 
+            
             // Pass user ID to Battle class when starting battle
             userPokemons = game.player.getUserPokemons();
             game.battle.startBattle(userPokemons, stageWildPokemons, userId);
 
+            
         } else {
-            System.out.println("Login failed!"); //login fail
+            println("Login failed!"); //login fail
         }
     }
 
-
+    
+    public static void print(String text) {  
+    	final int DELAY = 100; //millisecond
+    	
+    	
+    	// convert the String text into char
+        for (char ch : text.toCharArray()) {
+            System.out.print(ch);
+            try {
+            	// pause execution (insert delay time)
+                Thread.sleep(DELAY);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+        System.out.println(); // Print a new line at the end
+    }
+    
+    
+    public static void println(String text) {  
+    	final int DELAYS = 10; //millisecond
+    	
+    	// convert the String text into char
+        for (char ch : text.toCharArray()) {
+            System.out.print(ch);
+            try {
+            	// pause execution (insert delay time)
+                Thread.sleep(DELAYS);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+        System.out.println(); // Print a new line at the end
+    }
+    
+    
     public boolean login() {
-        System.out.println("Game succesfully loaded."); //pretty pokemon word icon here
+    	println("Game succesfully loaded\n");
         Scanner scanner = new Scanner(System.in);
         boolean isAuthenticated = false;
+        
+        
+        System.out.println("                                  ,'\\\r\n"
+				+ "    _.----.        ____         ,'  _\\   ___    ___     ____\r\n"
+				+ "_,-'       `.     |    |  /`.   \\,-'    |   \\  /   |   |    \\  |`.\r\n"
+				+ "\\      __    \\    '-.  | /   `.  ___    |    \\/    |   '-.   \\ |  |\r\n"
+				+ " \\.    \\ \\   |  __  |  |/    ,','_  `.  |          | __  |    \\|  |\r\n"
+				+ "   \\    \\/   /,' _`.|      ,' / / / /   |          ,' _`.|     |  |\r\n"
+				+ "    \\     ,-'/  /   \\    ,'   | \\/ / ,`.|         /  /   \\  |     |\r\n"
+				+ "     \\    \\ |   \\_/  |   `-.  \\    `'  /|  |    ||   \\_/  | |\\    |\r\n"
+				+ "      \\    \\ \\      /       `-.`.___,-' |  |\\  /| \\      /  | |   |\r\n"
+				+ "       \\    \\ `.__,'|  |`-._    `|      |__| \\/ |  `.__,'|  | |   |\r\n"
+				+ "        \\_.-'       |__|    `-._ |              '-.|     '-.| |   |\r\n"
+				+ "                                `'                            '-._|");
 
+        
         while (!isAuthenticated) {
-            System.out.println("Enter your user ID:");
+            print("Enter your user ID:");
             String userId = scanner.nextLine().trim();
 
+            
             // Check if user ID exists in stored credentials
             String[] storedCredentials = findStoredCredentials(userId);
 
+            
             if (storedCredentials == null) {
-                System.out.println("User ID not found. Would you like to create a new account? (yes/no)");
+                println("User ID not found. Would you like to create a new account? (yes/no)");
                 String createAccountChoice = scanner.nextLine().trim().toLowerCase();
 
+                
                 if (createAccountChoice.equals("yes")) {
                     // Prompt for password creation
-                    System.out.println("Enter your new password:");
+                    print("Enter your new password:");
                     String newPassword = scanner.nextLine().trim();
 
+                    
                     // Save new user credentials
                     saveUserCredentials(userId, newPassword);
 
+                    
                     // Authenticate with newly created credentials
                     Player newPlayer = new Player();
                     newPlayer.setUserId(userId);
                     newPlayer.setPassword( newPassword );
                     this.player = newPlayer;
                     isAuthenticated = true;
-
+                    
+                    
                 } else {
-                    System.out.println("Returning to login...");
+                    println("Returning to login...");
                 }
             } else {
                 String storedUserId = storedCredentials[0];
                 String storedPassword = storedCredentials[1];
 
-                System.out.println("Enter your password:");
+                
+                print("Enter your password:");
                 String password = scanner.nextLine().trim();
 
+                
                 if (storedPassword.equals(password)) {
-
                     Player player = new Player();
                     player.setUserId(userId);
 
                     this.player = player;
                     isAuthenticated = true;
                 } else {
-                    System.out.println("Incorrect password. Login failed. Retry? (yes/no)");
+                    println("Incorrect password. Login failed. Retry? (yes/no)");
                     String retryChoice = scanner.nextLine().trim().toLowerCase();
                     if (!retryChoice.equals("yes")) {
                         break; // Exit the loop if user chooses not to retry
@@ -138,6 +204,7 @@ public class Game {
 
         return isAuthenticated;
     }
+
 
     private String[] findStoredCredentials(String userId) {
         String fileName = "user_credentials.txt";
@@ -154,6 +221,8 @@ public class Game {
         }
         return null;
     }
+
+    
     public static void savePlayerData(Player player) {
         String filename = "player_" + player.getUserId() + ".txt";
         try (PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter(filename)))) {
@@ -164,6 +233,7 @@ public class Game {
         }
     }
 
+    
     public static Player readPlayerData(String userId) {
         String filename = "player_" + userId + ".txt";
         Player player = new Player();
@@ -174,7 +244,7 @@ public class Game {
             player.setBattlePoints(battlePoints);
         } catch (FileNotFoundException e) {
             // File does not exist, create a new one and initialize player with default values
-            System.out.println("File not found. Creating new file for user: " + userId);
+            print("File not found. Creating new file for user: " + userId);
             try (PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter(filename)))) {
                 out.println(userId); // Write userId to the file
                 out.println("0"); // Initialize battle points to 0
@@ -188,17 +258,19 @@ public class Game {
         }
         return player;
     }
-
+    
+    
     public void displayStages() {
         if (stages.isEmpty()) {
-            System.out.println("No stages available.");
+            println("No stages available.");
         } else {
+        	System.out.println();
             for (int i = 0; i < stages.size(); i++) {
-                System.out.println("Stage " + (i + 1) + ": " + stageNames.get(i));
-                System.out.println("Pokemons that might appear in this stage: ");
+                println("Stage " + (i + 1) + ": " + stageNames.get(i));
+                println("Pokemons that might appear in this stage: ");
                 List<Pokemon> stagePokemons = stages.get(i);
                 if (stagePokemons.isEmpty()) {
-                    System.out.println("No Pokémon in this stage.");
+                    println("No Pokémon in this stage.");
                 } else {
                     // Shuffle the list of Pokémon to randomize the order
                     Collections.shuffle(stagePokemons);
@@ -208,7 +280,7 @@ public class Game {
                     for (int j = 0; j < printCount; j++) {
                         Pokemon pokemon = stagePokemons.get(j);
                         String typesString = String.join(", ", pokemon.getTypes()); // Join types with a comma
-                        System.out.println(pokemon.getName() + " | Type: " + typesString + " | Stars: " + pokemon.getStars());
+                        println(pokemon.getName() + " | Type: " + typesString + " | Stars: " + pokemon.getStars());
                     }
                 }
                 System.out.println();
@@ -221,18 +293,18 @@ public class Game {
         int stageChoice = -1;
 
         while (stageChoice < 0 || stageChoice >= stages.size()) {
-            System.out.println("Choose a stage number: ");
+            print("Choose a stage number: ");
             for (int i = 0; i < stageNames.size(); i++) {
-                System.out.println((i + 1) + ": " + stageNames.get(i));
+                println((i + 1) + ": " + stageNames.get(i));
             }
 
             try {
                 stageChoice = scanner.nextInt() - 1;
                 if (stageChoice < 0 || stageChoice >= stages.size()) {
-                    System.out.println("Invalid stage choice. Please try again.");
+                    println("Invalid stage choice. Please try again.");
                 }
             } catch (InputMismatchException e) {
-                System.out.println("Invalid input. Please enter a number.");
+                println("Invalid input. Please enter a number.");
                 scanner.next(); // Clear the invalid input
             }
 
@@ -243,80 +315,82 @@ public class Game {
         int printCount = Math.min(3, chosenStagePokemons.size());
 
         Set<Pokemon> chosenPokemons = new HashSet<>(); // Track chosen Pokémon
-
+        
         // List of availablePokemons directly from chosenStagePokemons
         List<Pokemon> availablePokemons = new ArrayList<>(chosenStagePokemons.subList(0, printCount)); // Copy the first 3 Pokémon from the shuffled list
 
         while (true) {
             // Display the list of available Pokémon
-            System.out.println("Choose a Pokémon from the following list:");
-            for (int i = 0; i < availablePokemons.size(); i++) {
-                Pokemon pokemon = availablePokemons.get(i);
-                String typesString = String.join(", ", pokemon.getTypes()); // Join types with a comma
-                System.out.println((i + 1) + ": " + pokemon.getName() + " | Type: " + typesString + " | Stars: " + pokemon.getStars());
-            }
+        	println("Choose a Pokémon from the following list:");
+        	for (int i = 0; i < printCount; i++) {
+        		Pokemon pokemon = chosenStagePokemons.get(i);
+        		String typesString = String.join(", ", pokemon.getTypes()); // Join types with a comma
+        		println((i + 1) + ": " + pokemon.getName() + " | Type: " + typesString + " | Stars: " + pokemon.getStars());
+        	}
 
-            int pokemonChoice = -1;
-            while (pokemonChoice < 0 || pokemonChoice >= availablePokemons.size()) {
-                try {
-                    pokemonChoice = scanner.nextInt() - 1;
-                    scanner.nextLine(); // Consume the newline character left by nextInt()
-                    if (pokemonChoice < 0 || pokemonChoice >= availablePokemons.size()) {
-                        System.out.println("Invalid Pokémon choice. Please try again.");
-                    }
-                } catch (InputMismatchException e) {
-                    System.out.println("Invalid input. Please enter a number.");
-                    scanner.next(); // Clear the invalid input
-                    scanner.nextLine(); // Clear the newline character left by next()
-                }
-            }
+        	int pokemonChoice = -1;
+        	while (pokemonChoice < 0 || pokemonChoice >= availablePokemons.size()) {
+        		try {
+        			pokemonChoice = scanner.nextInt() - 1;
+        			scanner.nextLine(); // Consume the newline character  left by nextInt()
+        			if (pokemonChoice < 0 || pokemonChoice >= printCount) {
+        				println("Invalid Pokémon choice. Please try again.");
+        			}
+        		} catch (InputMismatchException e) {
+        			println("Invalid input. Please enter a number.");
+        			scanner.next(); // Clear the invalid input
+        			scanner.next(); // Clear the invalid input
+        		}
+        	}
 
-            Pokemon chosenPokemon = availablePokemons.get(pokemonChoice);
-            System.out.println("You chose: " + chosenPokemon.getName());
+        	Pokemon chosenPokemon = availablePokemons.get(pokemonChoice);
+        	print("You chose: " + chosenPokemon.getName());
 
+        	// Randomly choose a Poké Ball
             PokeballType chosenPokeball = player.chooseRandomPokeball();
-            System.out.println("A " + chosenPokeball + " appeared!");
+        	print("A " + chosenPokeball + " appeared!");
 
-            System.out.println("Press Enter to continue...");
-            scanner.nextLine(); // Wait for the user to press Enter
+        	println("Press Enter to attempt to catch the " + chosenPokemon.getName() + "!");
+        	scanner.nextLine(); //wait for user to press enter
+
 
             boolean isCaught = player.attemptCatch(chosenPokeball);
-            if (isCaught) {
-                System.out.println("You caught " + chosenPokemon.getName() + "!");
-                player.saveChosenPokemon(chosenPokemon);
-                chosenPokemons.add(chosenPokemon); // Add to chosenPokemons
+        	if (isCaught) {
+        		print("You caught the " + chosenPokemon.getName() + "!");
+        		player.saveChosenPokemon(chosenPokemon);
+        		chosenPokemons.add(chosenPokemon); // Add to chosenPokemons
 
-            } else {
-                System.out.println(chosenPokemon.getName() + " escaped!");
-            }
+        	} else {
+        		print(chosenPokemon.getName() + " escaped!");
+        	}
 
-            // Remove the chosen Pokémon from availablePokemons
-            availablePokemons.remove(pokemonChoice);
+        	// Remove the chosen Pokémon from availablePokemons
+        	availablePokemons.remove(pokemonChoice);
 
-            player.loadUserPokemons();
+        	player.loadUserPokemons();
 
-            // Display current battle points and ask if they want to catch another Pokémon if they have enough battle points
-            System.out.println("Current battle points: " + player.getBattlePoints());
+        	 // Display current battle points and ask if they want to catch another Pokémon if they have enough battle points
+            print("\nCurrent battle points: " + player.getBattlePoints());
             if (player.getBattlePoints() >= 200) {
-                System.out.println("Do you want to catch another Pokémon? (yes/no)");
+                println("Do you want to catch another Pokémon? (yes/no)");
                 // Exit the main loop if no more Pokémon are available to choose
                 if (availablePokemons.isEmpty()) {
-                    System.out.println("No more Pokémon available to catch.");
+                    println("No more Pokémon available to catch.");
                     break;
                 }
                 String choice = scanner.nextLine().trim().toLowerCase();
 
-                // error handling for this
+                // error handling 
                 if (!choice.equals("yes")) {
                     break; // Exit loop if they don't want to catch another Pokémon
                 } else {
                     // Deduct points, do not refresh the list of availablePokemons
-                   player.deductBattlePoints(200);
-                    System.out.println("Points deducted. Current battle points: " + player.getBattlePoints());
+                	player.deductBattlePoints(200);
+                    println("Points deducted. Current battle points: " + player.getBattlePoints());
                     Game.savePlayerData(player);
                 }
             } else {
-                System.out.println("Not enough points to catch another Pokémon.");
+                println("Not enough points to catch another Pokémon.");
                 break; // Exit loop if there are not enough points to catch another Pokémon
             }
         }
@@ -333,12 +407,13 @@ public class Game {
             String credentials = userId + "," + password;
             Files.write(Paths.get(fileName), (credentials + System.lineSeparator()).getBytes(),
                     StandardOpenOption.CREATE, StandardOpenOption.APPEND);
-            System.out.println("User credentials saved to " + fileName);
+            println("User credentials saved to " + fileName);
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
+    
     public void setupStages() {
         try {
             // Read Pokémon data from file
@@ -520,3 +595,4 @@ public class Game {
         return attributesList.toArray(new String[0]);
     }
 }
+
