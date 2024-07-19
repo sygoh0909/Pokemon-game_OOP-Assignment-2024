@@ -78,6 +78,23 @@ public class BattleScoreCalculation {
 
         return battleScore;
     }
+    
+    public static void println(String text) {  
+    	final int DELAYS = 15; //millisecond
+    	
+    	// convert the String text into char
+        for (char ch : text.toCharArray()) {
+            System.out.print(ch);
+            try {
+            	// pause execution (insert delay time)
+                Thread.sleep(DELAYS);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+        System.out.println(); // Print a new line at the end
+    }
+    
 
     public static int calculateBattlePoints(int battleScore) {
         // Example logic: 1 point for every 100 score
@@ -133,7 +150,7 @@ public class BattleScoreCalculation {
             }
             scanner.close();
         } catch (IOException e) {
-            System.out.println("Failed to read top scores: " + e.getMessage());
+            println("Failed to read top scores: " + e.getMessage());
         }
 
         return topScores;
@@ -145,15 +162,15 @@ public class BattleScoreCalculation {
                 writer.println(score.getUserId() + "," + score.getScore());
             }
         } catch (IOException e) {
-            System.out.println("Failed to write top scores: " + e.getMessage());
+            println("Failed to write top scores: " + e.getMessage());
         }
     }
 
     void displayTopScores() {
         List<Score> topScores = readTopScores();
-        System.out.println("\nTop Scores:");
+        println("\nTop Scores:");
         for (Score score : topScores) {
-            System.out.println(score.getUserId() + ": " + score.getScore());
+            println(score.getUserId() + ": " + score.getScore());
         }
     }
 
@@ -177,7 +194,7 @@ public class BattleScoreCalculation {
             pw.println("Score: " + score + ", " + dateTime);
             pw.close();
         } catch (IOException e) {
-            System.out.println("Failed to save user score: " + e.getMessage());
+            println("Failed to save user score: " + e.getMessage());
         }
     }
 
