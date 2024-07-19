@@ -83,7 +83,7 @@ public class Battle {
 
         // Check if user has at least 2 Pokémon to choose
         if (userPokemons.size() < 2) {
-        	if (userPokemons.size() < 2) {
+        	if (userPokemons.size() == 0) {
         		println("You don't have any Pokémon. Choosing rental Pokémon.");
         		int rentalChoice1 = choosePokemon(rentalPokemons, scanner, -1);
         		Pokemon rentalPokemon1 = rentalPokemons.get(rentalChoice1);
@@ -541,6 +541,7 @@ public class Battle {
     
     public void pokemonUpgrade(int battleScore, Pokemon userPokemon1, Pokemon userPokemon2) {
         if (battleWins) {
+
             println("\nIncreasing attack and defense stats for your Pokémon...");
 
             if (userPokemon1 != null) {
@@ -570,15 +571,11 @@ public class Battle {
             // Update the details of the modified Pokémon in the file without resetting special stats
             if (userPokemon1 != null) {
                 userPokemon1.resetHealth(); // Reset health to max
-                userPokemon1.resetSpecialAttack(); // Reset special attack to original
-                userPokemon1.resetSpecialDefense(); // Reset special defense to original
                 player.updatePokemonDetailsToFile(userPokemon1);
             }
 
             if (userPokemon2 != null) {
                 userPokemon2.resetHealth(); // Reset health to max
-                userPokemon2.resetSpecialAttack(); // Reset special attack to original
-                userPokemon2.resetSpecialDefense(); // Reset special defense to original
                 player.updatePokemonDetailsToFile(userPokemon2);
             }
         }
