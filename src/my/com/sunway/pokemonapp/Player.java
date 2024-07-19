@@ -55,6 +55,23 @@ public class Player {
     public void deductBattlePoints(int pointsToDeduct) {
         battlePoints -= pointsToDeduct;
     }
+    
+    public static void print(String text) {  
+    	final int DELAY = 50; //millisecond
+    	
+    	
+    	// convert the String text into char
+        for (char ch : text.toCharArray()) {
+            System.out.print(ch);
+            try {
+            	// pause execution (insert delay time)
+                Thread.sleep(DELAY);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+        System.out.println(); // Print a new line at the end
+    }
 
     public PokeballType chooseRandomPokeball() {
         double randomValue = Math.random();
@@ -85,7 +102,7 @@ public class Player {
         try {
             String pokemonDetails = pokemon.toString();
             Files.write(Paths.get(fileName), (pokemonDetails + System.lineSeparator()).getBytes(), StandardOpenOption.CREATE, StandardOpenOption.APPEND);
-            System.out.println("Saved " + pokemon.getName() + " to " + fileName);
+            print("Saved " + pokemon.getName() + " to " + fileName);
 
             // Add the newly caught pokemon to the userPokemons list
             userPokemons.add(pokemon);
@@ -109,7 +126,7 @@ public class Player {
                     }
                 }
             } else {
-                System.out.println("No Pokémon list found for user. Creating new list...");
+                print("No Pokémon list found for user. Creating new list...");
                 Files.createFile(filePath); // Create a new file if it doesn't exist
             }
         } catch (IOException e) {
@@ -131,17 +148,17 @@ public class Player {
                     // Update the line for the specific Pokémon
                     updatedLines.add(pokemonToUpdate.toString());
                     found = true;
-                    System.out.println("Updated line: " + pokemonToUpdate.toString());
+                    print("Updated line: " + pokemonToUpdate.toString());
                 } else {
                     updatedLines.add(line);
                 }
             }
 
             if (!found) {
-                System.out.println("Pokémon not found in file. Adding as new entry.");
+                print("Pokémon not found in file. Adding as new entry.");
                 // If the Pokémon was not found in the file, add it as a new entry
                 updatedLines.add(pokemonToUpdate.toString());
-                System.out.println("New line: " + pokemonToUpdate.toString());
+                print("New line: " + pokemonToUpdate.toString());
             }
 
             // Write the updated lines back to the file
@@ -152,9 +169,9 @@ public class Player {
                 }
             }
 
-            System.out.println("Updated Pokémon details saved to " + fileName);
+            print("Updated Pokémon details saved to " + fileName);
         } catch (IOException e) {
-            System.out.println("Error updating Pokémon details to file: " + e.getMessage());
+            print("Error updating Pokémon details to file: " + e.getMessage());
         }
     }
 
