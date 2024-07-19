@@ -441,7 +441,6 @@ public class Battle {
 	
 	  public void printEffectivenessMessage(Pokemon attacker, Pokemon defender) {
 	        double effectiveness = typeChart.getEffectiveness(capitalize(attacker.getTypes().get(0)), capitalize(defender.getTypes().get(0))); // get(0) is used to only get the first type of a pokemon
-	        print("Effectiveness value: " + effectiveness);
 	        if (effectiveness == 2.0) {
 	            print("It's super effective!");
 	        } else if (effectiveness == 0.5) {
