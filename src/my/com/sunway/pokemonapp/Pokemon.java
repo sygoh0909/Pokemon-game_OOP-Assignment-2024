@@ -13,8 +13,6 @@ public class Pokemon {
     private int specialAttack;
     private int specialDefense;
     private int maxHealth;
-    private int maxSpecialAttack;
-    private int maxSpecialDefense;
     private int habitatId;
 
     public Pokemon(String name, int health, int attack, int defense, int stars, List<String> types, int speed, int specialAttack, int specialDefense, int habitatId) {
@@ -28,8 +26,6 @@ public class Pokemon {
         this.specialAttack = specialAttack;
         this.specialDefense = specialDefense;
         this.maxHealth = health; // Initialize maxHealth to the initial health value
-        this.maxSpecialAttack = specialAttack;
-        this.maxSpecialDefense = specialDefense;
         this.habitatId = habitatId;
     }
 
@@ -104,14 +100,6 @@ public class Pokemon {
         this.health = this.maxHealth;
     }
 
-    public void resetSpecialAttack(){
-        this.specialAttack = this.maxSpecialAttack;
-    }
-
-    public void resetSpecialDefense(){
-        this.specialDefense = this.maxSpecialDefense;
-    }
-
     @Override
     public String toString() {
         return "Pokemon{" +
@@ -123,7 +111,7 @@ public class Pokemon {
                 ", defense=" + defense +
                 ", stars=" + stars +
                 ", speed=" + speed +
-                ", special attack=" + specialAttack +
+                ", specialAttack=" + specialAttack +
                 ", specialDefense=" + specialDefense +
                 ", habitatId=" + habitatId +
                 '}';
