@@ -155,6 +155,10 @@ public class Game {
                 println("User ID not found. Would you like to create a new account? (yes/no)");
                 String createAccountChoice = scanner.nextLine().trim().toLowerCase();
 
+                while (!createAccountChoice.equals("yes") && !createAccountChoice.equals("no")) {
+                    println("Invalid choice. Please enter 'yes' or 'no'");
+                    createAccountChoice = scanner.nextLine().trim().toLowerCase();
+                }
                 
                 if (createAccountChoice.equals("yes")) {
                     // Prompt for password creation
@@ -193,8 +197,14 @@ public class Game {
                     this.player = player;
                     isAuthenticated = true;
                 } else {
-                    println("Incorrect password. Login failed. Retry? (yes/no)");
+                    println("Incorrect user ID or password. Login failed. Retry? (yes/no)");
                     String retryChoice = scanner.nextLine().trim().toLowerCase();
+
+                    while (!retryChoice.equals("yes") && !retryChoice.equals("no")) {
+                        println("Invalid choice. Please enter 'yes' or 'no'");
+                        retryChoice = scanner.nextLine().trim().toLowerCase();
+                    }
+
                     if (!retryChoice.equals("yes")) {
                         break; // Exit the loop if user chooses not to retry
                     }
@@ -369,14 +379,24 @@ public class Game {
             println("\nCurrent battle points: " + player.getBattlePoints());
             if (player.getBattlePoints() >= 200) {
                 println("Do you want to catch another Pokémon? (yes/no)");
+
                 // Exit the main loop if no more Pokémon are available to choose
                 if (availablePokemons.isEmpty()) {
                     println("No more Pokémon available to catch.");
                     break;
                 }
-                String choice = scanner.nextLine().trim().toLowerCase();
 
                 // Error handling
+                String choice;
+                while (true) {
+                    choice = scanner.nextLine().trim().toLowerCase();
+                    if (choice.equals("yes") || choice.equals("no")) {
+                        break;
+                    } else {
+                        println("Invalid choice. Please enter 'yes' or 'no'");
+                    }
+                }
+
                 if (!choice.equals("yes")) {
                     break; // Exit loop if they don't want to catch another Pokémon
                 } else {
