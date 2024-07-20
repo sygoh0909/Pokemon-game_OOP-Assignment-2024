@@ -204,8 +204,7 @@ public class Game {
 
         return isAuthenticated;
     }
-
-
+    
     private String[] findStoredCredentials(String userId) {
         String fileName = "user_credentials.txt";
         try {
@@ -315,7 +314,7 @@ public class Game {
 
         Set<Pokemon> chosenPokemons = new HashSet<>(); // Track chosen Pokémon
 
-// List of availablePokemons directly from chosenStagePokemons
+        // List of availablePokemons directly from chosenStagePokemons
         List<Pokemon> availablePokemons = new ArrayList<>(chosenStagePokemons.subList(0, maxChoices)); // Copy the first 3 Pokémon from the shuffled list
 
         while (true) {

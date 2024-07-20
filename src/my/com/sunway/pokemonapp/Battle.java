@@ -1,6 +1,5 @@
 package my.com.sunway.pokemonapp;
 
-import java.io.*;
 import java.util.*;
 
 public class Battle {
@@ -16,7 +15,6 @@ public class Battle {
         this.rentalPokemons = new ArrayList<>();
         this.typeChart = new TypeChart();
         this.scoreCalculation = new BattleScoreCalculation();
-        this.battleWins = false; // Initialize battleWins to false
         this.player = new Player();
         
         //rental Pokémon 
@@ -555,6 +553,7 @@ public class Battle {
             }
 
             if (battleScore > 2000) {
+
                 println("\nIncreasing special attack and defense stats for your Pokémon...");
 
                 if (userPokemon1 != null) {

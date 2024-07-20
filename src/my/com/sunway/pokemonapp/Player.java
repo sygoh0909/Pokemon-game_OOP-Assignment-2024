@@ -155,10 +155,8 @@ public class Player {
             }
 
             if (!found) {
-                print("Pokémon not found in file. Adding as new entry.");
-                // If the Pokémon was not found in the file, add it as a new entry
-                updatedLines.add(pokemonToUpdate.toString());
-                print("New line: " + pokemonToUpdate.toString());
+                print("Pokémon not found in file.");
+                // If the Pokémon was not found in the file
             }
 
             // Write the updated lines back to the file
