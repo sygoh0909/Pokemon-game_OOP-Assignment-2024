@@ -484,24 +484,6 @@ public class Game {
         }
     }
 
-    private List<HabitatData> readHabitatsFromFile(String POKEMONS_FILENAME) throws IOException {
-        List<HabitatData> habitatDataList = new ArrayList<>();
-        try (BufferedReader reader = new BufferedReader(new FileReader(POKEMONS_FILENAME))) {
-            String line;
-            while ((line = reader.readLine()) != null) {
-                String[] parts = line.split(":");
-                String stageName = parts[0].trim();
-                String[] idStrings = parts[1].trim().split(",");
-                List<Integer> habitatIds = new ArrayList<>();
-                for (String idString : idStrings) {
-                    habitatIds.add(Integer.parseInt(idString.trim()));
-                }
-                habitatDataList.add(new HabitatData(stageName, habitatIds));
-            }
-        }
-        return habitatDataList;
-    }
-
     private List<Pokemon> readPokemonsFromFile(String POKEMONS_FILENAME) throws IOException {
         List<Pokemon> pokemonList = new ArrayList<>();
 
