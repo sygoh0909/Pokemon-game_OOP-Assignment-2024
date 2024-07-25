@@ -109,7 +109,6 @@ public class Pokemon {
                 ", health=" + health +
                 ", attack=" + attack +
                 ", defense=" + defense +
-                ", stars=" + stars +
                 ", speed=" + speed +
                 ", specialAttack=" + specialAttack +
                 ", specialDefense=" + specialDefense +
