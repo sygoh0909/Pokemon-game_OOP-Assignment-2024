@@ -59,7 +59,7 @@ public class QuickTimeEvent {
             }
         };
 
-        timer.schedule(task, 15000);  // 15 seconds for QTE
+        timer.schedule(task, 12000);  // 12 seconds for QTE
         
         Thread inputThread = new Thread(() -> {
              String input = scanner.nextLine();
