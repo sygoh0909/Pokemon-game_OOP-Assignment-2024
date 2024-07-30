@@ -46,7 +46,7 @@ public class QuickTimeEvent {
         tooSlow = false; // Initialize tooSlow to false at the start
 
         String randomSequence = generateRandomSequence(10);
-        println("Enter the following sequence within 15 seconds: " + randomSequence);
+        println("Enter the following sequence within 12 seconds: " + randomSequence);
 
         TimerTask task = new TimerTask() {
             @Override
