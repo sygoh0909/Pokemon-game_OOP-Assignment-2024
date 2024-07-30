@@ -16,8 +16,6 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import java.util.Arrays;
-
 public class PokemonService {
     private static final String API_URL = "https://pokeapi.co/api/v2/"; // Base URL for PokeAPI
     private static final String POKEMONS_FILENAME = "pokemons.txt";
