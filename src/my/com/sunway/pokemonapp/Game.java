@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 public class Game {
     private static final String POKEMONS_FILENAME = "pokemons.txt";
 
-    // Define HabitatData as a nested static class or separate top-level class
+    // Define HabitatData as a nested static class
     public static class HabitatData {
         private final String stageName;
         private final List<Integer> habitatIds;
@@ -134,7 +134,7 @@ public class Game {
                     // Authenticate with newly created credentials
                     Player newPlayer = new Player();
                     newPlayer.setUserId(userId);
-                    newPlayer.setPassword( newPassword );
+                    newPlayer.setPassword(newPassword);
                     this.player = newPlayer;
                     isAuthenticated = true;
                     
