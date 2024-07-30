@@ -7,7 +7,7 @@ import static my.com.sunway.pokemonapp.Game.println;
 import static my.com.sunway.pokemonapp.Game.readPlayerData;
 
 public class Main {
-    public static void main(String[] args) throws IOException, InterruptedException {
+    public static void main(String[] args) throws IOException {
         System.out.println("Game loading...Please be patient...");
         Game game = new Game();
 
@@ -17,7 +17,7 @@ public class Main {
 
         if (loggedIn) {
             game.player.loadUserPokemons();
-            List<Pokemon> userPokemons = game.player.getUserPokemons();
+            List<Pokemon> userPokemons;
             String userId = game.player.getUserId();
             println("Login successful! ");
 
