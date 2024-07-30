@@ -19,7 +19,7 @@ public class Main {
             game.player.loadUserPokemons();
             List<Pokemon> userPokemons = game.player.getUserPokemons();
             String userId = game.player.getUserId();
-            println("Login successful for user ID: " + userId);
+            println("Login successful! ");
 
 
             Player loadedPlayer = readPlayerData(userId);
