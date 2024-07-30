@@ -227,23 +227,4 @@ public class PokemonService {
             return 1;
         }
     }
-
-    public static void main(String[] args) {
-        PokemonService pokemonService = new PokemonService();
-
-        // Example: Fetch Pokémon by multiple habitat IDs (you can change the IDs as needed)
-        List<Integer> habitatIds = Arrays.asList(1, 2, 3, 4, 7, 8, 9); // Example habitat IDs
-        try {
-            List<Pokemon> pokemonList = pokemonService.fetchPokemonsByMultipleHabitats(habitatIds);
-
-            // Display API response and count the number of Pokémon fetched
-            System.out.println("Pokémon Fetched:");
-            for (Pokemon pokemon : pokemonList) {
-                System.out.println(pokemon);
-            }
-            System.out.println("Total Pokémon fetched: " + pokemonList.size());
-        } catch (IOException | InterruptedException e) {
-            e.printStackTrace();
-        }
-    }
 }
