@@ -457,107 +457,11 @@ public class Game {
         try (BufferedReader reader = new BufferedReader(new FileReader(POKEMONS_FILENAME))) {
             String line;
             while ((line = reader.readLine()) != null) {
-                Pokemon pokemon = parsePokemonFromString(line);
+                Pokemon pokemon = player.parsePokemonFromString(line);
                 pokemonList.add(pokemon);
             }
         }
         return pokemonList;
-    }
-
-    // Method to parse Pokémon details from a string representation
-    public Pokemon parsePokemonFromString(String pokemonDetails) {
-        String[] parts = parsePokemon(pokemonDetails);
-
-        // Initialize variables to store parsed values
-        String name = null;
-        int health = 0;
-        int attack = 0;
-        int defense = 0;
-        int stars = 0;
-        List<String> types = new ArrayList<>();
-        int speed = 0;
-        int specialAttack = 0;
-        int specialDefense = 0;
-        int habitatId = 0;
-
-        // Iterate through parts to parse each attribute
-        for (String part : parts) {
-            // Split each part into key and value
-            String[] keyValue = part.split("=");
-            if (keyValue.length != 2) {
-                // Handle unexpected format or skip if needed
-                continue;
-            }
-            String key = keyValue[0].trim();
-            String value = keyValue[1].trim();
-
-            // Switch case to assign values based on key
-            switch (key) {
-                case "name":
-                    name = value.replace("'", "");
-                    break;
-                case "health":
-                    health = Integer.parseInt(value);
-                    break;
-                case "attack":
-                    attack = Integer.parseInt(value);
-                    break;
-                case "defense":
-                    defense = Integer.parseInt(value);
-                    break;
-                case "stars":
-                    stars = Integer.parseInt(value);
-                    break;
-                case "types":
-                    // Remove brackets and split by comma for types
-                    types.addAll(List.of(value.replaceAll("[\\[\\]]", "").split(", ")));
-                    break;
-                case "speed":
-                    speed = Integer.parseInt(value);
-                    break;
-                case "specialAttack":
-                    specialAttack = Integer.parseInt(value);
-                    break;
-                case "specialDefense":
-                    specialDefense = Integer.parseInt(value);
-                    break;
-                case "habitatId":
-                    habitatId = Integer.parseInt(value);
-                    break;
-                default:
-                    // Handle unrecognized keys or ignore
-                    break;
-            }
-        }
-
-        // Create and return Pokemon object
-        return new Pokemon(name, health, attack, defense, stars, types, speed, specialAttack, specialDefense, habitatId);
-    }
-
-    // Method to parse attributes from a string into an array of strings
-    public static String[] parsePokemon(String input) {
-        ArrayList<String> attributesList = new ArrayList<>();
-
-        // Define regex pattern to match key-value pairs
-        String regex = "(\\w+)='([^']+)'|\\w+=\\d+|\\w+=\\[([^\\]]+)\\]|\\w+=\\d+";
-        Matcher matcher = Pattern.compile(regex).matcher(input);
-
-        while (matcher.find()) {
-            if (matcher.group(1) != null && matcher.group(2) != null) {
-                // For string values
-                attributesList.add(matcher.group(1) + "=" + matcher.group(2));
-            } else if (matcher.group(3) != null) {
-                // For list values
-                attributesList.add("types=" + matcher.group(3));
-            } else {
-                // For numeric values
-                String[] parts = matcher.group(0).split("=");
-                attributesList.add(parts[0] + "=" + parts[1]);
-            }
-        }
-
-        // Convert ArrayList to String array
-        return attributesList.toArray(new String[0]);
     }
 }
 
