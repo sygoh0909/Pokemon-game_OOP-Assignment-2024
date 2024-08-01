@@ -2,6 +2,7 @@ package my.com.sunway.pokemonapp;
 
 import java.io.*;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.*;
@@ -28,14 +29,14 @@ public class Game {
             return habitatIds;
         }
     }
-    
-    
+
+
     Player player;
     private List<List<Pokemon>> stages; // Pokémon in the stages
     private List<String> stageNames;
     private PokemonService pokemonService;
     Battle battle; // Add Battle instance
-    
+
 
     public Game() {
         this.player = new Player();
@@ -46,15 +47,15 @@ public class Game {
         setupStages();
     }
 
-    public static void print(String text) {  
-    	final int DELAY = 100; //millisecond
-    	
-    	
-    	// convert the String text into char
+    public static void print(String text) {
+        final int DELAY = 100; //millisecond
+
+
+        // convert the String text into char
         for (char ch : text.toCharArray()) {
             System.out.print(ch);
             try {
-            	// pause execution (insert delay time)
+                // pause execution (insert delay time)
                 Thread.sleep(DELAY);
             } catch (InterruptedException e) {
                 e.printStackTrace();
@@ -62,16 +63,16 @@ public class Game {
         }
         System.out.println(); // Print a new line at the end
     }
-    
-    
-    public static void println(String text) {  
-    	final int DELAYS = 10; //millisecond
-    	
-    	// convert the String text into char
+
+
+    public static void println(String text) {
+        final int DELAYS = 10; //millisecond
+
+        // convert the String text into char
         for (char ch : text.toCharArray()) {
             System.out.print(ch);
             try {
-            	// pause execution (insert delay time)
+                // pause execution (insert delay time)
                 Thread.sleep(DELAYS);
             } catch (InterruptedException e) {
                 e.printStackTrace();
@@ -79,37 +80,37 @@ public class Game {
         }
         System.out.println(); // Print a new line at the end
     }
-    
-    
+
+
     public boolean login() {
-    	println("Game succesfully loaded\n");
+        println("Game succesfully loaded\n");
         Scanner scanner = new Scanner(System.in);
         boolean isAuthenticated = false;
-        
-        
-        System.out.println("                                  ,'\\\r\n"
-				+ "    _.----.        ____         ,'  _\\   ___    ___     ____\r\n"
-				+ "_,-'       `.     |    |  /`.   \\,-'    |   \\  /   |   |    \\  |`.\r\n"
-				+ "\\      __    \\    '-.  | /   `.  ___    |    \\/    |   '-.   \\ |  |\r\n"
-				+ " \\.    \\ \\   |  __  |  |/    ,','_  `.  |          | __  |    \\|  |\r\n"
-				+ "   \\    \\/   /,' _`.|      ,' / / / /   |          ,' _`.|     |  |\r\n"
-				+ "    \\     ,-'/  /   \\    ,'   | \\/ / ,`.|         /  /   \\  |     |\r\n"
-				+ "     \\    \\ |   \\_/  |   `-.  \\    `'  /|  |    ||   \\_/  | |\\    |\r\n"
-				+ "      \\    \\ \\      /       `-.`.___,-' |  |\\  /| \\      /  | |   |\r\n"
-				+ "       \\    \\ `.__,'|  |`-._    `|      |__| \\/ |  `.__,'|  | |   |\r\n"
-				+ "        \\_.-'       |__|    `-._ |              '-.|     '-.| |   |\r\n"
-				+ "                                `'                            '-._|");
 
-        
+
+        System.out.println("                                  ,'\\\r\n"
+                + "    _.----.        ____         ,'  _\\   ___    ___     ____\r\n"
+                + "_,-'       `.     |    |  /`.   \\,-'    |   \\  /   |   |    \\  |`.\r\n"
+                + "\\      __    \\    '-.  | /   `.  ___    |    \\/    |   '-.   \\ |  |\r\n"
+                + " \\.    \\ \\   |  __  |  |/    ,','_  `.  |          | __  |    \\|  |\r\n"
+                + "   \\    \\/   /,' _`.|      ,' / / / /   |          ,' _`.|     |  |\r\n"
+                + "    \\     ,-'/  /   \\    ,'   | \\/ / ,`.|         /  /   \\  |     |\r\n"
+                + "     \\    \\ |   \\_/  |   `-.  \\    `'  /|  |    ||   \\_/  | |\\    |\r\n"
+                + "      \\    \\ \\      /       `-.`.___,-' |  |\\  /| \\      /  | |   |\r\n"
+                + "       \\    \\ `.__,'|  |`-._    `|      |__| \\/ |  `.__,'|  | |   |\r\n"
+                + "        \\_.-'       |__|    `-._ |              '-.|     '-.| |   |\r\n"
+                + "                                `'                            '-._|");
+
+
         while (!isAuthenticated) {
             print("Enter your user ID:");
             String userId = scanner.nextLine().trim();
 
-            
+
             // Check if user ID exists in stored credentials
             String[] storedCredentials = findStoredCredentials(userId);
 
-            
+
             if (storedCredentials == null) {
                 println("User ID not found. Would you like to create a new account? (yes/no)");
                 String createAccountChoice = scanner.nextLine().trim().toLowerCase();
@@ -118,25 +119,25 @@ public class Game {
                     println("Invalid choice. Please enter 'yes' or 'no'");
                     createAccountChoice = scanner.nextLine().trim().toLowerCase();
                 }
-                
+
                 if (createAccountChoice.equals("yes")) {
                     // Prompt for password creation
                     print("Enter your new password:");
                     String newPassword = scanner.nextLine().trim();
 
-                    
+
                     // Save new user credentials
                     saveUserCredentials(userId, newPassword);
 
-                    
+
                     // Authenticate with newly created credentials
                     Player newPlayer = new Player();
                     newPlayer.setUserId(userId);
                     newPlayer.setPassword(newPassword);
                     this.player = newPlayer;
                     isAuthenticated = true;
-                    
-                    
+
+
                 } else {
                     println("Returning to login...");
                 }
@@ -144,11 +145,11 @@ public class Game {
                 String storedUserId = storedCredentials[0];
                 String storedPassword = storedCredentials[1];
 
-                
+
                 print("Enter your password:");
                 String password = scanner.nextLine().trim();
 
-                
+
                 if (storedPassword.equals(password)) {
                     Player player = new Player();
                     player.setUserId(userId);
@@ -173,11 +174,19 @@ public class Game {
 
         return isAuthenticated;
     }
-    
+
     private String[] findStoredCredentials(String userId) {
         String fileName = "user_credentials.txt";
         try {
-            List<String> lines = Files.readAllLines(Paths.get(fileName));
+            // Check if the file exists, and create it if it doesn't
+            Path path = Paths.get(fileName);
+            if (Files.notExists(path)) {
+                Files.createFile(path);
+                println("User credentials file created: " + fileName);
+            }
+
+            // Read all lines from the file
+            List<String> lines = Files.readAllLines(path);
             for (String line : lines) {
                 String[] parts = line.split(",");
                 if (parts.length == 2 && parts[0].trim().equals(userId)) {
@@ -186,11 +195,12 @@ public class Game {
             }
         } catch (IOException e) {
             e.printStackTrace();
+            println("Error reading user credentials file.");
         }
         return null;
     }
 
-    
+
     public static void savePlayerData(Player player) {
         String filename = "player_" + player.getUserId() + ".txt";
         try (PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter(filename)))) {
@@ -201,7 +211,7 @@ public class Game {
         }
     }
 
-    
+
     public static Player readPlayerData(String userId) {
         String filename = "player_" + userId + ".txt";
         Player player = new Player();
@@ -231,7 +241,7 @@ public class Game {
         if (stages.isEmpty()) {
             println("No stages available.");
         } else {
-        	System.out.println();
+            System.out.println();
             for (int i = 0; i < stages.size(); i++) {
                 println("Stage " + (i + 1) + ": " + stageNames.get(i));
                 println("Pokemons that might appear in this stage: ");
@@ -394,7 +404,7 @@ public class Game {
         }
     }
 
-    
+
     public void setupStages() {
         try {
             // Read Pokémon data from file
